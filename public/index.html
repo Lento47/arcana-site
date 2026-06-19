@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>arcana — self-improving AI agent</title>
+  <meta name="description" content="arcana is a self-improving AI agent for the terminal. Skills, memory, gateway, coding, and cron in one CLI.">
+  <meta property="og:title" content="arcana — self-improving AI agent">
+  <meta property="og:description" content="Skills, memory, gateway, coding, and cron in one CLI.">
+  <meta property="og:image" content="/og.png">
+  <meta property="og:url" content="https://arcana.otnelhq.com">
+  <style>
+    :root {
+      --bg: #0d0a14;
+      --text: #e2d8ed;
+      --muted: #8b7fa0;
+      --accent: #c084fc;
+      --primary: #e0a64b;
+      --border: #1e1830;
+      --surface: #14101e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem; }
+    header { text-align: center; padding: 4rem 0 2rem; }
+    .sigil { font-size: 2.5rem; color: var(--accent); }
+    h1 { font-size: 2.5rem; font-weight: 700; margin: 0.5rem 0; letter-spacing: 0.05em; }
+    .tagline { color: var(--muted); font-size: 1.1rem; font-style: italic; margin-bottom: 2rem; }
+    .badge { display: inline-block; background: var(--surface); color: var(--primary); border: 1px solid var(--border); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; margin: 0.5rem; }
+    .hero { text-align: center; padding: 3rem 0; }
+    .hero p { color: var(--muted); max-width: 500px; margin: 1rem auto; font-size: 1.05rem; }
+    .cta { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: #0d0a14; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; margin-top: 1.5rem; transition: opacity 0.2s; }
+    .cta:hover { opacity: 0.9; }
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 3rem 0; }
+    .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+    .feature h3 { font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--accent); }
+    .feature p { font-size: 0.85rem; color: var(--muted); }
+    .cmd { display: block; background: #000; color: #7fd88f; padding: 0.75rem 1rem; border-radius: 6px; font-family: "SF Mono", "Fira Code", monospace; font-size: 0.9rem; margin: 1rem 0; }
+    section { margin: 3rem 0; }
+    h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--primary); }
+    .tier-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .tier { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; text-align: center; }
+    .tier.featured { border-color: var(--accent); }
+    .tier h3 { font-size: 1rem; }
+    .tier .price { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin: 0.5rem 0; }
+    .tier ul { list-style: none; font-size: 0.8rem; color: var(--muted); }
+    .tier ul li { padding: 0.25rem 0; }
+    footer { text-align: center; padding: 2rem 0; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    @media (max-width: 600px) { .features, .tier-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="sigil">⛧</div>
+      <h1>ARCANA</h1>
+      <div class="tagline">« decrypt the arcane »</div>
+      <div>
+        <span class="badge">CLI</span>
+        <span class="badge">TUI</span>
+        <span class="badge">AI Agent</span>
+        <span class="badge">Open Source</span>
+      </div>
+    </header>
+
+    <div class="hero">
+      <p>A self-improving AI agent for the terminal. Skills, memory, cron, gateway — one CLI to rule them all.</p>
+      <code class="cmd">npx arcana-ai@latest</code>
+      <br>
+      <a class="cta" href="https://github.com/Lento47/arcana">⛧ View on GitHub</a>
+    </div>
+
+    <section>
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature"><h3>⛧ Skills</h3><p>174+ specialized skills, auto-loaded on demand.</p></div>
+        <div class="feature"><h3>◆ Memory</h3><p>Persistent facts, cross-session learning, self-improvement loop.</p></div>
+        <div class="feature"><h3>⌨ Terminal UI</h3><p>Full TUI with themes, glyphs, sigils, and arcane cyberpunk chrome.</p></div>
+        <div class="feature"><h3>◇ Gateway</h3><p>Telegram, Discord, Slack, WhatsApp bots — one agent everywhere.</p></div>
+        <div class="feature"><h3>❯ Cron</h3><p>Scheduled agent runs, cron expression parser, auto-reporting.</p></div>
+        <div class="feature"><h3>▣ Kanban</h3><p>Built-in goal tracking, task boards, auto-wiki documentation.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Licensing</h2>
+      <div class="tier-grid">
+        <div class="tier">
+          <h3>Free</h3>
+          <div class="price">MIT</div>
+          <ul>
+            <li>All core features</li>
+            <li>Local memory</li>
+            <li>≤5 users in org</li>
+            <li>Community support</li>
+          </ul>
+        </div>
+        <div class="tier featured">
+          <h3>Pro</h3>
+          <div class="price">$19/mo</div>
+          <ul>
+            <li>Premium models</li>
+            <li>Session sharing</li>
+            <li>Gateway bots</li>
+            <li>Priority support</li>
+          </ul>
+        </div>
+        <div class="tier">
+          <h3>Enterprise</h3>
+          <div class="price">Custom</div>
+          <ul>
+            <li>Team vault</li>
+            <li>Shared memory</li>
+            <li>SSO + audit log</li>
+            <li>SLA + support</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>⛧ <b>ARCANA</b> — made by <a href="https://otnelhq.com">OTNEL</a></p>
+      <p><a href="https://github.com/Lento47/arcana">GitHub</a> · <a href="https://github.com/Lento47/arcana/issues">Issues</a> · <a href="https://github.com/Lento47/arcana/blob/master/LICENSE">License</a></p>
+    </footer>
+  </div>
+</body>
+</html>

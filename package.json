@@ -1,0 +1,9 @@
+{
+  "name": "arcana-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public",
+    "deploy": "npx wrangler pages deploy public --project-name=arcana-otnelhq"
+  }
+}
