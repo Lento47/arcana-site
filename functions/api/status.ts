@@ -23,6 +23,6 @@ export async function onRequest(): Promise<Response> {
     summary: checks.every((c) => c.status === "up") ? "operational" : "issues",
   }
   return new Response(JSON.stringify(data, null, 2), {
-    headers: { "Content-Type": "application/json", "Cache-Control": "no-cache, no-store, must-revalidate", "Access-Control-Allow-Origin": "*" },
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-cache, no-store, must-revalidate", "Access-Control-Allow-Origin": "https://arcana.otnelhq.com" },
   })
 }

@@ -62,7 +62,14 @@ try {
 } catch(e) {}
 
 function bar(status, time) {
-  return '<div class="bar ' + status + '" title="' + time + ' ' + status + '"><div class="tip">' + time + ' ' + status + '</div></div>';
+  var el = document.createElement('div');
+  el.className = 'bar ' + status;
+  el.title = time + ' ' + status;
+  var tip = document.createElement('div');
+  tip.className = 'tip';
+  tip.textContent = time + ' ' + status;
+  el.appendChild(tip);
+  return el;
 }
 
 function render(d) {
@@ -72,7 +79,9 @@ function render(d) {
   if (history.length > MAX) history.splice(0, history.length - MAX);
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch(e) {}
 
-  var h = '';
+  var servicesEl = document.getElementById('services');
+  servicesEl.textContent = '';
+
   for (var i = 0; i < d.services.length; i++) {
     var svc = d.services[i];
     var uptime = 0, lastDown = '';
@@ -81,21 +90,71 @@ function render(d) {
       else if (history[j].statuses[i] === 'down') lastDown = history[j].time;
     }
     var pct = history.length > 0 ? Math.round(uptime / history.length * 100) : 100;
-    var bars = '';
-    for (var p = history.length; p < MAX; p++) { bars += '<div class="bar nodata"></div>'; }
-    for (var j = 0; j < history.length; j++) {
-      bars += bar(history[j].statuses[i], history[j].time);
+
+    var service = document.createElement('div');
+    service.className = 'service';
+
+    var svcTop = document.createElement('div');
+    svcTop.className = 'svc-top';
+    var svcLeft = document.createElement('div');
+    svcLeft.className = 'svc-left';
+    var dot = document.createElement('span');
+    dot.className = 'dot ' + svc.status;
+    svcLeft.appendChild(dot);
+    var nameEl = document.createElement('span');
+    nameEl.className = 'svc-name';
+    nameEl.textContent = svc.name;
+    svcLeft.appendChild(nameEl);
+    svcTop.appendChild(svcLeft);
+    var latencyEl = document.createElement('span');
+    latencyEl.className = 'svc-latency';
+    latencyEl.textContent = svc.latency + 'ms';
+    svcTop.appendChild(latencyEl);
+    service.appendChild(svcTop);
+
+    var barRow = document.createElement('div');
+    barRow.className = 'bar-row';
+    for (var p = history.length; p < MAX; p++) {
+      var nodata = document.createElement('div');
+      nodata.className = 'bar nodata';
+      barRow.appendChild(nodata);
     }
-    var downtimeHtml = lastDown ? '<span class="downtime">↑' + lastDown + '</span>' : '';
-    h += '<div class="service"><div class="svc-top"><div class="svc-left"><span class="dot ' + svc.status + '"></span><span class="svc-name">' + svc.name + '</span></div><span class="svc-latency">' + svc.latency + 'ms</span></div><div class="bar-row">' + bars + '<span class="svc-meta"><span class="pct">' + pct + '%</span>' + downtimeHtml + '</span></div></div>';
+    for (var j = 0; j < history.length; j++) {
+      barRow.appendChild(bar(history[j].statuses[i], history[j].time));
+    }
+    var meta = document.createElement('span');
+    meta.className = 'svc-meta';
+    var pctSpan = document.createElement('span');
+    pctSpan.className = 'pct';
+    pctSpan.textContent = pct + '%';
+    meta.appendChild(pctSpan);
+    if (lastDown) {
+      var downtimeSpan = document.createElement('span');
+      downtimeSpan.className = 'downtime';
+      downtimeSpan.textContent = '↑' + lastDown;
+      meta.appendChild(downtimeSpan);
+    }
+    barRow.appendChild(meta);
+    service.appendChild(barRow);
+    servicesEl.appendChild(service);
   }
 
   var ago = Math.max(0, Math.floor((Date.now() - new Date(d.lastChecked).getTime()) / 1000));
   var summary = d.summary === 'operational' ? 'All systems operational' : 'Issues detected';
   var badge = d.summary === 'operational' ? 'ok' : 'issues';
-  h += '<div class="summary"><div class="badge ' + badge + '">' + summary + '</div><div class="ago">Last checked: ' + ago + 's ago</div></div>';
 
-  document.getElementById('services').innerHTML = h;
+  var summaryEl = document.createElement('div');
+  summaryEl.className = 'summary';
+  var badgeEl = document.createElement('div');
+  badgeEl.className = 'badge ' + badge;
+  badgeEl.textContent = summary;
+  summaryEl.appendChild(badgeEl);
+  var agoEl = document.createElement('div');
+  agoEl.className = 'ago';
+  agoEl.textContent = 'Last checked: ' + ago + 's ago';
+  summaryEl.appendChild(agoEl);
+  servicesEl.appendChild(summaryEl);
+
   document.getElementById('footer').textContent = d.lastChecked.replace('T', ' ').slice(0, 19) + ' UTC';
 }
 
@@ -105,7 +164,15 @@ async function load() {
     var d = await r.json();
     render(d);
   } catch(e) {
-    document.getElementById('services').innerHTML = '<div class="service"><span class="svc-name">Failed to fetch status</span></div>';
+    var servicesEl = document.getElementById('services');
+    servicesEl.textContent = '';
+    var errService = document.createElement('div');
+    errService.className = 'service';
+    var errName = document.createElement('span');
+    errName.className = 'svc-name';
+    errName.textContent = 'Failed to fetch status';
+    errService.appendChild(errName);
+    servicesEl.appendChild(errService);
     document.getElementById('footer').textContent = 'Unable to connect';
   }
 }
@@ -115,5 +182,14 @@ setInterval(load, 60000);
 </body></html>`
 
 export async function onRequest(): Promise<Response> {
-  return new Response(PAGE, { headers: { "Content-Type": "text/html;charset=utf-8" } })
+  return new Response(PAGE, {
+    headers: {
+      "Content-Type": "text/html;charset=utf-8",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+    },
+  })
 }

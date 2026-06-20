@@ -1,2 +1,3 @@
-/docs/* https://github.com/Lento47/arcana 302
-/api/* https://api.arcana.otnelhq.com 302
+# Explicit path redirects (no splats) prevent open redirects.
+/docs  https://github.com/Lento47/arcana  302
+/api   https://api.arcana.otnelhq.com    302

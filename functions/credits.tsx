@@ -109,14 +109,12 @@ payBtn.addEventListener('click', async function(){
 });
 
 document.getElementById('check').addEventListener('click', async function(){
-  var email = emailEl.value.trim().toLowerCase();
   var key = keyEl.value.trim();
-  var token = email || key;
-  if(!token){ return show('Enter your email address or license key.', false); }
+  if(!key){ return show('Enter your Arcana license key to check balance.', false); }
   var bal = document.getElementById('bal');
   bal.textContent = '· checking...';
   try{
-    var r = await fetch(PROXY + '/v1/balance', { headers:{ 'Authorization':'Bearer ' + token } });
+    var r = await fetch(PROXY + '/v1/balance', { headers:{ 'Authorization':'Bearer ' + key } });
     var d = await r.json();
     if(d.dollars !== undefined){ bal.textContent = '· $' + d.dollars; }
     else { bal.textContent = '· ' + (d.error || 'unavailable'); }
@@ -126,5 +124,14 @@ document.getElementById('check').addEventListener('click', async function(){
 </body></html>`
 
 export async function onRequest(): Promise<Response> {
-  return new Response(PAGE, { headers: { "Content-Type": "text/html;charset=utf-8" } })
+  return new Response(PAGE, {
+    headers: {
+      "Content-Type": "text/html;charset=utf-8",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://arcana-proxy.lejzerv.workers.dev; frame-ancestors 'none'",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+    },
+  })
 }

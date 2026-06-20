@@ -43,7 +43,17 @@ function fail(text){
   icon.textContent = '✕';
   title.textContent = 'Payment not completed';
   detail.textContent = text;
-  extra.innerHTML = '<a class="btn" href="/credits">Try again</a><a class="btn ghost" href="/">Home</a>';
+  extra.textContent = '';
+  var a1 = document.createElement('a');
+  a1.className = 'btn';
+  a1.href = '/credits';
+  a1.textContent = 'Try again';
+  var a2 = document.createElement('a');
+  a2.className = 'btn ghost';
+  a2.href = '/';
+  a2.textContent = 'Home';
+  extra.appendChild(a1);
+  extra.appendChild(a2);
 }
 function done(d){
   icon.textContent = '✓';
@@ -51,7 +61,25 @@ function done(d){
   detail.textContent = 'Your Arcana proxy balance is topped up.';
   var added = '$' + ((d.creditsAdded || 0) / 100).toFixed(2);
   var bal = '$' + ((d.newBalance || 0) / 100).toFixed(2);
-  extra.innerHTML = '<div class="big">+' + added + '</div><div class="muted">New balance: ' + bal + '</div><a class="btn" href="/">Done</a><a class="btn ghost" href="/credits">Buy more</a>';
+  extra.textContent = '';
+  var big = document.createElement('div');
+  big.className = 'big';
+  big.textContent = '+' + added;
+  var m = document.createElement('div');
+  m.className = 'muted';
+  m.textContent = 'New balance: ' + bal;
+  var a1 = document.createElement('a');
+  a1.className = 'btn';
+  a1.href = '/';
+  a1.textContent = 'Done';
+  var a2 = document.createElement('a');
+  a2.className = 'btn ghost';
+  a2.href = '/credits';
+  a2.textContent = 'Buy more';
+  extra.appendChild(big);
+  extra.appendChild(m);
+  extra.appendChild(a1);
+  extra.appendChild(a2);
 }
 
 (async function(){
@@ -67,5 +95,14 @@ function done(d){
 </body></html>`
 
 export async function onRequest(): Promise<Response> {
-  return new Response(PAGE, { headers: { "Content-Type": "text/html;charset=utf-8" } })
+  return new Response(PAGE, {
+    headers: {
+      "Content-Type": "text/html;charset=utf-8",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://arcana-proxy.lejzerv.workers.dev; frame-ancestors 'none'",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+    },
+  })
 }
