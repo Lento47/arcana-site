@@ -41,9 +41,14 @@ const PAGE = `<!DOCTYPE html>
   <p class="sub">Top up your Arcana proxy balance. $1 = 100 credits. Spent only when you route models through the Arcana proxy — your own provider keys stay free.</p>
   <div class="card">
     <div class="row">
-      <label for="key">Arcana license / proxy key</label>
+      <label for="email">Email address</label>
+      <input type="email" id="email" placeholder="you@example.com" autocomplete="email" spellcheck="false">
+      <div class="hint">The email tied to your Arcana subscription. Credits land on this account.</div>
+    </div>
+    <div class="row">
+      <label for="key">Or Arcana license key (optional)</label>
       <input type="text" id="key" placeholder="ARCANA-PRO-..." autocomplete="off" spellcheck="false">
-      <div class="hint">The key you activate in the CLI (<code>arcana license activate</code>). Credits land on this account.</div>
+      <div class="hint">If you don't have a subscription email on file. The key from <code>arcana license activate</code>.</div>
     </div>
     <div class="row">
       <label>Amount (USD · min $5)</label>
@@ -66,6 +71,7 @@ var PROXY = ${JSON.stringify(PROXY)};
 var amount = 10;
 var amts = document.getElementById('amts');
 var custom = document.getElementById('custom');
+var emailEl = document.getElementById('email');
 var keyEl = document.getElementById('key');
 var msg = document.getElementById('msg');
 var payBtn = document.getElementById('pay');
@@ -85,12 +91,16 @@ custom.addEventListener('input', function(){
 function show(text, ok){ msg.className = 'msg ' + (ok ? 'ok' : 'err'); msg.textContent = text; }
 
 payBtn.addEventListener('click', async function(){
+  var email = emailEl.value.trim().toLowerCase();
   var key = keyEl.value.trim();
-  if(!key){ return show('Enter your Arcana key first.', false); }
+  if(!email && !key){ return show('Enter your email address or license key.', false); }
   if(!amount || amount < 5){ return show('Minimum is $5.', false); }
   payBtn.disabled = true; payBtn.textContent = 'Creating order...';
   try{
-    var r = await fetch(PROXY + '/v1/pay/create-order', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ amount: amount, userId: key }) });
+    var body = { amount: amount };
+    if (email) body.email = email;
+    else body.userId = key;
+    var r = await fetch(PROXY + '/v1/pay/create-order', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
     var d = await r.json();
     if(d.approvalUrl){ window.location.href = d.approvalUrl; return; }
     show(d.message || d.error || 'Could not create order.', false);
@@ -99,12 +109,14 @@ payBtn.addEventListener('click', async function(){
 });
 
 document.getElementById('check').addEventListener('click', async function(){
+  var email = emailEl.value.trim().toLowerCase();
   var key = keyEl.value.trim();
-  if(!key){ return show('Enter your Arcana key first.', false); }
+  var token = email || key;
+  if(!token){ return show('Enter your email address or license key.', false); }
   var bal = document.getElementById('bal');
   bal.textContent = '· checking...';
   try{
-    var r = await fetch(PROXY + '/v1/balance', { headers:{ 'Authorization':'Bearer ' + key } });
+    var r = await fetch(PROXY + '/v1/balance', { headers:{ 'Authorization':'Bearer ' + token } });
     var d = await r.json();
     if(d.dollars !== undefined){ bal.textContent = '· $' + d.dollars; }
     else { bal.textContent = '· ' + (d.error || 'unavailable'); }
