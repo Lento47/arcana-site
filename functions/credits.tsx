@@ -12,8 +12,8 @@ h1{font-size:1.5rem;letter-spacing:-.02em;margin:.6rem 0 .3rem}
 .sub{color:var(--muted);font-size:.9rem;line-height:1.5;margin-bottom:1.8rem}
 .card{background:rgba(17,16,24,.9);border:1px solid var(--line);border-radius:10px;padding:22px}
 label{display:block;font-size:.72rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin:0 0 8px}
-input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:7px;color:var(--text);font-family:var(--mono);font-size:.85rem;padding:11px 13px;outline:none;transition:border-color .15s}
-input[type=text]:focus{border-color:var(--accent)}
+input[type=text],input[type=email]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:7px;color:var(--text);font-family:var(--mono);font-size:.85rem;padding:11px 13px;outline:none;transition:border-color .15s}
+input[type=text]:focus,input[type=email]:focus{border-color:var(--accent)}
 .amts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 4px}
 .amt{appearance:none;cursor:pointer;background:var(--surface2);border:1px solid var(--line);color:var(--muted);font:700 15px/1 var(--mono);padding:12px 0;border-radius:7px;transition:.15s}
 .amt:hover{color:var(--text);border-color:var(--soft)}
