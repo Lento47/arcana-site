@@ -37,10 +37,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .card-error{font-family:var(--mono);font-size:.68rem;color:var(--red);margin:4px 0 0 23px;line-height:1.5;padding:3px 8px;background:rgba(255,107,107,.06);border-radius:4px;display:inline-block}
 .card-stats{display:flex;align-items:center;gap:10px;margin-top:6px;padding-left:23px}
 .mini-bars{display:flex;gap:2px;flex:1;align-items:flex-end;height:18px}
-.mini-bar{flex:1;min-width:3px;border-radius:1.5px;transition:opacity .15s;cursor:pointer;position:relative;opacity:.55}
+.mini-bar{flex:1;min-width:3px;border-radius:1.5px;transition:opacity .15s;cursor:pointer;position:relative;opacity:.55;background:#1a1925}
 .mini-bar:hover{opacity:1}
-.mini-bar.up{background:var(--green)}
-.mini-bar.down{background:var(--red);opacity:.65}
+.mini-bar.up{background:var(--green);opacity:.9}
+.mini-bar.down{background:var(--red);opacity:.8}
 .mini-bar[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--surface2);color:var(--text);padding:2px 6px;border-radius:3px;font-size:.55rem;white-space:nowrap;pointer-events:none;z-index:10;border:1px solid var(--line);font-family:var(--mono)}
 .uptime{font-family:var(--mono);font-size:.63rem;color:var(--muted);white-space:nowrap;min-width:60px;text-align:right}
 .uptime strong{color:var(--text);font-weight:600}
