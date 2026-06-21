@@ -36,9 +36,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .lat-fast{color:#8CFFBF}.lat-mid{color:var(--amber)}.lat-slow{color:var(--red)}
 .card-error{font-family:var(--mono);font-size:.68rem;color:var(--red);margin:4px 0 0 23px;line-height:1.5;padding:3px 8px;background:rgba(255,107,107,.06);border-radius:4px;display:inline-block}
 .card-stats{display:flex;align-items:center;gap:10px;margin-top:6px;padding-left:23px}
-.mini-bars{display:flex;gap:2.5px;flex:1;align-items:flex-end;height:26px;padding:2px 0}
+.mini-bars{display:flex;gap:2.5px;flex:1;height:26px;padding:2px 0}
 .mini-bar{flex:1;min-width:3px;border-radius:2px 2px 1px 1px;transition:opacity .2s,transform .2s;cursor:pointer;position:relative;opacity:.4;background:linear-gradient(to top,rgba(161,154,173,.15),rgba(161,154,173,.05))}
-.mini-bar:hover{opacity:1;transform:scaleY(1.15)}
+.mini-bar:hover{opacity:1;filter:brightness(1.3)}
 .mini-bar.up{background:linear-gradient(to top,rgba(140,255,191,.85),rgba(140,255,191,.3));opacity:1;box-shadow:0 0 3px rgba(140,255,191,.15)}
 .mini-bar.down{background:linear-gradient(to top,rgba(255,107,107,.8),rgba(255,107,107,.25));opacity:1;box-shadow:0 0 3px rgba(255,107,107,.12)}
 .mini-bar[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--surface2);color:var(--text);padding:2px 6px;border-radius:3px;font-size:.55rem;white-space:nowrap;pointer-events:none;z-index:10;border:1px solid var(--line);font-family:var(--mono)}
