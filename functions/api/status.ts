@@ -1,8 +1,8 @@
 const SERVICES = [
-  { name: "AI Proxy", url: "https://proxy.arcana.otnelhq.com/v1/health" },
+  { name: "AI Proxy", url: "https://proxy.arcana.otnelhq.com/v1/models" },
   { name: "License Server", url: "https://api.arcana.otnelhq.com/api/health" },
   { name: "Website", url: "https://arcana.otnelhq.com" },
-  { name: "R2 Releases", url: "https://releases.otnelhq.com" },
+  { name: "R2 Releases", url: "https://releases.otnelhq.com/arcana-darwin-arm64.zip.sha256" },
 ] as const
 
 async function check(url: string, requireOk = true): Promise<{ status: string; latency: number; error?: string }> {
@@ -19,7 +19,9 @@ async function check(url: string, requireOk = true): Promise<{ status: string; l
 
 export async function onRequest(): Promise<Response> {
   const checks = await Promise.all(SERVICES.map((s) => {
-    const requireOk = s.name !== "Website"  // Website: any reachable is OK; health endpoints: need 2xx
+    // Website + Proxy: any reachable response = up (proxy endpoints require auth)
+    // R2: any response = up (root path has no index, check specific file)
+    const requireOk = s.name === "License Server"  // Only License Server has a real health endpoint
     return check(s.url, requireOk)
   }))
   const data = {
