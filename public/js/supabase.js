@@ -8,7 +8,13 @@ const sb = window.supabase?.createClient
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null
 
-if (!sb) console.error("Arcana: Supabase SDK not loaded. Auth disabled.")
+if (!sb) {
+  console.error("Arcana: Supabase SDK not loaded. Auth disabled.")
+  // Let the page know immediately so it can show a banner on load
+  window.addEventListener('DOMContentLoaded', () => {
+    window.dispatchEvent(new CustomEvent('arcana:auth-offline'))
+  })
+}
 
 // Expose for inline scripts
 window.__ARCANA_SB__ = sb

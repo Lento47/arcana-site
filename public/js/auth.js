@@ -4,6 +4,28 @@
       const sb = window.__ARCANA_SB__;
       const authReady = !!sb;
 
+      // Show offline warning on page load if Supabase SDK failed to load
+      if (!authReady) {
+        window.addEventListener('arcana:auth-offline', () => {
+          showBannerQuick('warning', 'Auth unavailable', 'Authentication service did not load. Check your connection and refresh.');
+        });
+        // Also show after a short delay in case the event already fired
+        setTimeout(() => {
+          if (!window.__ARCANA_SB__) showBannerQuick('warning', 'Auth unavailable', 'Authentication service did not load. Check your connection and refresh.');
+        }, 1500);
+      }
+
+      // Quick banner before full init (used for offline warning)
+      function showBannerQuick(type, title, message) {
+        const b = document.getElementById('banner-' + type);
+        if (!b) return;
+        const t = b.querySelector('[id^="banner-' + type + '-title"]');
+        const m = b.querySelector('[id^="banner-' + type + '-message"]');
+        if (t) t.textContent = title;
+        if (m) m.textContent = message;
+        b.setAttribute('aria-hidden', 'false');
+      }
+
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       let theme = document.documentElement.getAttribute('data-theme') || (prefersDark ? 'dark' : 'light');
 
@@ -223,7 +245,7 @@
           return;
         }
         if (!authReady) {
-          showBanner('error', 'Auth offline', 'Authentication service unavailable. Try again shortly.');
+          showBanner('warning', 'Auth offline', 'Authentication is temporarily unavailable.');
           return;
         }
 
@@ -274,7 +296,7 @@
           return;
         }
         if (!authReady) {
-          showBanner('error', 'Auth offline', 'Authentication service unavailable. Try again shortly.');
+          showBanner('warning', 'Auth offline', 'Authentication is temporarily unavailable.');
           return;
         }
 
@@ -331,7 +353,7 @@
           return;
         }
         if (!authReady) {
-          showBanner('error', 'Auth offline', 'Authentication service unavailable. Try again shortly.');
+          showBanner('warning', 'Auth offline', 'Authentication is temporarily unavailable.');
           return;
         }
         const btn = document.getElementById('btn-magic');
@@ -366,7 +388,7 @@
       // OAuth
       function handleOAuth(provider) {
         if (!authReady) {
-          showBanner('error', 'Auth offline', 'Authentication service unavailable. Try again shortly.');
+          showBanner('warning', 'Auth offline', 'Authentication is temporarily unavailable.');
           return;
         }
         hideBanners();
@@ -430,7 +452,7 @@
           return;
         }
         if (!authReady) {
-          showBanner('error', 'Auth offline', 'Authentication service unavailable. Try again shortly.');
+          showBanner('warning', 'Auth offline', 'Authentication is temporarily unavailable.');
           return;
         }
 
