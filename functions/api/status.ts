@@ -5,14 +5,15 @@ const SERVICES = [
   { name: "R2 Releases", url: "https://releases.otnelhq.com" },
 ] as const
 
-async function check(url: string, requireOk = true): Promise<{ status: string; latency: number }> {
+async function check(url: string, requireOk = true): Promise<{ status: string; latency: number; error?: string }> {
   const start = Date.now()
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(5000) })
     const healthy = requireOk ? res.ok : res.status < 500
-    return { status: healthy ? "up" : "down", latency: Date.now() - start }
-  } catch {
-    return { status: "down", latency: Date.now() - start }
+    if (healthy) return { status: "up", latency: Date.now() - start }
+    return { status: "down", latency: Date.now() - start, error: "HTTP " + res.status }
+  } catch (e: any) {
+    return { status: "down", latency: Date.now() - start, error: e?.name === "TimeoutError" ? "timeout (5s)" : (e?.message || "connection failed") }
   }
 }
 

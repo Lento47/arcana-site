@@ -14,8 +14,11 @@ header{display:flex;align-items:center;justify-content:space-between;padding:1re
 .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .dot.up{background:#10B981;box-shadow:0 0 6px rgba(16,185,129,.4)}
 .dot.down{background:#EF4444;box-shadow:0 0 6px rgba(239,68,68,.4)}
+.dot.recovered{background:#10B981;box-shadow:0 0 12px rgba(16,185,129,.6);animation:pulse .6s ease-out 3}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
 .svc-name{font-size:.85rem;color:#E7ECF3}
 .svc-latency{font-size:.75rem;color:#8A94A6;font-family:ui-monospace,SFMono-Regular,monospace}
+.svc-error{font-size:.7rem;color:#EF4444;font-family:ui-monospace,SFMono-Regular,monospace;margin:4px 0 0 22px;padding:3px 8px;background:rgba(239,68,68,.08);border-radius:3px;display:inline-block}
 .bar-row{display:flex;align-items:center;gap:3px}
 .bar{flex:1 1 0;min-width:0;height:16px;border-radius:2px;cursor:pointer;position:relative;transition:opacity .15s}
 .bar:hover{opacity:.7}
@@ -32,6 +35,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:1re
 .badge.ok{background:rgba(16,185,129,.15);color:#10B981;border:1px solid rgba(16,185,129,.3)}
 .badge.issues{background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.3)}
 .summary .ago{font-size:.75rem;color:#8A94A6;margin-top:6px}
+.down-detail{font-size:.7rem;color:#EF4444;margin-top:8px;font-family:ui-monospace,SFMono-Regular,monospace;line-height:1.5}
 .timestamp{font-size:.7rem;color:#5B6380;text-align:center;margin-top:1rem;font-family:ui-monospace,SFMono-Regular,monospace}
 footer{border-top:1px solid #1D2430;padding:1.5rem 0;margin-top:2rem;text-align:center}
 footer div{font-size:.75rem;color:#5B6380}`
@@ -82,6 +86,7 @@ function render(d) {
   var servicesEl = document.getElementById('services');
   servicesEl.textContent = '';
 
+  var downList = [];
   for (var i = 0; i < d.services.length; i++) {
     var svc = d.services[i];
     var uptime = 0, lastDown = '';
@@ -90,6 +95,9 @@ function render(d) {
       else if (history[j].statuses[i] === 'down') lastDown = history[j].time;
     }
     var pct = history.length > 0 ? Math.round(uptime / history.length * 100) : 100;
+    var wasDown = history.length > 0 && history[history.length - 1].statuses[i] === 'down';
+    var recovered = wasDown && svc.status === 'up';
+    if (svc.status === 'down') downList.push(svc);
 
     var service = document.createElement('div');
     service.className = 'service';
@@ -99,11 +107,11 @@ function render(d) {
     var svcLeft = document.createElement('div');
     svcLeft.className = 'svc-left';
     var dot = document.createElement('span');
-    dot.className = 'dot ' + svc.status;
+    dot.className = 'dot ' + svc.status + (recovered ? ' recovered' : '');
     svcLeft.appendChild(dot);
     var nameEl = document.createElement('span');
     nameEl.className = 'svc-name';
-    nameEl.textContent = svc.name;
+    nameEl.textContent = svc.name + (recovered ? ' ◆ recovered' : '');
     svcLeft.appendChild(nameEl);
     svcTop.appendChild(svcLeft);
     var latencyEl = document.createElement('span');
@@ -111,6 +119,13 @@ function render(d) {
     latencyEl.textContent = svc.latency + 'ms';
     svcTop.appendChild(latencyEl);
     service.appendChild(svcTop);
+
+    if (svc.status === 'down' && svc.error) {
+      var errEl = document.createElement('div');
+      errEl.className = 'svc-error';
+      errEl.textContent = svc.error;
+      service.appendChild(errEl);
+    }
 
     var barRow = document.createElement('div');
     barRow.className = 'bar-row';
@@ -131,7 +146,7 @@ function render(d) {
     if (lastDown) {
       var downtimeSpan = document.createElement('span');
       downtimeSpan.className = 'downtime';
-      downtimeSpan.textContent = '↑' + lastDown;
+      downtimeSpan.textContent = '↓' + lastDown;
       meta.appendChild(downtimeSpan);
     }
     barRow.appendChild(meta);
@@ -149,6 +164,12 @@ function render(d) {
   badgeEl.className = 'badge ' + badge;
   badgeEl.textContent = summary;
   summaryEl.appendChild(badgeEl);
+  if (downList.length > 0) {
+    var downDetail = document.createElement('div');
+    downDetail.className = 'down-detail';
+    downDetail.textContent = 'Down: ' + downList.map(function(s) { return s.name + (s.error ? ' (' + s.error + ')' : ''); }).join(', ');
+    summaryEl.appendChild(downDetail);
+  }
   var agoEl = document.createElement('div');
   agoEl.className = 'ago';
   agoEl.textContent = 'Last checked: ' + ago + 's ago';
