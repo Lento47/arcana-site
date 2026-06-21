@@ -271,29 +271,6 @@
       gap: var(--space-sm);
     }
 
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2xs);
-      padding: var(--space-2xs) var(--space-sm);
-      border-radius: var(--radius-full);
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-subtle);
-      font-size: 0.75rem;
-      font-family: var(--font-mono);
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
-    }
-
     .main {
       display: grid;
       grid-template-columns: 1fr minmax(360px, 480px);
