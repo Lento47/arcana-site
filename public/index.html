@@ -26,7 +26,6 @@
   <meta name="theme-color" content="#08070B">
 
   <link rel="stylesheet" href="/css/main.css" media="all">
-  <link rel="preconnect" href="https://esm.sh">
 
   <!-- Structured Data — SoftwareApplication -->
   <script type="application/ld+json">
@@ -48,47 +47,170 @@
   </script>
 </head>
 <body>
-  <div id="root">
-    <!-- SSR fallback: visible immediately, replaced by SPA if JS works -->
-    <header>
-      <div class="wrap nav">
-        <a class="brand" href="/"><span class="mark">⛧</span> ARCANA</a>
-        <nav>
-          <a href="/#models">Models</a>
-          <a href="/#system">System</a>
-          <a href="/#start">Start</a>
-          <a href="/#pricing">Pricing</a>
-          <a href="/changelog">Changelog</a>
-          <a class="status" href="/status">Status</a>
-          <a href="https://github.com/Lento47/arcana">GitHub</a>
-        </nav>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="/"><span class="mark">⛧</span> ARCANA</a>
+      <nav>
+        <a href="#models">Models</a>
+        <a href="#system">System</a>
+        <a href="#start">Start</a>
+        <a href="#pricing">Pricing</a>
+        <a href="/changelog">Changelog</a>
+        <a class="status" href="/status">Status</a>
+        <a href="https://github.com/Lento47/arcana">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="slash">/</div>
+      <h1>The Terminal Interface For AI Keys</h1>
+      <p class="lead">Chat with <b>OpenAI, Claude, DeepSeek, OpenRouter, Cerebras, and local models</b> from one terminal. Arcana builds a <b>personal knowledge graph</b> from your sessions — wiki-style memory, auto-docs, and linked facts that grow with your work.</p>
+      <div class="actions">
+        <div class="cmd"><span>$</span>npx arcana-ai@latest</div>
+        <a class="btn primary" href="#start">Start</a>
+        <a class="btn" href="https://github.com/Lento47/arcana">View source</a>
       </div>
-    </header>
-    <main>
-      <section class="hero wrap">
-        <div class="slash">/</div>
-        <h1>The Terminal Interface For AI Keys</h1>
-        <p class="lead">Chat with <b>OpenAI, Claude, DeepSeek, OpenRouter, Cerebras, and local models</b> from one terminal. Arcana builds a <b>personal knowledge graph</b> from your sessions — wiki-style memory, auto-docs, and linked facts that grow with your work.</p>
-        <div class="actions">
-          <div class="cmd"><span>$</span>npx arcana-ai@latest</div>
-          <a class="btn primary" href="/#start">Start</a>
-          <a class="btn" href="https://github.com/Lento47/arcana">View source</a>
+    </section>
+
+    <div class="wrap">
+      <div class="stats" aria-label="Arcana product stats">
+        <div class="stat"><strong>174</strong><span>Skills</span></div>
+        <div class="stat"><strong>32</strong><span>Providers</span></div>
+        <div class="stat"><strong>17</strong><span>Tools</span></div>
+        <div class="stat"><strong>4</strong><span>Gateways</span></div>
+      </div>
+    </div>
+
+    <section class="wrap" id="models">
+      <div class="section-head">
+        <div>
+          <div class="kicker">// Models</div>
+          <h2>One session for any model key.</h2>
         </div>
-      </section>
-    </main>
-  </div>
+        <p>Arcana does not sell a model. It gives your model keys a terminal-native session layer with memory, tools, and scheduled runs.</p>
+      </div>
+      <div class="model-strip">
+        <span class="pill">openai</span>
+        <span class="pill">anthropic</span>
+        <span class="pill">openrouter</span>
+        <span class="pill">deepseek</span>
+        <span class="pill">cerebras</span>
+        <span class="pill">ollama</span>
+        <span class="pill">local</span>
+        <span class="pill">custom endpoint</span>
+      </div>
+    </section>
+
+    <section class="wrap" id="system">
+      <div class="section-head">
+        <div>
+          <div class="kicker">// System</div>
+          <h2>Everything around the model.</h2>
+        </div>
+        <p>OpenRouter sells unified model access. Arcana sits one layer above: the terminal surface where keys, tools, memory, jobs, and gateways meet.</p>
+      </div>
+      <div class="cards">
+        <article class="card"><div class="num">01</div><h3>Any model key</h3><p>Add provider keys once. Start sessions against the model that fits the task instead of changing apps.</p></article>
+        <article class="card"><div class="num">02</div><h3>Wiki-style memory</h3><p>Facts, patterns, and mistakes saved as interlinked wiki files. Arcana builds a knowledge graph from your sessions that grows with your work.</p></article>
+        <article class="card"><div class="num">03</div><h3>Scoped tools</h3><p>Run filesystem, shell, git, gateway, and skill tools from explicit profiles. The tool surface is visible.</p></article>
+        <article class="card"><div class="num">04</div><h3>Skills on demand</h3><p>Load specialized instructions only when needed. Keep the base session clean.</p></article>
+        <article class="card"><div class="num">05</div><h3>Cron jobs</h3><p>Schedule recurring prompts, reports, reviews, and checks from the same terminal runtime.</p></article>
+        <article class="card"><div class="num">06</div><h3>Chat gateways</h3><p>Expose sessions through Telegram, Discord, Slack, and WhatsApp when the terminal should not be open.</p></article>
+      </div>
+    </section>
+
+    <section class="wrap" id="start">
+      <div class="section-head">
+        <div>
+          <div class="kicker">// Start</div>
+          <h2>Install. Add key. Run session.</h2>
+        </div>
+        <p>No account required for local use. The first run should feel like using a developer tool, not signing up for another workspace.</p>
+      </div>
+      <div class="steps">
+        <article class="step"><div class="idx">1</div><h3>Install</h3><p>Run Arcana from npm. Keep it local.</p><code class="code">npx arcana-ai@latest</code></article>
+        <article class="step"><div class="idx">2</div><h3>Activate Pro</h3><p>Paste the license key from your subscription email.</p><code class="code">arcana license activate &lt;key&gt;</code></article>
+        <article class="step"><div class="idx">3</div><h3>Open a session</h3><p>Chat, run tools, save memory, or schedule a job.</p><code class="code">arcana</code></article>
+      </div>
+    </section>
+
+    <section class="wrap" id="pricing">
+      <div class="section-head">
+        <div>
+          <div class="kicker">// Pricing</div>
+          <h2>Free locally. Paid when it becomes a system.</h2>
+        </div>
+        <p>Model costs stay with your provider. Arcana charges for the terminal interface, session layer, sync, relay, and team surfaces.</p>
+      </div>
+      <div class="pricing">
+        <article class="plan">
+          <h3>Community</h3>
+          <div class="price">$0</div>
+          <div class="annual">local use</div>
+          <ul>
+            <li>one provider key</li>
+            <li>local sessions</li>
+            <li>basic memory</li>
+            <li>local tools</li>
+            <li>community source</li>
+          </ul>
+          <a class="btn" href="https://github.com/Lento47/arcana-community">Install</a>
+        </article>
+        <article class="plan featured">
+          <h3>Pro</h3>
+          <div class="price">$19<small> /mo</small></div>
+          <div class="annual">per month</div>
+          <ul>
+            <li>unlimited provider keys</li>
+            <li>multi-model rooms</li>
+            <li>advanced memory search</li>
+            <li>tool profiles</li>
+            <li>cost ledger</li>
+          </ul>
+          <a class="btn primary" href="#" id="subscribe-pro">Subscribe →</a>
+        </article>
+        <article class="plan">
+          <h3>Enterprise</h3>
+          <div class="price">Custom</div>
+          <div class="annual">per-seat pricing</div>
+          <ul>
+            <li>encrypted sync</li>
+            <li>gateway relay</li>
+            <li>hosted cron relay</li>
+            <li>cross-machine sessions</li>
+            <li>team vault</li>
+            <li>audit log</li>
+            <li>SLA support</li>
+          </ul>
+          <a class="btn" href="mailto:lejzerv@gmail.com?subject=Arcana%20Enterprise">Contact</a>
+        </article>
+      </div>
+      <div class="note mono">
+        Provider usage is billed separately. Arcana does not need to proxy or resell tokens for local mode.
+        Prefer pay-as-you-go? <a href="/credits" style="color:var(--accent)">Buy proxy credits</a>
+        ($1 = 100 credits, min $5) — top up from the web or with <code>arcana proxy buy</code>.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer">
+      <div><span style="color:var(--accent)">⛧</span> ARCANA · Terminal Interface For AI Keys</div>
+      <div class="links">
+        <a href="https://github.com/Lento47/arcana">GitHub</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Buy Credits</a>
+        <a href="/status">Status</a>
+        <a href="https://otnelhq.com">OTNEL</a>
+      </div>
+    </div>
+  </footer>
 
   <script type="module" src="/js/app.js" async></script>
 
-  <!-- Noscript fallback -->
-  <noscript>
-    <div style="max-width:600px;margin:4rem auto;padding:2rem;color:#A19AAD;font-family:sans-serif;text-align:center">
-      <h1 style="color:#F4F0FF">ARCANA</h1>
-      <p>The Terminal Interface For AI Keys. Requires JavaScript.</p>
-      <p style="margin-top:1rem">
-        <code style="background:#111018;padding:8px 14px;border-radius:4px;color:#D9F99D">npx arcana-ai@latest</code>
-      </p>
-    </div>
-  </noscript>
+  <!-- Noscript fallback: content is already rendered above -->
+  <noscript></noscript>
 </body>
 </html>
