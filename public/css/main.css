@@ -94,18 +94,31 @@ nav a.status{color:var(--green)}
 nav a.status:hover{color:#b8ffd4;background:rgba(140,255,191,.06)}
 nav a.status::after{background:var(--green)}
 nav a.signin{
-  color:var(--accent);
-  border:1px solid rgba(179,140,255,.35);
-  background:rgba(179,140,255,.08);
-  padding:6px 14px;
+  color:#fff;
+  border:1px solid rgba(179,140,255,.5);
+  background:rgba(179,140,255,.18);
+  padding:6px 16px;
   font-weight:600;
+  letter-spacing:.02em;
 }
 nav a.signin:hover{
-  background:rgba(179,140,255,.16);
-  border-color:rgba(179,140,255,.55);
-  box-shadow:0 0 16px rgba(179,140,255,.18);
+  color:#fff;
+  background:rgba(179,140,255,.3);
+  border-color:rgba(179,140,255,.72);
+  box-shadow:0 0 20px rgba(179,140,255,.25);
 }
 nav a.signin::after{display:none}
+nav a.signin.signed-in{
+  color:var(--green);
+  border-color:rgba(140,255,191,.4);
+  background:rgba(140,255,191,.1);
+  font-weight:500;
+  font-size:11.5px;
+}
+nav a.signin.signed-in:hover{
+  border-color:rgba(140,255,191,.6);
+  box-shadow:0 0 14px rgba(140,255,191,.15);
+}
 
 /* === Hero === */
 .hero{padding:86px 0 52px;text-align:center}
