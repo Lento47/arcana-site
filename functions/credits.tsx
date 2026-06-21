@@ -1,4 +1,4 @@
-const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
+const PROXY = "https://proxy.arcana.otnelhq.com"
 
 const CSS = `*{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#08070B;--surface:#111018;--surface2:#171520;--line:#282638;--text:#F4F0FF;--muted:#A19AAD;--soft:#736C80;--accent:#B38CFF;--green:#8CFFBF;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -99,7 +99,7 @@ payBtn.addEventListener('click', async function(){
   try{
     var body = { amount: amount };
     if (email) body.email = email;
-    else body.userId = key;
+    else body.userId = key; // proxy resolves license keys via getUser(Authorization: Bearer <key>)
     var r = await fetch(PROXY + '/v1/pay/create-order', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
     var d = await r.json();
     if(d.approvalUrl){ window.location.href = d.approvalUrl; return; }
@@ -116,9 +116,10 @@ document.getElementById('check').addEventListener('click', async function(){
   try{
     var r = await fetch(PROXY + '/v1/balance', { headers:{ 'Authorization':'Bearer ' + key } });
     var d = await r.json();
-    if(d.dollars !== undefined){ bal.textContent = '· $' + d.dollars; }
+    if (!r.ok) { bal.textContent = '· ' + (d.error || 'HTTP ' + r.status); }
+    else if(d.dollars !== undefined){ bal.textContent = '· $' + d.dollars; }
     else { bal.textContent = '· ' + (d.error || 'unavailable'); }
-  }catch(e){ bal.textContent = '· error'; }
+  }catch(e){ bal.textContent = '· ' + (e.message || 'network error'); }
 });
 </script>
 </body></html>`
@@ -127,7 +128,8 @@ export async function onRequest(): Promise<Response> {
   return new Response(PAGE, {
     headers: {
       "Content-Type": "text/html;charset=utf-8",
-      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://arcana-proxy.lejzerv.workers.dev; frame-ancestors 'none'",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://proxy.arcana.otnelhq.com; frame-ancestors 'none'",
       "X-Frame-Options": "DENY",
       "X-Content-Type-Options": "nosniff",
       "Strict-Transport-Security": "max-age=31536000; includeSubDomains",

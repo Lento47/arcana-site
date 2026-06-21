@@ -64,17 +64,17 @@ try {
 function bar(status, time) {
   var el = document.createElement('div');
   el.className = 'bar ' + status;
-  el.title = time + ' ' + status;
+  el.title = time + ' UTC ' + status;
   var tip = document.createElement('div');
   tip.className = 'tip';
-  tip.textContent = time + ' ' + status;
+  tip.textContent = time + ' UTC ' + status;
   el.appendChild(tip);
   return el;
 }
 
 function render(d) {
   var now = new Date();
-  var entry = { time: now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0'), statuses: d.services.map(function(s){return s.status}) };
+  var entry = { time: now.getUTCHours().toString().padStart(2,'0') + ':' + now.getUTCMinutes().toString().padStart(2,'0'), statuses: d.services.map(function(s){return s.status}) };
   history.push(entry);
   if (history.length > MAX) history.splice(0, history.length - MAX);
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch(e) {}
@@ -185,6 +185,7 @@ export async function onRequest(): Promise<Response> {
   return new Response(PAGE, {
     headers: {
       "Content-Type": "text/html;charset=utf-8",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
       "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'",
       "X-Frame-Options": "DENY",
       "X-Content-Type-Options": "nosniff",

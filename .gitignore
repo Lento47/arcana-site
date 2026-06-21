@@ -1,3 +1,4 @@
 node_modules/
 .wrangler/fnbuild/
 .DS_Store
+vault/

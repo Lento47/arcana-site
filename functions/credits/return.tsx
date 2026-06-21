@@ -1,4 +1,4 @@
-const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
+const PROXY = "https://proxy.arcana.otnelhq.com"
 
 const CSS = `*{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#08070B;--line:#282638;--text:#F4F0FF;--muted:#A19AAD;--soft:#736C80;--accent:#B38CFF;--green:#8CFFBF;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -37,6 +37,10 @@ var extra = document.getElementById('extra');
 function token(){
   var p = new URLSearchParams(location.search);
   return p.get('token') || p.get('orderId');
+}
+function captureTokenParam(){
+  var p = new URLSearchParams(location.search);
+  return p.get('capture_token') || '';
 }
 function fail(text){
   card.className = 'card err';
@@ -84,9 +88,12 @@ function done(d){
 
 (async function(){
   var t = token();
+  var ct = captureTokenParam();
   if(!t){ return fail('Missing order reference. If you were charged, contact support.'); }
   try{
-    var r = await fetch(PROXY + '/v1/pay/capture-return?token=' + encodeURIComponent(t));
+    var url = PROXY + '/v1/pay/capture-return?token=' + encodeURIComponent(t);
+    if (ct) url += '&capture_token=' + encodeURIComponent(ct);
+    var r = await fetch(url);
     var d = await r.json();
     if(d.success){ done(d); } else { fail(d.message || d.error || 'Capture failed.'); }
   }catch(e){ fail('Network error: ' + e.message); }
@@ -98,7 +105,8 @@ export async function onRequest(): Promise<Response> {
   return new Response(PAGE, {
     headers: {
       "Content-Type": "text/html;charset=utf-8",
-      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://arcana-proxy.lejzerv.workers.dev; frame-ancestors 'none'",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://proxy.arcana.otnelhq.com; frame-ancestors 'none'",
       "X-Frame-Options": "DENY",
       "X-Content-Type-Options": "nosniff",
       "Strict-Transport-Security": "max-age=31536000; includeSubDomains",

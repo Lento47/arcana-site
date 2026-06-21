@@ -1,6 +1,11 @@
 // ARCANA — Homepage enhancements (vanilla JS)
 
-document.addEventListener('DOMContentLoaded', () => {
+function onReady(fn) {
+  if (document.readyState !== 'loading') { fn(); }
+  else { document.addEventListener('DOMContentLoaded', fn); }
+}
+
+onReady(() => {
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
