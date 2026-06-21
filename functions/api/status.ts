@@ -2,7 +2,7 @@ const SERVICES = [
   { name: "AI Proxy", url: "https://proxy.arcana.otnelhq.com/v1/models" },
   { name: "License Server", url: "https://api.arcana.otnelhq.com/api/health" },
   { name: "Website", url: "https://arcana.otnelhq.com" },
-  { name: "R2 Releases", url: "https://releases.otnelhq.com/arcana-darwin-arm64.zip.sha256" },
+  { name: "R2 Releases", url: "https://releases.otnelhq.com" },
 ] as const
 
 async function check(url: string, requireOk = true): Promise<{ status: string; latency: number; error?: string }> {
