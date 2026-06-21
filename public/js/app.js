@@ -1,18 +1,34 @@
-// ARCANA — Preact SPA with wouter routing (no # hashes)
-import { h, render } from 'https://esm.sh/preact@10.24.3';
-import { useState, useEffect } from 'https://esm.sh/preact@10.24.3/hooks';
-import { Router, Route, Link, useLocation } from 'https://esm.sh/wouter-preact@3.3.5';
+// ARCANA — Preact SPA (no # hashes, no wouter)
+import { h, render, createContext } from 'https://esm.sh/preact@10.24.3';
+import { useState, useEffect, useContext, useCallback } from 'https://esm.sh/preact@10.24.3/hooks';
 
-const { createElement: el, Fragment: F } = { createElement: h, Fragment: (p) => p.children };
+const { createElement: el } = { createElement: h };
 
-// ── Scroll helper (no hash, smooth scroll to section id) ──
+// ── Minimal router (replaces wouter) ──
+const RouteCtx = createContext({ path: '/', nav: () => {} });
+
+function useRoute() {
+  const [path, setPath] = useState(location.pathname || '/');
+  useEffect(() => {
+    const onPop = () => setPath(location.pathname);
+    addEventListener('popstate', onPop);
+    return () => removeEventListener('popstate', onPop);
+  }, []);
+  const nav = useCallback((url) => {
+    history.pushState(null, '', url);
+    setPath(url);
+    dispatchEvent(new PopStateEvent('popstate'));
+  }, []);
+  return { path, nav };
+}
+
 function scrollTo(id) {
-  const target = document.getElementById(id);
-  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const t = document.getElementById(id);
+  if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function NavLink({ id, children }) {
-  const [, navigate] = useLocation();
-  const go = (e) => { e.preventDefault(); navigate('/'); setTimeout(() => scrollTo(id), 60); };
+  const { nav } = useContext(RouteCtx);
+  const go = (e) => { e.preventDefault(); nav('/'); setTimeout(() => scrollTo(id), 60); };
   return el('a', { href: '/', onClick: go }, children);
 }
 
@@ -214,7 +230,7 @@ function Footer() {
 
 function Home() {
   const [cycle, setCycle] = useState('monthly');
-  return el(F, null,
+  return el('div', null,
     el(Hero),
     el(Stats),
     el(Models),
@@ -225,10 +241,13 @@ function Home() {
 }
 
 function App() {
-  return el(Router, null,
+  const { path, nav } = useRoute();
+  const isHome = path === '/';
+  return el(RouteCtx.Provider, { value: { path, nav } },
     el(Header),
     el('main', null,
-      el(Route, { path: '/', component: Home }),
+      isHome && el(Home),
+      // /changelog, /credits, /status handled by full page loads via Functions
     ),
     el(Footer),
   );
