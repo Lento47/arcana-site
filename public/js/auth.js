@@ -229,7 +229,7 @@
 
         const btn = document.getElementById('btn-signin');
         btn.disabled = true;
-        btn.textContent = 'Decrypting…';
+        btn.textContent = 'Signing in…';
         pulseScanline();
 
         const { data, error: err } = await sb.auth.signInWithPassword({
@@ -239,13 +239,13 @@
 
         if (err) {
           btn.disabled = false;
-          btn.textContent = 'Decrypt vault';
+          btn.textContent = 'Sign in';
           if (err.message?.includes('Invalid login')) {
             showBanner('error', 'Access denied', 'Email or password not recognized. Check your credentials.');
           } else if (err.message?.includes('Email not confirmed')) {
             showBanner('warning', 'Email unverified', 'Check your inbox for the confirmation link.');
           } else {
-            showBanner('error', 'Threshold blocked', err.message || 'Authentication failed.');
+            showBanner('error', 'Authentication failed', err.message || 'Could not sign in.');
           }
           return;
         }
@@ -253,7 +253,7 @@
         if (data.session) {
           document.getElementById('success-session').textContent = 'arc-' + data.session.user.id.slice(0, 8);
           showStatePanel('success');
-          showBanner('success', 'Threshold crossed', 'Arcana decrypts your workspace. Routing…');
+          showBanner('success', 'Authenticated', 'Routing to your workspace…');
           // Redirect to workspace after brief display
           setTimeout(() => { window.location.href = '/'; }, 1500);
         }
@@ -280,7 +280,7 @@
 
         const btn = document.getElementById('btn-signup');
         btn.disabled = true;
-        btn.textContent = 'Forging…';
+        btn.textContent = 'Creating account…';
         pulseScanline();
 
         const { data, error: err } = await sb.auth.signUp({
@@ -290,35 +290,33 @@
 
         if (err) {
           btn.disabled = false;
-          btn.textContent = 'Forge key';
+          btn.textContent = 'Create account';
           if (err.message?.includes('already registered')) {
-            showBanner('warning', 'Email exists', 'This email already has a vault. Sign in instead.');
+            showBanner('warning', 'Email exists', 'This email is already registered. Sign in instead.');
           } else {
-            showBanner('error', 'Forge failed', err.message || 'Account creation failed.');
+            showBanner('error', 'Account creation failed', err.message || 'Could not create account.');
           }
           return;
         }
 
         if (data.user?.identities?.length === 0) {
-          // Email already registered but Supabase returned success (shouldn't happen with signUp)
           showBanner('warning', 'Email exists', 'This email is already registered. Sign in instead.');
           btn.disabled = false;
-          btn.textContent = 'Forge key';
+          btn.textContent = 'Create account';
           return;
         }
 
         // User created — check if email confirmation required
         document.getElementById('success-session').textContent = 'arc-' + data.user.id.slice(0, 8);
         if (data.session) {
-          // Auto-confirmed (no email verification required)
           showStatePanel('success');
-          showBanner('success', 'Vault sealed', 'Arcana workspace initialized. Your keys, your terminal.');
+          showBanner('success', 'Account created', 'Your Arcana workspace is ready.');
           setTimeout(() => { window.location.href = '/'; }, 1500);
         } else {
           // Email confirmation sent
-          showBanner('info', 'Verify your email', 'A confirmation cipher was sent to your inbox. Verify to complete the forge.');
+          showBanner('info', 'Verify your email', 'A confirmation link was sent to your inbox. Verify to complete sign-up.');
           btn.disabled = false;
-          btn.textContent = 'Forge key';
+          btn.textContent = 'Create account';
         }
       });
 
@@ -329,7 +327,7 @@
         const emailEl = document.getElementById('magic-email');
         const email = emailEl.value.trim();
         if (!isValidEmail(email)) {
-          showBanner('error', 'Invalid email', 'Cipher link requires a valid delivery address.');
+          showBanner('error', 'Invalid email', 'Enter a valid email address to receive the link.');
           return;
         }
         if (!authReady) {
@@ -338,7 +336,7 @@
         }
         const btn = document.getElementById('btn-magic');
         btn.disabled = true;
-        btn.textContent = 'Encrypting…';
+        btn.textContent = 'Sending…';
         pulseScanline();
 
         const { error: err } = await sb.auth.signInWithOtp({
@@ -348,16 +346,16 @@
 
         if (err) {
           btn.disabled = false;
-          btn.textContent = 'Send cipher link';
-          showBanner('error', 'Dispatch failed', err.message || 'Could not send the cipher link.');
+          btn.textContent = 'Send magic link';
+          showBanner('error', 'Could not send link', err.message || 'Failed to send the magic link.');
           return;
         }
 
         document.getElementById('magic-sent-email').textContent = email || '—';
         showStatePanel('magic-sent');
-        showBanner('info', 'Cipher link sent', 'Encrypted one-time link dispatched to your inbox.');
+        showBanner('info', 'Magic link sent', 'Check your inbox for the one-time sign-in link.');
         btn.disabled = false;
-        btn.textContent = 'Send cipher link';
+        btn.textContent = 'Send magic link';
       });
 
       document.getElementById('btn-magic-back').addEventListener('click', () => {
@@ -406,16 +404,16 @@
         }
         const btn = document.getElementById('btn-workspace');
         btn.disabled = true;
-        btn.textContent = 'Unsealing…';
+        btn.textContent = 'Joining…';
         pulseScanline();
 
         await mockAsync(() => {
           document.getElementById('success-session').textContent = randomSession();
           showStatePanel('success');
-          showBanner('success', 'Vault joined', 'Session scoped. Arcana decrypts the shared workspace.');
+          showBanner('success', 'Workspace joined', 'Session scoped to the shared workspace.');
         });
         btn.disabled = false;
-        btn.textContent = 'Join vault';
+        btn.textContent = 'Join workspace';
       });
 
       // Enterprise SSO — real Supabase SAML + proxy email validation
@@ -466,7 +464,7 @@
 
         if (err) {
           btn.disabled = false;
-          btn.textContent = 'Discover IdP';
+          btn.textContent = 'Continue with SSO';
           restoreMode('enterprise');
           if (err.message?.includes('not found') || err.message?.includes('No SSO')) {
             showBanner('warning', 'Domain not onboarded',
@@ -493,7 +491,7 @@
       function onAuthenticated(session) {
         document.getElementById('success-session').textContent = 'arc-' + session.user.id.slice(0, 8);
         showStatePanel('success');
-        showBanner('success', 'Threshold crossed', 'Arcana decrypts your workspace. Routing…');
+        showBanner('success', 'Authenticated', 'Routing to your workspace…');
         setTimeout(() => { window.location.href = '/'; }, 1500);
       }
 

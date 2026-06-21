@@ -50,10 +50,10 @@
 
     <main class="main">
       <section class="atmosphere" aria-labelledby="hero-title">
-        <h1 id="hero-title" class="hero-title">Decrypt <span>Arcana</span></h1>
-        <p class="hero-subtitle">Cross the threshold. Authenticate to unseal your terminal workspace — private routing, scoped access, your keys under your control.</p>
+        <h1 id="hero-title" class="hero-title">Enter <span>Arcana</span></h1>
+        <p class="hero-subtitle">Private AI operations terminal. Your keys, your models, your control.</p>
 
-        <div class="glyph-divider" aria-hidden="true">// threshold</div>
+        <div class="glyph-divider" aria-hidden="true">// authenticate</div>
 
         <div class="terminal-preview" aria-hidden="true">
           <div class="terminal-header">
@@ -64,8 +64,8 @@
           </div>
           <div class="terminal-body">
             <div class="terminal-line"><span class="terminal-prompt">⛧</span> <span>arcana status</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">→</span> <span>vault: sealed · threshold: locked · keys: dormant</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">⛧</span> <span>arcana auth --decrypt</span><span class="terminal-cursor" aria-hidden="true"></span></div>
+            <div class="terminal-line"><span class="terminal-prompt">→</span> <span>session: none · keys: ready · providers: 32</span></div>
+            <div class="terminal-line"><span class="terminal-prompt">⛧</span> <span>arcana sign-in --email</span><span class="terminal-cursor" aria-hidden="true"></span></div>
           </div>
         </div>
 
@@ -75,7 +75,7 @@
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <p class="trust-text"><strong>Encrypted vault.</strong> Each session is isolated, signed, and sealed at the threshold. Your keys never leave the vault.</p>
+            <p class="trust-text"><strong>Encrypted session.</strong> Each workspace session is isolated and signed. Your keys never leave your machine.</p>
           </div>
           <div class="trust-item" role="listitem">
             <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -103,9 +103,9 @@
         <div class="auth-card">
           <div class="auth-card-header">
             <div class="mode-switcher" role="tablist" aria-label="Authentication mode">
-              <button class="mode-btn" role="tab" aria-selected="true" data-mode="personal" id="tab-personal">Solo</button>
-              <button class="mode-btn" role="tab" aria-selected="false" data-mode="workspace" id="tab-workspace">Vault</button>
-              <button class="mode-btn" role="tab" aria-selected="false" data-mode="enterprise" id="tab-enterprise">Org</button>
+              <button class="mode-btn" role="tab" aria-selected="true" data-mode="personal" id="tab-personal">Personal</button>
+              <button class="mode-btn" role="tab" aria-selected="false" data-mode="workspace" id="tab-workspace">Workspace</button>
+              <button class="mode-btn" role="tab" aria-selected="false" data-mode="enterprise" id="tab-enterprise">Enterprise</button>
             </div>
           </div>
 
@@ -175,8 +175,8 @@
               </div>
 
               <div class="tab-panel" id="panel-signin" aria-hidden="false" aria-labelledby="tab-signin" role="tabpanel">
-                <h2 class="section-title">Unseal your vault</h2>
-                <p class="section-desc">Authenticate to decrypt your arcana workspace.</p>
+                <h2 class="section-title">Sign in</h2>
+                <p class="section-desc">Access your Arcana workspace and terminal.</p>
                 <form id="form-signin" novalidate>
                   <div class="form-group">
                     <label class="form-label" for="signin-email">Email</label>
@@ -205,7 +205,7 @@
                     </label>
                     <a href="#" class="link-subtle">Forgot password?</a>
                   </div>
-                  <button type="submit" class="btn btn-primary" id="btn-signin">Decrypt vault</button>
+                  <button type="submit" class="btn btn-primary" id="btn-signin">Sign in</button>
                 </form>
 
                 <div class="divider" aria-hidden="true">Or continue with</div>
@@ -230,8 +230,8 @@
               </div>
 
               <div class="tab-panel" id="panel-signup" aria-hidden="true" aria-labelledby="tab-signup" role="tabpanel">
-                <h2 class="section-title">Forge a new key</h2>
-                <p class="section-desc">One vault. Your keys. Your terminal. No shared secrets.</p>
+                <h2 class="section-title">Create account</h2>
+                <p class="section-desc">One account. Your keys. Access to the Arcana terminal.</p>
                 <form id="form-signup" novalidate>
                   <div class="form-group">
                     <label class="form-label" for="signup-email">Email</label>
@@ -256,7 +256,7 @@
                     <label class="form-label" for="signup-invite">Invite code <span class="hint">optional</span></label>
                     <input class="input mono" id="signup-invite" type="text" name="invite" autocomplete="off" placeholder="arc-xxxxxxxx">
                   </div>
-                  <button type="submit" class="btn btn-primary" id="btn-signup">Forge key</button>
+                  <button type="submit" class="btn btn-primary" id="btn-signup">Create account</button>
                 </form>
 
                 <div class="divider" aria-hidden="true">Or join with</div>
@@ -281,22 +281,22 @@
               </div>
 
               <div class="tab-panel" id="panel-magic" aria-hidden="true" aria-labelledby="tab-magic" role="tabpanel">
-                <h2 class="section-title">Cipher link</h2>
-                <p class="section-desc">A one-time encrypted link sent to your inbox. No password required.</p>
+                <h2 class="section-title">Magic link</h2>
+                <p class="section-desc">A one-time sign-in link sent to your inbox. No password required.</p>
                 <form id="form-magic" novalidate>
                   <div class="form-group">
                     <label class="form-label" for="magic-email">Email</label>
                     <input class="input" id="magic-email" type="email" name="email" autocomplete="email" placeholder="you@domain.com" required>
                   </div>
-                  <button type="submit" class="btn btn-primary" id="btn-magic">Send cipher link</button>
+                  <button type="submit" class="btn btn-primary" id="btn-magic">Send magic link</button>
                 </form>
               </div>
             </div>
 
             <!-- Mode: Workspace -->
             <div class="auth-mode hidden" id="mode-workspace" aria-labelledby="tab-workspace" role="tabpanel">
-              <h2 class="section-title">Join a vault</h2>
-              <p class="section-desc">Invite code, session token, or workspace slug — decrypt shared scope.</p>
+              <h2 class="section-title">Join workspace</h2>
+              <p class="section-desc">Enter an invite code, session token, or workspace slug.</p>
               <form id="form-workspace" novalidate>
                 <div class="form-group">
                   <label class="form-label" for="workspace-token">Workspace token or slug</label>
@@ -346,7 +346,7 @@
                   <label class="form-label" for="enterprise-slug">Org slug <span class="hint">optional</span></label>
                   <input class="input mono" id="enterprise-slug" type="text" name="slug" autocomplete="off" placeholder="acme">
                 </div>
-                <button type="submit" class="btn btn-primary" id="btn-enterprise">Discover IdP</button>
+                <button type="submit" class="btn btn-primary" id="btn-enterprise">Continue with SSO</button>
               </form>
 
               <div class="divider" aria-hidden="true">Managed by your IdP</div>
@@ -376,12 +376,12 @@
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
               </svg>
-              <h2 class="state-title">Cipher link sent</h2>
-              <p class="state-desc">Check your inbox. One-time encrypted link — expires in 15 minutes.</p>
+              <h2 class="state-title">Magic link sent</h2>
+              <p class="state-desc">Check your inbox. One-time sign-in link — expires in 15 minutes.</p>
               <div class="state-meta">
                 <span class="label">Sent to</span> <span class="value" id="magic-sent-email">—</span>
               </div>
-              <button class="btn btn-secondary" id="btn-magic-back" type="button">Back to vault access</button>
+              <button class="btn btn-secondary" id="btn-magic-back" type="button">Back to sign in</button>
             </div>
 
             <!-- State: OAuth pending -->
@@ -394,7 +394,7 @@
               <div class="state-meta">
                 <span class="label">Provider</span> <span class="value" id="oauth-provider-id">—</span>
               </div>
-              <button class="btn btn-ghost" id="btn-oauth-cancel" type="button">Return to threshold</button>
+              <button class="btn btn-ghost" id="btn-oauth-cancel" type="button">Cancel</button>
             </div>
 
             <!-- State: SAML redirecting -->
@@ -408,7 +408,7 @@
                 <span class="label">IdP</span> <span class="value" id="saml-redirect-idp">Okta</span>
                 <span class="label ml-md">Domain</span> <span class="value" id="saml-redirect-domain">acme.dev</span>
               </div>
-              <button class="btn btn-ghost" id="btn-saml-cancel" type="button">Return to threshold</button>
+              <button class="btn btn-ghost" id="btn-saml-cancel" type="button">Cancel</button>
             </div>
 
             <!-- State: SAML IdP return -->
@@ -422,7 +422,7 @@
                 <span class="label">Assertion</span> <span class="value">verified ✓</span>
                 <span class="label ml-md">Workspace</span> <span class="value" id="saml-return-workspace">acme</span>
               </div>
-              <button class="btn btn-ghost" id="btn-saml-return-cancel" type="button">Return to threshold</button>
+              <button class="btn btn-ghost" id="btn-saml-return-cancel" type="button">Cancel</button>
             </div>
 
             <!-- State: Auth success -->
