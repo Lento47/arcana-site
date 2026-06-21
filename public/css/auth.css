@@ -253,10 +253,11 @@
       width: 28px;
       height: 28px;
       flex-shrink: 0;
+      transition: filter .2s;
     }
-
-    .logo-grad-start { stop-color: var(--text-primary); }
-    .logo-grad-end { stop-color: var(--accent); }
+    .brand:hover .brand-logo {
+      filter: drop-shadow(0 0 6px rgba(179,140,255,.35));
+    }
 
     .brand-name {
       font-weight: 600;

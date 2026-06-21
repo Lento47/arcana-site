@@ -61,15 +61,11 @@ header{
 .brand:hover{opacity:.85}
 .mark{
   width:30px;height:30px;
-  display:grid;place-items:center;
-  border:1px solid var(--line2);
-  color:var(--accent);
-  background:#0A0910;
-  transition:box-shadow .3s, border-color .3s;
+  vertical-align:bottom;
+  transition:filter .3s;
 }
 .brand:hover .mark{
-  border-color:var(--accent);
-  box-shadow:0 0 12px rgba(179,140,255,.25);
+  filter:drop-shadow(0 0 6px rgba(179,140,255,.4));
 }
 nav{
   display:flex;align-items:center;gap:6px;
