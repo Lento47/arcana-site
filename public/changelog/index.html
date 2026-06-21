@@ -204,7 +204,7 @@
         <a href="/auth">Sign In</a>
         <a href="/credits">Buy Credits</a>
         <a href="/status">Status</a>
-        <a href="https://github.com/Lento47/arcana">GitHub</a>
+        <a href="https://github.com/Lento47/arcana-community">GitHub</a>
       </nav>
     </div>
   </header>
@@ -213,297 +213,51 @@
     <div class="kicker">// releases</div>
     <h1>Changelog</h1>
     <p class="sub">Every arcana release — features, fixes, and infrastructure updates. Published from CI on every tagged push.</p>
-
-    <!-- v0.2.33 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag latest">v0.2.33 — latest</span>
-        <span class="date">Jun 21, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="fix">R2 upload pipeline fixed end-to-end — binaries now served from <code>releases.otnelhq.com</code></li>
-        <li class="fix">Corrected archive glob path: <code>packages/engine/dist/</code> not repo root</li>
-        <li class="fix">Release workflow uses PAT (<code>WORKFLOW_TOKEN</code>) so tag pushes trigger build</li>
-        <li class="fix">Release trigger regex now matches <code>[bump patch]</code> in commit messages</li>
-        <li class="fix">Removed invalid <code>--account-id</code> flag from wrangler r2 commands</li>
-        <li class="fix"><code>wrangler r2 object put</code> uses <code>--remote</code> (was writing to local simulator)</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.28 — v0.2.32: R2 pipeline iteration -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.28 — v0.2.32</span>
-        <span class="date">Jun 20–21, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="fix">CI uploads binaries to R2 on release (was: GitHub Release only)</li>
-        <li class="fix">Correct R2 bucket name: <code>arcana-releases</code></li>
-        <li class="fix">Correct R2 upload syntax + account ID</li>
-        <li class="fix">Added <code>--remote</code> flag to wrangler commands</li>
-        <li class="fix">Fixed glob path for archives (<code>packages/engine/dist/</code>)</li>
-        <li class="fix">Explicit <code>--account-id</code> attempt — removed (invalid flag for r2)</li>
-        <li class="fix">Release workflow PAT to unblock downstream workflow triggers</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.27 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.27</span>
-        <span class="date">Jun 19, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Token-efficiency rule added to main system prompt</li>
-        <li class="feat">OpenAI-compatible providers now route through Arcana proxy</li>
-        <li class="fix">Arcana-proxy uses cached real catalog, not hardcoded model list</li>
-        <li class="fix">Never git-snapshot the home directory (36s/turn stall)</li>
-        <li class="fix">Hide OpenRouter :free models from arcana-proxy catalog</li>
-        <li class="fix">License client surfaces server errors instead of crashing</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.26 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.26</span>
-        <span class="date">Jun 18, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Arcana Proxy as provider — route through Cloudflare Worker</li>
-        <li class="feat">Auto-resolve proxy key from stored license</li>
-        <li class="feat">Auto-redirect all providers through proxy when key set</li>
-        <li class="fix">Auto-set provider API keys from proxy key (<code>/connect</code> without prompting)</li>
-        <li class="fix">Register <code>ARCANA_PROXY_KEY</code> as env method for all providers</li>
-        <li class="fix">Engine Provider service uses proxy key as fallback for all providers</li>
-        <li class="fix">Set <code>ARCANA_PROXY_KEY</code> in launchers before spawning bun</li>
-        <li class="fix">OpenCode→Arcana rebrand in OAuth callback and TUI tips</li>
-        <li class="sec">Remove hardcoded dev key fallback from proxy CLI</li>
-        <li class="fix">Point schema URL to public <code>arcana.otnelhq.com/schema</code></li>
-      </ul>
-    </article>
-
-    <!-- v0.2.24 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.24</span>
-        <span class="date">Jun 17, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Proxy status shows account name, <code>models --provider</code> filter</li>
-        <li class="feat">Pay-as-you-go — <code>balance</code>, <code>buy</code>, <code>capture</code> commands</li>
-        <li class="fix">Subagent errors shown as scrambled text — click to reveal</li>
-        <li class="fix">Balance race condition, KV namespace mismatch, double-capture</li>
-        <li class="fix">Migration handles both old and fresh databases</li>
-        <li class="fix">Org_id migration, proxy hardening — auth check, pre-deduct, rate limiting</li>
-        <li class="fix">Subagent footer typescript errors</li>
-        <li class="feat">Workflow engine foundation</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.23 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.23</span>
-        <span class="date">Jun 16, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Arcana proxy CLI command</li>
-        <li class="fix">Duplicate plugin entry removed</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.22 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.22</span>
-        <span class="date">Jun 16, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Audit log — enterprise sync, API routes, CLI query</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.21 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.21</span>
-        <span class="date">Jun 15, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Shared memory — cross-user knowledge sync, fact pull on startup</li>
-        <li class="feat">Conflict resolution for shared knowledge</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.20 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.20</span>
-        <span class="date">Jun 14, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Team vault — <code>org_id</code> in session schema, team CLI sessions, vault API</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.19 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.19</span>
-        <span class="date">Jun 14, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">License tier tool gating — per-tier tool access, runner enforcement</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.18 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.18</span>
-        <span class="date">Jun 13, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">10 new features: fs tools, batch processing, configurable loop</li>
-        <li class="feat">Smart git, cost estimator, code review tools</li>
-        <li class="feat">Team vault, plugin store, extensions system</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.17 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.17</span>
-        <span class="date">Jun 12, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="perf">Startup optimizations — lazy skills, config cache, deferred providers</li>
-        <li class="perf">Models cache TTL, fs cache, dynamic imports</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.16 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.16</span>
-        <span class="date">Jun 11, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Artifact system with versioning, TUI viewer, sidebar plugin</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.15 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.15</span>
-        <span class="date">Jun 10, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Safe mode, tool timeout, WAL mode</li>
-        <li class="feat">Input sanitization, dedup, smart compaction, warm-up</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.14 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.14</span>
-        <span class="date">Jun 9, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Premium model gating, session sharing gate</li>
-        <li class="feat">Admin license API</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.13 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.13</span>
-        <span class="date">Jun 8, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Signed license responses (Ed25519)</li>
-        <li class="feat">Rate limiting (25/5), anti-tamper docs</li>
-        <li class="fix">DNS records for otnelhq.com, license fallback to workers.dev</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.12 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.12</span>
-        <span class="date">Jun 7, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">License validation system — CLI commands, core service, worker infra</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.11 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.11</span>
-        <span class="date">Jun 6, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Context usage bar, git tools, diagnose upgrade</li>
-        <li class="feat">Session summary, sidebar removed</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.10 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.10</span>
-        <span class="date">Jun 5, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Dynamic tool verbs, statusbar format, goal tips, sigil title</li>
-        <li class="fix">OpenCode→Arcana permission dialog branding</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.9 -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.9</span>
-        <span class="date">Jun 4, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat"><code>/goal</code> and <code>/loop</code> slash commands added to TUI</li>
-      </ul>
-    </article>
-
-    <!-- v0.2.8 and earlier -->
-    <article class="release">
-      <div class="rel-top">
-        <span class="tag">v0.2.0 — v0.2.8</span>
-        <span class="date">May — Jun 3, 2026</span>
-      </div>
-      <ul class="changes">
-        <li class="feat">Phase 12 — Polish, rebrand, auto-wiki, kanban, visual redesign</li>
-        <li class="feat">174 skills across hermes, opencode, and arcana namespaces</li>
-        <li class="feat">SDK rebrand: opencode → arcana, packages/opencode → packages/engine</li>
-        <li class="feat">Arcana gold+violet theme, ARCANA wordmark, status-bar HUD</li>
-        <li class="feat">TUI delegation — bare arcana → opencode TUI fully renders</li>
-        <li class="feat">13/15 providers via models.dev, nous-portal + mimosa local</li>
-        <li class="feat">License server & proxy architecture (separate workers/KV)</li>
-        <li class="feat">Arcane personality — voice lexicon, session slugs, branding</li>
-        <li class="fix">Build pipeline repair (19/20 green), critical LLM type safety fixes</li>
-        <li class="fix">SDK performance: health check + graceful shutdown, placeholder fix</li>
-        <li class="fix">arcana.ps1 optimized launch (saved ~2-3s startup)</li>
-      </ul>
-    </article>
+    <div id="releases">Loading releases…</div>
   </main>
+
+  <script>
+    (async function () {
+      const el = document.getElementById('releases');
+      const REPO = 'Lento47/arcana-community-community';
+      try {
+        const r = await fetch('https://api.github.com/repos/' + REPO + '/releases?per_page=20');
+        if (!r.ok) throw new Error('GitHub API ' + r.status);
+        const releases = await r.json();
+        if (!releases.length) { el.textContent = 'No releases found.'; return; }
+
+        let html = '';
+        releases.forEach(function(rel, i) {
+          const tag = rel.tag_name || rel.name || 'untagged';
+          const isLatest = i === 0;
+          const date = new Date(rel.published_at || rel.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+          const body = rel.body || '';
+          // Parse conventional commit lines
+          const lines = body.split('\n').filter(function(l) { return l.trim(); });
+          const changes = lines.map(function(l) {
+            let cls = 'fix';
+            if (/^feat/i.test(l)) cls = 'feat';
+            else if (/^fix/i.test(l)) cls = 'fix';
+            else if (/^sec/i.test(l) || /security/i.test(l)) cls = 'sec';
+            else if (/^perf/i.test(l)) cls = 'perf';
+            let text = l.replace(/^(feat|fix|sec|perf|chore|docs|refactor|style|test|build|ci)(\(.*?\))?:\s*/i, '');
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            return '<li class="' + cls + '">' + text + '</li>';
+          }).join('');
+          html += '<article class="release"><div class="rel-top"><span class="tag' + (isLatest ? ' latest' : '') + '">' + tag + (isLatest ? ' — latest' : '') + '</span><span class="date">' + date + '</span></div><ul class="changes">' + changes + '</ul></article>';
+        });
+        el.innerHTML = html;
+      } catch(e) {
+        el.innerHTML = '<div class="release" style="text-align:center;padding:32px;color:var(--muted)">Could not load releases. <a href="https://github.com/' + REPO + '/releases" style="color:var(--accent)">View on GitHub →</a></div>';
+      }
+    })();
+  </script>
 
   <footer>
     <div class="wrap footer">
       <div><img src="/arcana.png" alt="" width="16" height="16" style="vertical-align:text-bottom;margin-right:4px"> ARCANA · Terminal Interface For AI Keys</div>
       <div class="links">
-        <a href="https://github.com/Lento47/arcana">GitHub</a>
+        <a href="https://github.com/Lento47/arcana-community">GitHub</a>
         <a href="/changelog">Changelog</a>
         <a href="/auth">Sign In</a>
         <a href="/credits">Buy Credits</a>
