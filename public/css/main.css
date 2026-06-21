@@ -172,22 +172,6 @@ h2{font-size:clamp(30px,4vw,50px);line-height:1;letter-spacing:-.06em}
 .price{font:800 34px/1 var(--mono);margin:18px 0 4px;letter-spacing:-.06em}
 .price small{color:var(--muted);font-size:12px;font-weight:500;letter-spacing:0}
 .annual{color:var(--soft);font-size:13px;margin-bottom:18px}
-.billing-toggle{
-  display:flex;gap:2px;width:max-content;margin:0 auto 26px;
-  padding:3px;border:1px solid var(--line);background:var(--surface);
-  border-radius:999px;font-family:var(--mono);
-}
-.bt-opt{
-  appearance:none;cursor:pointer;border:0;background:transparent;
-  color:var(--muted);font:600 13px/1 var(--mono);letter-spacing:-.01em;
-  padding:9px 18px;border-radius:999px;transition:background .15s,color .15s;
-}
-.bt-opt:hover{color:var(--text)}
-.bt-opt.active{
-  background:var(--accent);color:var(--bg);
-  box-shadow:0 0 0 1px rgba(179,140,255,.5),0 6px 18px -8px rgba(179,140,255,.8);
-}
-.bt-opt .bt-save{font-weight:500;opacity:.8}
 .plan ul{
   list-style:none;display:grid;gap:8px;
   color:var(--muted);font-size:14px;line-height:1.45;margin-bottom:20px;

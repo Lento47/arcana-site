@@ -144,17 +144,15 @@ function Start() {
   );
 }
 
-function Pricing({ cycle, setCycle }) {
-  const isYearly = cycle === 'yearly';
+function Pricing() {
   const plans = [
-    { h:'Community', price:'$0', small:null, annual:'local use', featured:false,
+    { h:'Community', price:'$0', annual:'local use', featured:false,
       items:['one provider key','local sessions','basic memory','local tools','community source'],
       btn: el('a', {class:'btn',href:'https://github.com/Lento47/arcana-community'}, 'Install') },
-    { h:'Pro', price: isYearly ? '$190' : '$19', small: isYearly ? ' /yr' : ' /mo',
-      annual: isYearly ? '$19/mo · billed yearly' : 'or $190/year', featured:true,
-      items:['unlimited provider keys','multi-model rooms','advanced memory search','tool profiles','cost ledger','priority support'],
-      btn: el(SubscribeBtn, { cycle }) },
-    { h:'Enterprise', price:'Custom', small:null, annual:'per-seat pricing', featured:false,
+    { h:'Pro', price:'$19', small:' /mo', annual:'per month', featured:true,
+      items:['unlimited provider keys','multi-model rooms','advanced memory search','tool profiles','cost ledger'],
+      btn: el(SubscribeBtn, null) },
+    { h:'Enterprise', price:'Custom', annual:'per-seat pricing', featured:false,
       items:['encrypted sync','gateway relay','hosted cron relay','cross-machine sessions','team vault','audit log','SLA support'],
       btn: el('a', {class:'btn',href:'mailto:lejzerv@gmail.com?subject=Arcana%20Enterprise'}, 'Contact') },
   ];
@@ -162,11 +160,6 @@ function Pricing({ cycle, setCycle }) {
     el('div', { class: 'section-head' },
       el('div', null, el('div',{class:'kicker'},'// Pricing'), el('h2',null,'Free locally. Paid when it becomes a system.')),
       el('p',null,'Model costs stay with your provider. Arcana charges for the terminal interface, session layer, sync, relay, and team surfaces.')
-    ),
-    el('div', { class: 'billing-toggle' },
-      el('button', {class:'bt-opt'+(isYearly?'':' active'),onClick:()=>setCycle('monthly')}, 'Monthly'),
-      el('button', {class:'bt-opt'+(isYearly?' active':''),onClick:()=>setCycle('yearly')},
-        'Yearly ', el('span',{class:'bt-save'},'· save 17%'))
     ),
     el('div', { class: 'pricing' },
       plans.map((p,i) => el('article', {class:'plan'+(p.featured?' featured':''), key:i},
@@ -185,15 +178,14 @@ function Pricing({ cycle, setCycle }) {
   );
 }
 
-function SubscribeBtn({ cycle }) {
+function SubscribeBtn() {
   const [loading, setLoading] = useState(false);
   async function handle(e) {
     e.preventDefault();
     setLoading(true);
     try {
-      const plan = cycle === 'yearly' ? 'pro_yearly' : 'pro_monthly';
       const r = await fetch('https://arcana-proxy.lejzerv.workers.dev/v1/pay/create-sub', {
-        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan })
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: 'pro_monthly' })
       });
       const d = await r.json();
       if (d.approvalUrl) { window.location.href = d.approvalUrl; return; }
@@ -226,14 +218,13 @@ function Footer() {
 // ══════════════════════════════════════════
 
 function Home() {
-  const [cycle, setCycle] = useState('monthly');
   return el('div', null,
     el(Hero),
     el(Stats),
     el(Models),
     el(System),
     el(Start),
-    el(Pricing, { cycle, setCycle }),
+    el(Pricing),
   );
 }
 
