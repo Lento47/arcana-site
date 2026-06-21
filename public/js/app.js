@@ -5,7 +5,41 @@ function onReady(fn) {
   else { document.addEventListener('DOMContentLoaded', fn); }
 }
 
+// ── Session-aware nav ──
+function updateNavSession() {
+  const sb = window.__ARCANA_SB__;
+  if (!sb) return;
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (session) showSignedIn(session);
+  });
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) showSignedIn(session);
+    else if (event === 'SIGNED_OUT') showSignedOut();
+  });
+}
+
+function showSignedIn(session) {
+  const email = session.user.email || '';
+  const shortEmail = email.length > 24 ? email.slice(0, 22) + '…' : email;
+  document.querySelectorAll('a[href="/auth"]').forEach(a => {
+    a.textContent = shortEmail;
+    a.href = '#';
+    a.className = 'signin signed-in';
+    a.title = 'Signed in as ' + email;
+  });
+}
+
+function showSignedOut() {
+  document.querySelectorAll('a.signed-in').forEach(a => {
+    a.textContent = 'Sign In';
+    a.href = '/auth';
+    a.className = 'signin';
+    a.removeAttribute('title');
+  });
+}
+
 onReady(() => {
+  updateNavSession();
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
