@@ -225,7 +225,7 @@ function Home() {
 }
 
 function App() {
-  return el(F, null,
+  return el(Router, null,
     el(Header),
     el('main', null,
       el(Route, { path: '/', component: Home }),
