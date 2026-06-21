@@ -48,7 +48,35 @@
   </script>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- SSR fallback: visible immediately, replaced by SPA if JS works -->
+    <header>
+      <div class="wrap nav">
+        <a class="brand" href="/"><span class="mark">⛧</span> ARCANA</a>
+        <nav>
+          <a href="/#models">Models</a>
+          <a href="/#system">System</a>
+          <a href="/#start">Start</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/changelog">Changelog</a>
+          <a class="status" href="/status">Status</a>
+          <a href="https://github.com/Lento47/arcana">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="hero wrap">
+        <div class="slash">/</div>
+        <h1>The Terminal Interface For AI Keys</h1>
+        <p class="lead">Chat with <b>OpenAI, Claude, DeepSeek, OpenRouter, Cerebras, and local models</b> from one terminal. Arcana builds a <b>personal knowledge graph</b> from your sessions — wiki-style memory, auto-docs, and linked facts that grow with your work.</p>
+        <div class="actions">
+          <div class="cmd"><span>$</span>npx arcana-ai@latest</div>
+          <a class="btn primary" href="/#start">Start</a>
+          <a class="btn" href="https://github.com/Lento47/arcana">View source</a>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script type="module" src="/js/app.js" async></script>
 

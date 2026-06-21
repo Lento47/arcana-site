@@ -243,4 +243,10 @@ function App() {
   );
 }
 
-render(el(App), document.getElementById('root'));
+try {
+  const root = document.getElementById('root');
+  render(el(App), root);
+} catch (err) {
+  console.error('Arcana SPA render failed:', err);
+  // The SSR fallback in #root remains visible, so the page still works.
+}
