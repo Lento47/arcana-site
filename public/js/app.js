@@ -184,7 +184,7 @@ function SubscribeBtn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const r = await fetch('https://arcana-proxy.lejzerv.workers.dev/v1/pay/create-sub', {
+      const r = await fetch('/api/create-sub', {
         method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: 'pro_monthly' })
       });
       const d = await r.json();
