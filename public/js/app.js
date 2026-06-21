@@ -1,13 +1,11 @@
-// ARCANA — Preact SPA (no # hashes, no wouter)
-import { h, render, createContext } from 'https://esm.sh/preact@10.24.3';
-import { useState, useEffect, useContext, useCallback } from 'https://esm.sh/preact@10.24.3/hooks';
+// ARCANA — Preact SPA (no # hashes, no deps)
+import { h, render } from 'https://esm.sh/preact@10.24.3';
+import { useState, useEffect, useCallback } from 'https://esm.sh/preact@10.24.3/hooks';
 
 const { createElement: el } = { createElement: h };
 
-// ── Minimal router (replaces wouter) ──
-const RouteCtx = createContext({ path: '/', nav: () => {} });
-
-function useRoute() {
+// ── Minimal router (History API + Preact state) ──
+function useRouter() {
   const [path, setPath] = useState(location.pathname || '/');
   useEffect(() => {
     const onPop = () => setPath(location.pathname);
@@ -26,8 +24,7 @@ function scrollTo(id) {
   const t = document.getElementById(id);
   if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-function NavLink({ id, children }) {
-  const { nav } = useContext(RouteCtx);
+function NavLink({ nav, id, children }) {
   const go = (e) => { e.preventDefault(); nav('/'); setTimeout(() => scrollTo(id), 60); };
   return el('a', { href: '/', onClick: go }, children);
 }
@@ -36,17 +33,17 @@ function NavLink({ id, children }) {
 // COMPONENTS
 // ══════════════════════════════════════════
 
-function Header() {
+function Header({ nav }) {
   return el('header', null,
     el('div', { class: 'wrap nav' },
       el('a', { class: 'brand', href: '/' },
         el('span', { class: 'mark' }, '⛧'), ' ARCANA'
       ),
       el('nav', null,
-        el(NavLink, { id: 'models' }, 'Models'),
-        el(NavLink, { id: 'system' }, 'System'),
-        el(NavLink, { id: 'start' }, 'Start'),
-        el(NavLink, { id: 'pricing' }, 'Pricing'),
+        el(NavLink, { nav, id: 'models' }, 'Models'),
+        el(NavLink, { nav, id: 'system' }, 'System'),
+        el(NavLink, { nav, id: 'start' }, 'Start'),
+        el(NavLink, { nav, id: 'pricing' }, 'Pricing'),
         el('a', { href: '/changelog' }, 'Changelog'),
         el('a', { class: 'status', href: '/status' }, 'Status'),
         el('a', { href: 'https://github.com/Lento47/arcana' }, 'GitHub'),
@@ -241,13 +238,12 @@ function Home() {
 }
 
 function App() {
-  const { path, nav } = useRoute();
+  const { path, nav } = useRouter();
   const isHome = path === '/';
-  return el(RouteCtx.Provider, { value: { path, nav } },
-    el(Header),
+  return el('div', null,
+    el(Header, { nav }),
     el('main', null,
       isHome && el(Home),
-      // /changelog, /credits, /status handled by full page loads via Functions
     ),
     el(Footer),
   );
