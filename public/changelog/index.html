@@ -219,7 +219,7 @@
   <script>
     (async function () {
       const el = document.getElementById('releases');
-      const REPO = 'Lento47/arcana-community-community';
+      const REPO = 'Lento47/arcana-community';
       try {
         const r = await fetch('https://api.github.com/repos/' + REPO + '/releases?per_page=20');
         if (!r.ok) throw new Error('GitHub API ' + r.status);
