@@ -2,3 +2,6 @@ node_modules/
 .wrangler/fnbuild/
 .DS_Store
 vault/
+.agents/
+.claude/
+skills-lock.json
