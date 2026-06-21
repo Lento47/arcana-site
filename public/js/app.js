@@ -58,7 +58,10 @@ function Hero() {
     el('h1', null, 'The Terminal Interface For AI Keys'),
     el('p', { class: 'lead' },
       'Chat with ', el('b', null, 'OpenAI, Claude, DeepSeek, OpenRouter, Cerebras, and local models'),
-      ' from one TUI. Skills, memory, tools, cron, and gateways included.'
+      ' from one terminal. ',
+      'Arcana builds a ',
+      el('b', null, 'personal knowledge graph'),
+      ' from your sessions — wiki-style memory, auto-docs, and linked facts that grow with your work.'
     ),
     el('div', { class: 'actions' },
       el('div', { class: 'cmd' }, el('span', null, '$'), 'npx arcana-ai@latest'),
@@ -105,7 +108,7 @@ function Models() {
 function System() {
   const cards = [
     ['01','Any model key','Add provider keys once. Start sessions against the model that fits the task instead of changing apps.'],
-    ['02','Session memory','Search previous sessions, facts, artifacts, and decisions. Keep context outside one provider\'s chat history.'],
+    ['02','Wiki-style memory','Facts, patterns, and mistakes saved as interlinked wiki files. Arcana builds a knowledge graph from your sessions that grows with your work.'],
     ['03','Scoped tools','Run filesystem, shell, git, gateway, and skill tools from explicit profiles. The tool surface is visible.'],
     ['04','Skills on demand','Load specialized instructions only when needed. Keep the base session clean.'],
     ['05','Cron jobs','Schedule recurring prompts, reports, reviews, and checks from the same terminal runtime.'],
