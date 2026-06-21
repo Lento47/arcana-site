@@ -9,7 +9,7 @@ export async function onRequest({ request }: { request: Request }): Promise<Resp
 
   const upstream = await fetch(`${PROXY}/v1/pay/create-sub`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "Origin": "https://arcana.otnelhq.com" },
     body,
   });
 
