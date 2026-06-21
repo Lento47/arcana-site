@@ -45,10 +45,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .svc-latency{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:right;min-width:48px}
 .svc-latency.fast{color:var(--green)}.svc-latency.mid{color:var(--amber)}.svc-latency.slow{color:var(--red)}
 
-/* Sparkline */
-.spark{display:flex;gap:1.5px;align-items:flex-end;height:22px;min-width:80px}
-.spark-bar{flex:1;min-width:2.5px;border-radius:1.5px;background:var(--green);opacity:.45}
-.spark-bar.down-bg{background:var(--red);opacity:.55}
+/* History bars */
+.history-bars{display:flex;gap:3px;align-items:stretch;height:44px;min-width:100px;padding:2px 0}
+.h-bar{flex:1;min-width:3px;border-radius:2px;background:rgba(161,154,173,.12);transition:transform .15s,filter .15s;cursor:pointer;position:relative}
+.h-bar:hover{filter:brightness(1.4);transform:scaleY(1.06)}
+.h-bar.up{background:linear-gradient(to top,rgba(140,255,191,.7),rgba(140,255,191,.25));box-shadow:0 0 4px rgba(140,255,191,.1)}
+.h-bar.down{background:linear-gradient(to top,rgba(255,107,107,.65),rgba(255,107,107,.2));box-shadow:0 0 4px rgba(255,107,107,.08)}
+.h-bar[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);background:var(--surface2);color:var(--text);padding:2px 6px;border-radius:3px;font-size:.55rem;white-space:nowrap;z-index:10;border:1px solid var(--line);font-family:var(--mono);pointer-events:none}
 
 /* History link */
 .history-link{text-align:center;margin-top:1rem}
@@ -63,7 +66,7 @@ footer a:hover{color:var(--text)}
   .wrap{padding:1.5rem 1rem}
   .metrics{grid-template-columns:1fr;gap:4px}
   .svc{padding:12px 14px;gap:8px}
-  .spark{height:16px;min-width:60px}
+  .history-bars{height:32px;min-width:70px;gap:2px}
 }`
 
 const PAGE = `<!DOCTYPE html>
@@ -132,19 +135,22 @@ function render(d) {
     var div = document.createElement('div');
     div.className = 'svc' + (down ? ' down' : '');
 
-    // Sparkline from history
-    var spark = '<div class="spark">';
-    for (var j = Math.max(0, HISTORY.length - 30); j < HISTORY.length; j++) {
-      spark += '<div class="spark-bar' + (HISTORY[j].s[i] === 0 ? ' down-bg' : '') + '" title="' + HISTORY[j].t + ' UTC"></div>';
+    // History bars
+    var barsHtml = '<div class="history-bars">';
+    var show = HISTORY.slice(-48);
+    for (var j = 0; j < 48 - show.length; j++) barsHtml += '<div class="h-bar"></div>';
+    for (var k = 0; k < show.length; k++) {
+      var cls = show[k].s[i] === 1 ? 'up' : 'down';
+      barsHtml += '<div class="h-bar ' + cls + '" data-tip="' + show[k].t + ' UTC"></div>';
     }
-    spark += '</div>';
+    barsHtml += '</div>';
 
     div.innerHTML =
       '<span class="svc-dot ' + svc.status + '"></span>' +
       '<div class="svc-info"><div class="svc-name">' + svc.name + ' <span class="tag ' + svc.status + '">' + (down ? 'Down' : 'Operational') + '</span></div>' +
       (down && svc.error ? '<div class="svc-detail">' + svc.error + '</div>' : '<div class="svc-detail">Responding normally</div>') +
       '</div>' +
-      spark +
+      barsHtml +
       '<span class="svc-latency ' + latencyLabel(svc.latency) + '">' + svc.latency + 'ms</span>';
     el.appendChild(div);
   });
