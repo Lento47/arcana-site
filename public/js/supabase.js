@@ -3,13 +3,19 @@
 const SUPABASE_URL = "https://ndaejikkbckaeygtruwl.supabase.co"
 const SUPABASE_ANON_KEY = "sb_publishable_kvD3JQvemwuQWoNtQG7Pfg_vBgpM9IE"
 
-// @ts-ignore — loaded via CDN <script> before this file
-const sb = window.supabase?.createClient
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null
+let sb = null
+
+// Debug: detect exactly what's wrong with the Supabase SDK load
+if (typeof window.supabase === 'undefined') {
+  console.error("Arcana: window.supabase is undefined. CDN script may be blocked by CSP or failed to load.")
+} else if (typeof window.supabase.createClient !== 'function') {
+  console.error("Arcana: window.supabase.createClient is not a function. SDK version mismatch? Type:", typeof window.supabase)
+} else {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  console.log("Arcana: Supabase client initialized. Auth ready.")
+}
 
 if (!sb) {
-  console.error("Arcana: Supabase SDK not loaded. Auth disabled.")
   // Let the page know immediately so it can show a banner on load
   window.addEventListener('DOMContentLoaded', () => {
     window.dispatchEvent(new CustomEvent('arcana:auth-offline'))
