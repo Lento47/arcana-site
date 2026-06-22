@@ -5,7 +5,7 @@
   --hairline:#212327;
   --primary:#B38CFF;--primary-soft:rgba(179,140,255,.15);--primary-glow:rgba(179,140,255,.25);
   --green:#8CFFBF;--red:#FF6B6B;--amber:#FFD36E;
-  --font-display:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-display:Geist,Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
   --sidebar-width:13rem;--radius:8px
 }
@@ -36,13 +36,14 @@ a{color:inherit;text-decoration:none}
 
 .content{overflow-y:auto;background:var(--canvas)}
 .content-inner{max-width:1200px;margin:0 auto;padding:2rem 2.5rem}@media(max-width:768px){.content-inner{padding:1.5rem 1rem}}
-.content h1{font-size:1.25rem;font-weight:400;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.25rem}
+.content h1{font-size:1.5rem;font-weight:400;letter-spacing:-.04em;color:var(--ink);margin-bottom:1.25rem;font-family:var(--font-display)}
 
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem}
 @media(max-width:768px){.stats-grid{grid-template-columns:1fr}}
 .stat{background:var(--canvas-card);border:1px solid var(--hairline);border-radius:var(--radius);padding:1.25rem;box-shadow:none}
 .stat-top{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem}
-.stat-icon{width:4rem;height:4rem;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:1rem;flex-shrink:0}
+.stat-icon{width:4rem;height:4rem;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:1rem;flex-shrink:0;transition:filter .2s}
+.stat:hover .stat-icon.accent{filter:drop-shadow(0 0 8px var(--primary-glow))}.stat:hover .stat-icon.green{filter:drop-shadow(0 0 8px rgba(140,255,191,.15))}.stat:hover .stat-icon.amber{filter:drop-shadow(0 0 8px rgba(255,211,110,.15))}
 .stat-icon.accent{background:var(--primary-soft);color:var(--primary)}.stat-icon.green{background:rgba(140,255,191,.08);color:var(--green)}.stat-icon.amber{background:rgba(255,211,110,.08);color:var(--amber)}
 .stat-label{font-family:var(--font-mono);font-size:.625rem;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;font-weight:400}
 .stat-value{font-size:1.25rem;font-weight:400;color:var(--ink);line-height:1.2;letter-spacing:-.02em}
