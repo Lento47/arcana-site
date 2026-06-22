@@ -21,15 +21,15 @@
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="side-head">
-        <a class="side-logo" href="/"><img src="/arcana.png" alt="Arcana" width="26" height="26"><div class="side-logo-text"><span class="side-logo-name">ARCANA</span><span class="side-logo-sub">console</span></div></a>
+        <a class="side-logo" href="/"><img src="/arcana.png" alt="Arcana" width="26" height="26" loading="lazy"><div class="side-logo-text"><span class="side-logo-name">ARCANA</span><span class="side-logo-sub">console</span></div></a>
       </div>
 
       <div class="side-section-label">Workspace</div>
       <nav class="side-nav">
-        <a class="nav-item active" href="/workspace"><span class="n-icon">◈</span>Overview</a>
-        <span class="nav-item" style="opacity:.35;pointer-events:none"><span class="n-icon">▸</span>Sessions</span>
-        <span class="nav-item" style="opacity:.35;pointer-events:none"><span class="n-icon">▸</span>API Keys</span>
-        <span class="nav-item" style="opacity:.35;pointer-events:none"><span class="n-icon">▸</span>Billing</span>
+        <a class="nav-item active" href="/workspace" aria-current="page"><span class="n-icon">◈</span>Overview</a>
+        <span class="nav-item disabled"><span class="n-icon">▸</span>Sessions</span>
+        <span class="nav-item disabled"><span class="n-icon">▸</span>API Keys</span>
+        <span class="nav-item disabled"><span class="n-icon">▸</span>Billing</span>
       </nav>
 
       <div class="side-section-label">System</div>
@@ -67,12 +67,12 @@
           </div>
         </header>
 
-        <div class="err-banner" id="ws-error">Unable to reach proxy. <button onclick="location.reload()">Retry</button></div>
+        <div class="err-banner" id="ws-error">Unable to reach proxy. <button id="ws-retry">Retry</button></div>
 
         <div class="skel-grid" id="ws-skeleton">
-          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s65"></div></div>
-          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s65"></div></div>
-          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s65"></div></div>
+          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s40"></div><div class="skel-line s65"></div><div class="skel-bar"></div></div>
+          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s40"></div><div class="skel-line s65"></div><div class="skel-bar"></div></div>
+          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s40"></div><div class="skel-line s65"></div><div class="skel-bar"></div></div>
         </div>
 
         <div class="cards-grid" id="ws-cards" style="display:none">
@@ -116,9 +116,9 @@
             <div class="ref-icon">⌘</div>
             <div class="ref-body"><strong>CLI</strong><span>npx arcana-ai@latest</span></div>
           </a>
-          <a class="ref-card" href="/auth">
-            <div class="ref-icon">◈</div>
-            <div class="ref-body"><strong>Account</strong><span>Manage identity and keys</span></div>
+          <a class="ref-card" href="/credits">
+            <div class="ref-icon">$</div>
+            <div class="ref-body"><strong>Credits</strong><span>Buy proxy credits</span></div>
           </a>
         </div>
       </div>

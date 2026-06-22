@@ -19,7 +19,8 @@
 
   let session = null;
 
-  function showError(msg) { if (el.error) { el.error.style.display = 'flex'; el.error.firstChild.textContent = '⚠ ' + msg + ' '; } }
+  const retryBtn = document.getElementById('ws-retry');
+  if (retryBtn) retryBtn.addEventListener('click', () => location.reload());
   function showCards(s) { if (el.skeleton) el.skeleton.style.display = s ? 'none' : ''; if (el.cards) el.cards.style.display = s ? '' : 'none'; }
 
   async function proxyFetch(path, token) {
@@ -61,38 +62,41 @@
     updateTime();
     setInterval(updateTime, 30000);
     checkProxyHealth();
+    setInterval(checkProxyHealth, 30000);
 
-    try {
-      const [health, balanceData, usageData] = await Promise.all([
-        proxyFetch('/v1/health', session.access_token),
-        proxyFetch('/v1/balance', session.access_token),
-        proxyFetch('/v1/usage', session.access_token),
-      ]);
+    const results = await Promise.allSettled([
+      proxyFetch('/v1/health', session.access_token),
+      proxyFetch('/v1/balance', session.access_token),
+      proxyFetch('/v1/usage', session.access_token),
+    ]);
 
-      const tier = health?.tier || 'free';
-      if (el.tierLabel) el.tierLabel.textContent = tier + ' tier';
+    const health = results[0].status === 'fulfilled' ? results[0].value : null;
+    const balanceData = results[1].status === 'fulfilled' ? results[1].value : null;
+    const usageData = results[2].status === 'fulfilled' ? results[2].value : null;
 
-      const dollars = balanceData?.dollars ?? '0.00';
-      const credits = balanceData?.credits ?? 0;
-      if (el.balance) el.balance.textContent = '$' + dollars;
-      if (el.balanceSub) el.balanceSub.textContent = Math.round(credits).toLocaleString('en') + ' credits';
-      if (el.balanceBar) el.balanceBar.style.width = Math.min(100, (parseFloat(dollars) / 50) * 100) + '%';
-      if (el.credits) el.credits.textContent = credits.toLocaleString('en');
-      if (el.creditsBar) el.creditsBar.style.width = Math.min(100, (credits / 5000) * 100) + '%';
+    const tier = health?.tier || 'free';
+    if (el.tierLabel) el.tierLabel.textContent = tier + ' tier';
 
-      const used = usageData?.requests ?? usageData?.count ?? 0;
-      const limits = { enterprise: Infinity, pro: 2000, trial: 200, free: 50 };
-      const limit = limits[tier] ?? 50;
-      if (el.usage) el.usage.textContent = used.toLocaleString('en');
-      if (el.usageSub) el.usageSub.textContent = 'of ' + (limit === Infinity ? '∞' : limit.toLocaleString('en')) + ' today';
-      if (el.usageBar) {
-        const pct = limit === Infinity ? 0 : Math.min(100, Math.round(used / limit * 100));
-        el.usageBar.style.width = pct + '%';
-        el.usageBar.style.background = pct > 95 ? 'var(--red)' : pct > 80 ? 'var(--amber)' : 'var(--accent)';
-      }
-    } catch (e) {
-      showError('Could not load workspace data.');
+    const dollars = balanceData?.dollars ?? '—';
+    const credits = balanceData?.credits ?? 0;
+    if (el.balance) el.balance.textContent = balanceData ? '$' + dollars : '—';
+    if (el.balanceSub) el.balanceSub.textContent = balanceData ? Math.round(credits).toLocaleString() + ' credits' : 'unavailable';
+    if (el.balanceBar) el.balanceBar.style.width = balanceData ? Math.min(100, (parseFloat(dollars) / 50) * 100) + '%' : '0%';
+    if (el.credits) el.credits.textContent = balanceData ? credits.toLocaleString() : '—';
+    if (el.creditsBar) el.creditsBar.style.width = balanceData ? Math.min(100, (credits / 5000) * 100) + '%' : '0%';
+
+    const used = usageData?.requests ?? usageData?.count ?? 0;
+    const limits = { enterprise: Infinity, pro: 2000, trial: 200, free: 50 };
+    const limit = limits[tier] ?? 50;
+    if (el.usage) el.usage.textContent = usageData ? used.toLocaleString() : '—';
+    if (el.usageSub) el.usageSub.textContent = usageData ? 'of ' + (limit === Infinity ? '∞' : limit.toLocaleString()) + ' today' : 'unavailable';
+    if (el.usageBar) {
+      const pct = limit === Infinity ? 0 : Math.min(100, Math.round(used / limit * 100));
+      el.usageBar.style.width = (usageData ? pct : 0) + '%';
+      el.usageBar.style.background = pct > 95 ? 'var(--red)' : pct > 80 ? 'var(--amber)' : 'var(--accent)';
     }
+
+    if (!health && !balanceData && !usageData) showError('Could not load workspace data.');
 
     showCards(true);
   }
@@ -103,6 +107,7 @@
   function closeSidebar() { el.sidebar.classList.remove('open'); }
   if (el.mobileMenu) { el.mobileMenu.addEventListener('click', () => el.sidebar.classList.toggle('open')); if (overlay) overlay.addEventListener('click', closeSidebar); }
   el.sidebar.querySelectorAll('.nav-item').forEach(item => { item.addEventListener('click', closeSidebar); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSidebar(); });
 
   window.addEventListener('arcana:signed-out', () => { window.location.replace('/'); });
 

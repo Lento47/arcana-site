@@ -4,6 +4,13 @@
       const sb = window.__ARCANA_SB__;
       const authReady = !!sb;
 
+      // Already authenticated? Redirect to workspace immediately — no flash
+      if (sb) {
+        sb.auth.getSession().then(function (r) {
+          if (r.data.session) window.location.replace('/workspace');
+        });
+      }
+
       // Show offline warning on page load if Supabase SDK failed to load
       if (!authReady) {
         window.addEventListener('arcana:auth-offline', () => {
@@ -363,7 +370,7 @@
 
         const { error: err } = await sb.auth.signInWithOtp({
           email: email.toLowerCase(),
-          options: { emailRedirectTo: 'https://arcana.otnelhq.com/auth' },
+          options: { emailRedirectTo: window.location.origin + '/auth' },
         });
 
         if (err) {
@@ -400,7 +407,7 @@
 
         sb.auth.signInWithOAuth({
           provider: provider.toLowerCase(),
-          options: { redirectTo: 'https://arcana.otnelhq.com/auth' },
+          options: { redirectTo: window.location.origin + '/auth' },
         });
         // Page will redirect — no further action needed
       }
@@ -481,7 +488,7 @@
         // Real Supabase SSO — redirects to IdP
         const { error: err } = await sb.auth.signInWithSSO({
           domain: email.split('@')[1] || domain + '.com',
-          options: { redirectTo: 'https://arcana.otnelhq.com/auth' },
+          options: { redirectTo: window.location.origin + '/auth' },
         });
 
         if (err) {

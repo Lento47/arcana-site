@@ -5,10 +5,10 @@
 :root{
   --void:#08070B;--depth:#0A0910;--panel:#0F0E16;--raised:#14131C;
   --border:#232034;--border-light:#2D2940;
-  --text:#EDEAF5;--text-secondary:#9E98B4;--text-muted:#6B6580;
+  --text:#F4F0FF;--text-secondary:#A19AAD;--text-muted:#736C80;
   --accent:#B38CFF;--accent-glow:rgba(179,140,255,.25);
-  --green:#6FE8B0;--green-glow:rgba(111,232,176,.2);
-  --red:#F97080;--amber:#F5C854;
+  --green:#8CFFBF;--green-glow:rgba(140,255,191,.2);
+  --red:#F97080;--amber:#FFD36E;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --body:"Geist",Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
   --radius:6px;--radius-lg:10px;
@@ -51,6 +51,8 @@ a{color:inherit;text-decoration:none}
 .nav-item:hover{color:var(--text);background:rgba(179,140,255,.04)}
 .nav-item.active{color:var(--text);background:rgba(179,140,255,.07);font-weight:500}
 .nav-item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2.5px;background:var(--accent);border-radius:0 2px 2px 0;box-shadow:0 0 8px var(--accent-glow)}
+.nav-item.disabled{opacity:.4;cursor:default}
+.nav-item.disabled:hover{color:var(--text-secondary);background:transparent}
 .nav-item .n-icon{font-family:var(--mono);font-size:.65rem;width:18px;text-align:center;opacity:.5;flex-shrink:0;transition:opacity var(--transition)}
 .nav-item:hover .n-icon,.nav-item.active .n-icon{opacity:1}
 .nav-spacer{flex:1}
@@ -101,8 +103,9 @@ a{color:inherit;text-decoration:none}
 .skel-card{border-radius:var(--radius-lg);background:var(--panel);border:1px solid var(--border);padding:22px 20px}
 .skel-icon{width:34px;height:34px;border-radius:var(--radius);margin-bottom:14px;background:linear-gradient(100deg,var(--panel) 25%,rgba(30,28,46,.6) 50%,var(--panel) 75%);background-size:400% 100%;animation:shimmer 1.8s infinite}
 .skel-line{height:12px;border-radius:3px;margin-bottom:8px;background:linear-gradient(100deg,var(--panel) 25%,rgba(30,28,46,.6) 50%,var(--panel) 75%);background-size:400% 100%;animation:shimmer 1.8s infinite}
-.skel-line:last-child{margin-bottom:0}
+.skel-line:last-of-type{margin-bottom:0}
 .skel-line.s20{width:25%}.skel-line.s40{width:45%}.skel-line.s65{width:70%}
+.skel-bar{height:4px;border-radius:2px;margin-top:12px;background:linear-gradient(100deg,var(--panel) 25%,rgba(30,28,46,.6) 50%,var(--panel) 75%);background-size:400% 100%;animation:shimmer 1.8s infinite}
 
 /* ═══ Cards ═══ */
 .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
@@ -113,7 +116,8 @@ a{color:inherit;text-decoration:none}
 @keyframes cardReveal{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .card:hover{border-color:var(--border-light);transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,0,0,.35),0 0 0 1px rgba(179,140,255,.04)}
 .card-inner{padding:22px 20px 0}
-.card-icon-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-track{background:transparent}.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.card-icon-row{display:flex;align-items:center;margin-bottom:16px}
 .card-icon{width:36px;height:36px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.85rem;transition:all var(--transition)}
 .card-icon.accent{background:rgba(179,140,255,.1);color:var(--accent)}.card-icon.green{background:rgba(111,232,176,.1);color:var(--green)}.card-icon.amber{background:rgba(245,200,84,.1);color:var(--amber)}
 .card:hover .card-icon.accent{box-shadow:0 0 16px var(--accent-glow)}.card:hover .card-icon.green{box-shadow:0 0 16px var(--green-glow)}.card:hover .card-icon.amber{box-shadow:0 0 16px rgba(245,200,84,.15)}
@@ -144,6 +148,14 @@ a{color:inherit;text-decoration:none}
   .actions{flex-direction:column}
   .welcome h1{font-size:1.15rem}.card-value{font-size:1.4rem}
 }
+@media(max-width:1024px){.cards-grid,.skel-grid{grid-template-columns:repeat(2,1fr)}}
+
 @media(prefers-reduced-motion:reduce){
-  .card,.skel-line,.skel-icon{animation:none}
+  .card,.skel-line,.skel-icon,.skel-bar{animation:none}
+  .proxy-dot{transition:none}
 }
+
+/* Focus visible */
+.nav-item:focus-visible,.action:focus-visible,.ref-card:focus-visible,.btn-signout:focus-visible,.mobile-menu-btn:focus-visible,.err-banner button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--radius)}
+
+::selection{background:rgba(179,140,255,.25);color:var(--text)}

@@ -20,8 +20,13 @@ function updateNavSession() {
     }
   });
   sb.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session) showSignedIn(session);
-    else if (event === 'SIGNED_OUT') showSignedOut();
+    if (event === 'SIGNED_IN' && session) {
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        window.location.replace('/workspace');
+        return;
+      }
+      showSignedIn(session);
+    } else if (event === 'SIGNED_OUT') showSignedOut();
   });
 }
 
