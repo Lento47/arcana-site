@@ -10,7 +10,14 @@ function updateNavSession() {
   const sb = window.__ARCANA_SB__;
   if (!sb) return;
   sb.auth.getSession().then(({ data: { session } }) => {
-    if (session) showSignedIn(session);
+    if (session) {
+      // Authenticated users: redirect to workspace, not landing page
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        window.location.replace('/workspace');
+        return;
+      }
+      showSignedIn(session);
+    }
   });
   sb.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session) showSignedIn(session);

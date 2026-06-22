@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Workspace — ARCANA</title>
-  <meta name="description" content="Arcana workspace — terminal-first AI operations.">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Arcana — Workspace</title>
+  <meta name="description" content="Arcana AI operations console.">
   <meta name="theme-color" content="#08070B"><meta name="robots" content="noindex">
-  <link rel="stylesheet" href="/css/workspace.css" media="all">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/workspace.css">
 </head>
 <body>
-  <div class="bg-atmosphere" aria-hidden="true"></div>
-  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-void" aria-hidden="true"></div>
+  <div class="bg-noise" aria-hidden="true"></div>
 
   <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
     <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
@@ -19,40 +21,33 @@
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="side-head">
-        <a class="side-brand" href="/">
-          <img src="/arcana.png" alt="" width="28" height="28">
-          <div class="side-brand-text">
-            <span class="side-brand-name">ARCANA</span>
-            <span class="side-brand-sub">workspace</span>
-          </div>
-        </a>
+        <a class="side-logo" href="/"><img src="/arcana.png" alt="Arcana" width="26" height="26"><div class="side-logo-text"><span class="side-logo-name">ARCANA</span><span class="side-logo-sub">console</span></div></a>
       </div>
 
-      <div class="side-section">Navigate</div>
+      <div class="side-section-label">Workspace</div>
       <nav class="side-nav">
-        <a class="nav-item active" href="/workspace"><span class="nav-icon">◈</span>Overview</a>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>Sessions<span class="nav-badge">soon</span></span>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>API Keys<span class="nav-badge">soon</span></span>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>Billing<span class="nav-badge">soon</span></span>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>Settings</span>
+        <a class="nav-item active" href="/workspace"><span class="n-icon">◈</span>Overview</a>
+        <span class="nav-item" style="opacity:.35;pointer-events:none"><span class="n-icon">▸</span>Sessions</span>
+        <span class="nav-item" style="opacity:.35;pointer-events:none"><span class="n-icon">▸</span>API Keys</span>
+        <span class="nav-item" style="opacity:.35;pointer-events:none"><span class="n-icon">▸</span>Billing</span>
       </nav>
 
-      <div class="side-section">Links</div>
+      <div class="side-section-label">System</div>
       <nav class="side-nav">
-        <a class="nav-item" href="/status"><span class="nav-icon">◉</span>System Status</a>
-        <a class="nav-item" href="/changelog"><span class="nav-icon">↗</span>Changelog</a>
-        <a class="nav-item" href="/docs"><span class="nav-icon">▹</span>Documentation</a>
+        <a class="nav-item" href="/status"><span class="n-icon">◉</span>Status</a>
+        <a class="nav-item" href="/changelog"><span class="n-icon">↗</span>Changelog</a>
+        <a class="nav-item" href="/docs"><span class="n-icon">▹</span>Docs</a>
       </nav>
 
       <div class="nav-spacer"></div>
 
       <div class="side-footer">
-        <div class="side-status"><span class="dot"></span> Proxy connected</div>
-        <div class="side-user-row">
+        <div class="proxy-status"><span class="proxy-dot" id="proxy-dot"></span><span>proxy connected</span></div>
+        <div class="side-user">
           <div class="side-avatar" id="ws-avatar">?</div>
           <div class="side-user-info">
             <div class="side-email" id="ws-email">—</div>
-            <div class="side-tier free" id="ws-tier-label">free tier</div>
+            <div class="side-tier" id="ws-tier-label">free tier</div>
           </div>
         </div>
         <button class="btn-signout" id="btn-signout">Sign out</button>
@@ -62,60 +57,68 @@
 
     <main class="content">
       <div class="content-inner">
-        <div class="welcome">
-          <div class="welcome-kicker">// workspace</div>
-          <h1>Good to see you.</h1>
-          <div class="session-id">⛧ <span id="ws-session-id">arc-········</span></div>
+        <header class="welcome">
+          <div class="welcome-eyebrow">console.active</div>
+          <h1>Command center</h1>
+          <div class="welcome-meta">
+            <span id="ws-session-id">arc-········</span>
+            <span class="sep"></span>
+            <span id="ws-time">—</span>
+          </div>
+        </header>
+
+        <div class="err-banner" id="ws-error">Unable to reach proxy. <button onclick="location.reload()">Retry</button></div>
+
+        <div class="skel-grid" id="ws-skeleton">
+          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s65"></div></div>
+          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s65"></div></div>
+          <div class="skel-card"><div class="skel-icon"></div><div class="skel-line s20"></div><div class="skel-line s65"></div></div>
         </div>
 
-        <div class="err-banner" id="ws-error">⚠ Could not load workspace data. <button onclick="location.reload()">Retry</button></div>
-
-        <div class="skeleton-pulse" id="ws-skeleton">
-          <div class="sk-cards">
-            <div class="sk-card"><div class="sk-icon"></div><div class="sk-line w30"></div><div class="sk-line w70"></div></div>
-            <div class="sk-card"><div class="sk-icon"></div><div class="sk-line w30"></div><div class="sk-line w70"></div></div>
-            <div class="sk-card"><div class="sk-icon"></div><div class="sk-line w30"></div><div class="sk-line w70"></div></div>
+        <div class="cards-grid" id="ws-cards" style="display:none">
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-icon-row"><div class="card-icon accent">$</div></div>
+              <div class="card-label">Balance</div>
+              <div class="card-value" id="ws-balance">—</div>
+              <div class="card-sub" id="ws-balance-sub"></div>
+            </div>
+            <div class="card-bar-wrap"><div class="card-bar" id="ws-balance-bar" style="background:var(--accent)"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-icon-row"><div class="card-icon green">◆</div></div>
+              <div class="card-label">Credits</div>
+              <div class="card-value" id="ws-credits">—</div>
+              <div class="card-sub">1 credit = 1¢ USD</div>
+            </div>
+            <div class="card-bar-wrap"><div class="card-bar" id="ws-credits-bar" style="background:var(--green)"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-icon-row"><div class="card-icon amber">↗</div></div>
+              <div class="card-label">Requests Today</div>
+              <div class="card-value" id="ws-usage">—</div>
+              <div class="card-sub" id="ws-usage-sub"></div>
+            </div>
+            <div class="card-bar-wrap"><div class="card-bar" id="ws-usage-bar" style="background:var(--accent)"></div></div>
           </div>
         </div>
 
-        <div class="stats-grid" id="ws-stats" style="display:none">
-          <div class="stat-card">
-            <div class="stat-icon-row"><div class="stat-icon purple">$</div></div>
-            <div class="stat-label">Balance</div>
-            <div class="stat-value" id="ws-balance">—</div>
-            <div class="stat-sub" id="ws-balance-sub"></div>
-            <div class="stat-bar-wrap"><div class="stat-bar" id="ws-balance-bar" style="background:var(--accent)"></div></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon-row"><div class="stat-icon green">◆</div></div>
-            <div class="stat-label">Credits</div>
-            <div class="stat-value" id="ws-credits">—</div>
-            <div class="stat-sub">1 credit = 1¢ USD</div>
-            <div class="stat-bar-wrap"><div class="stat-bar" id="ws-credits-bar" style="background:var(--green)"></div></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon-row"><div class="stat-icon amber">↗</div></div>
-            <div class="stat-label">Requests Today</div>
-            <div class="stat-value" id="ws-usage">—</div>
-            <div class="stat-sub" id="ws-usage-sub"></div>
-            <div class="stat-bar-wrap"><div class="stat-bar" id="ws-usage-bar" style="background:var(--accent)"></div></div>
-          </div>
+        <div class="actions">
+          <a class="action primary" href="/credits">+ Buy Credits</a>
+          <a class="action" href="/status">System Status</a>
+          <a class="action" href="/changelog">Release Notes</a>
         </div>
 
-        <div class="actions-row">
-          <a class="act-btn accent" href="/credits"><span>+</span> Buy Credits</a>
-          <a class="act-btn" href="/status"><span>◉</span> System Status</a>
-          <a class="act-btn" href="/changelog"><span>↗</span> Changelog</a>
-        </div>
-
-        <div class="quick-row">
-          <a class="quick-card" href="https://github.com/Lento47/arcana-community">
-            <div class="qc-icon">⌘</div>
-            <div><strong>CLI</strong><span>npx arcana-ai@latest</span></div>
+        <div class="ref-cards">
+          <a class="ref-card" href="https://github.com/Lento47/arcana-community">
+            <div class="ref-icon">⌘</div>
+            <div class="ref-body"><strong>CLI</strong><span>npx arcana-ai@latest</span></div>
           </a>
-          <a class="quick-card" href="/auth">
-            <div class="qc-icon">◈</div>
-            <div><strong>Account</strong><span>Manage your Arcana identity</span></div>
+          <a class="ref-card" href="/auth">
+            <div class="ref-icon">◈</div>
+            <div class="ref-body"><strong>Account</strong><span>Manage identity and keys</span></div>
           </a>
         </div>
       </div>
