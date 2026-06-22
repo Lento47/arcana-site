@@ -98,8 +98,9 @@ nav a.signin{
   border:1px solid rgba(179,140,255,.5);
   background:rgba(179,140,255,.18);
   padding:6px 16px;
-  font-weight:600;
+  font-weight:400;
   letter-spacing:.02em;
+  border-radius:9999px;
 }
 nav a.signin:hover{
   color:#fff;
@@ -139,8 +140,8 @@ h1{
 .cmd,.btn{
   height:44px;display:inline-flex;align-items:center;justify-content:center;
   border:1px solid var(--line2);padding:0 18px;
-  font:650 13px/1 var(--mono);
-  border-radius:7px;
+  font:400 13px/1 var(--mono);
+  border-radius:9999px;
   cursor:pointer;
   transition:border-color .2s, background .2s, box-shadow .25s, transform .15s;
 }
@@ -165,7 +166,7 @@ h1{
   background:var(--accent);
   color:#08070B;
   border-color:var(--accent);
-  font-weight:700;
+  font-weight:400;
   letter-spacing:.01em;
 }
 .btn.primary:hover{
