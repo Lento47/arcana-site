@@ -57,6 +57,7 @@
 
   async function init(s) {
     session = s;
+    checkProxyHealth();
     const email = session.user.email || '';
     if (el.email) el.email.textContent = email;
     // Avatar: first letter of email
@@ -138,6 +139,30 @@
       if (placeholder) placeholder.style.display = 'block';
     });
   });
+
+  // Proxy health check — dynamic status dot
+  async function checkProxyHealth() {
+    const dot = document.querySelector('.side-status .dot');
+    const label = document.querySelector('.side-status');
+    if (!dot || !label) return;
+    try {
+      const r = await fetch(PROXY + '/v1/models', { signal: AbortSignal.timeout(3000) });
+      if (r.ok) {
+        dot.style.background = 'var(--green)';
+        dot.style.boxShadow = '0 0 6px rgba(140,255,191,.4)';
+        if (label.lastChild) label.lastChild.textContent = ' Proxy connected';
+      } else {
+        dot.style.background = 'var(--amber)';
+        dot.style.boxShadow = '0 0 6px rgba(255,211,110,.4)';
+        if (label.lastChild) label.lastChild.textContent = ' Proxy degraded';
+      }
+    } catch {
+      dot.style.background = 'var(--red)';
+      dot.style.boxShadow = '0 0 6px rgba(255,107,107,.4)';
+      dot.style.animation = 'none';
+      if (label.lastChild) label.lastChild.textContent = ' Proxy offline';
+    }
+  }
 
   // Listen for signed-out event from other tabs
   window.addEventListener('arcana:signed-out', () => {
