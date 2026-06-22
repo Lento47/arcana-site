@@ -1,23 +1,15 @@
-/* === ARCANA Design Tokens & Global Styles === */
+/* Arcana Informational Layer */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#08070B;
-  --surface:#111018;
-  --surface2:#171520;
-  --line:#282638;
-  --line2:#3A3650;
-  --text:#F4F0FF;
-  --muted:#A19AAD;
-  --soft:#736C80;
-  --accent:#B38CFF;
-  --accent2:#8FE8FF;
-  --green:#8CFFBF;
-  --warn:#FFD36E;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
-  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --color-bg:#0a0a0a;--color-surface:#191919;--color-surface-2:#1a1c20;--color-border:#212327;--color-divider:#212327;
+  --color-text:#fff;--color-text-muted:#7d8187;--color-text-faint:#4a4d52;
+  --color-primary:#B38CFF;--color-success:#8CFFBF;--color-warning:#FFD36E;--color-error:#FF6B6B;
+  --font-sans:Geist,Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  --text-xs:.625rem;--text-sm:.8125rem;--text-base:.875rem;--text-lg:1rem;--text-xl:1.125rem;
+  --radius-sm:4px;--radius-md:6px;--radius-lg:8px;--radius-pill:9999px;
 }
-
-html,body{background:var(--bg);color:var(--text)}
+html,body{background:var(--color-bg);color:var(--color-text);font-weight:400}
 body{
   min-height:100vh;
   font-family:var(--sans);

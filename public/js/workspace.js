@@ -7,7 +7,7 @@ var emailEl=e('ws-email'),avatarEl=e('ws-avatar'),balanceEl=e('ws-balance'),bala
 function show(s){if(skelEl)skelEl.style.display=s?'none':'';if(statsEl)statsEl.style.display=s?'':'none'}
 async function pf(path,token){var r=await fetch(P+path,{headers:{Authorization:'Bearer '+token}});if(r.status===401){var ref=await sb.auth.refreshSession();if(ref.data.session){r=await fetch(P+path,{headers:{Authorization:'Bearer '+ref.data.session.access_token}});if(r.ok)return r.json()}await sb.auth.signOut();location.replace('/auth');return null}if(!r.ok)throw Error('Proxy '+r.status);return r.json()}
 async function init(s){
-  if(emailEl)emailEl.textContent=s.user.email||'';if(avatarEl)avatarEl.textContent=(s.user.email||'?')[0].toUpperCase();
+  var sidEl=e('ws-session-id');if(emailEl)emailEl.textContent=s.user.email||'';if(avatarEl)avatarEl.textContent=(s.user.email||'?')[0].toUpperCase();if(sidEl)sidEl.textContent='arc-'+s.user.id.slice(0,8);
   try{var results=await Promise.allSettled([pf('/v1/balance',s.access_token),pf('/v1/usage',s.access_token)]);var bd=results[0].status==='fulfilled'?results[0].value:null;var ud=results[1].status==='fulfilled'?results[1].value:null;
   var d=bd?bd.dollars||'0.00':'—',c=bd?bd.credits||0:0;
   if(balanceEl)balanceEl.textContent=bd?'$'+d:'—';if(balanceSubEl)balanceSubEl.textContent=bd?Math.round(c).toLocaleString()+' credits':'unavailable';if(balanceBar)balanceBar.style.width=bd?Math.min(100,(parseFloat(d)/50)*100)+'%':'0%';
