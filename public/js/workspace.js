@@ -121,13 +121,13 @@
   }
 
   // Mobile menu
+  const overlay = document.getElementById('sidebar-overlay');
+  function closeSidebar() { el.sidebar.classList.remove('open'); }
   if (el.mobileMenu) {
-    el.mobileMenu.addEventListener('click', () => {
-      el.sidebar.classList.toggle('open');
-    });
-    // Close sidebar on nav click
+    el.mobileMenu.addEventListener('click', () => el.sidebar.classList.toggle('open'));
+    if (overlay) overlay.addEventListener('click', closeSidebar);
     el.sidebar.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', () => el.sidebar.classList.remove('open'));
+      item.addEventListener('click', closeSidebar);
     });
   }
 
