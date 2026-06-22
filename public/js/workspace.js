@@ -57,7 +57,14 @@
 
   async function init(s) {
     session = s;
-    if (el.email) el.email.textContent = session.user.email || '';
+    const email = session.user.email || '';
+    if (el.email) el.email.textContent = email;
+    // Avatar: first letter of email
+    const av = document.getElementById('ws-avatar');
+    if (av) av.textContent = (email[0] || '?').toUpperCase();
+    // Session ID
+    const sid = document.getElementById('ws-session-id');
+    if (sid) sid.textContent = 'arc-' + session.user.id.slice(0, 8);
     showSkeleton(true);
 
     try {
@@ -69,17 +76,21 @@
 
       // Tier
       const tier = health?.tier || 'free';
-      if (el.tierBadge) {
-        el.tierBadge.textContent = tier;
-        el.tierBadge.className = 'tier-badge ' + (tier === 'enterprise' ? 'enterprise' : tier === 'pro' ? 'pro' : 'free');
-      }
+      const tl = document.getElementById('ws-tier-label');
+      if (tl) { tl.textContent = tier + ' tier'; tl.className = 'side-tier ' + (tier === 'pro' ? 'pro' : tier === 'enterprise' ? 'enterprise' : 'free'); }
 
       // Balance
       const credits = balance?.credits ?? 0;
       const dollars = balance?.dollars ?? '0.00';
       if (el.balance) el.balance.textContent = '$' + dollars;
-      if (el.balanceSub) el.balanceSub.textContent = 'USD';
+      if (el.balanceSub) el.balanceSub.textContent = Math.round(credits) + ' credits';
       if (el.credits) el.credits.textContent = credits.toLocaleString('en');
+      // Balance bar (max visual: $50)
+      const balBar = document.getElementById('ws-balance-bar');
+      if (balBar) balBar.style.width = Math.min(100, (parseFloat(dollars) / 50) * 100) + '%';
+      // Credits bar
+      const crBar = document.getElementById('ws-credits-bar');
+      if (crBar) crBar.style.width = Math.min(100, (credits / 5000) * 100) + '%';
 
       // Usage
       const used = usage?.requests ?? usage?.count ?? 0;
@@ -88,12 +99,11 @@
       const limitText = tier === 'enterprise' ? '∞' : limit.toLocaleString('en');
       if (el.usage) el.usage.textContent = used.toLocaleString('en');
       if (el.usageSub) el.usageSub.textContent = 'of ' + limitText + ' today';
-      // Usage bar
-      const bar = document.getElementById('ws-usage-bar');
-      if (bar) {
+      const uBar = document.getElementById('ws-usage-bar');
+      if (uBar) {
         const pct = limit === Infinity ? 0 : Math.min(100, Math.round(used / limit * 100));
-        bar.style.width = pct + '%';
-        bar.style.background = pct > 80 ? 'var(--amber)' : pct > 95 ? 'var(--red)' : 'var(--accent)';
+        uBar.style.width = pct + '%';
+        uBar.style.background = pct > 95 ? 'var(--red)' : pct > 80 ? 'var(--amber)' : 'var(--accent)';
       }
     } catch (e) {
       showError('Could not load workspace data. Proxy may be unavailable.');

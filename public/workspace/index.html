@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Workspace — ARCANA</title>
   <meta name="description" content="Arcana workspace — terminal-first AI operations.">
-  <meta name="theme-color" content="#08070B">
-  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#08070B"><meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/workspace.css" media="all">
 </head>
 <body>
@@ -19,21 +18,42 @@
 
   <div class="app">
     <aside class="sidebar" id="sidebar">
-      <a class="side-brand" href="/"><img src="/arcana.png" alt="" width="24" height="24"><div><span class="brand-name">ARCANA</span><span class="brand-ver">workspace</span></div></a>
+      <div class="side-head">
+        <a class="side-brand" href="/">
+          <img src="/arcana.png" alt="" width="28" height="28">
+          <div class="side-brand-text">
+            <span class="side-brand-name">ARCANA</span>
+            <span class="side-brand-sub">workspace</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="side-section">Navigate</div>
       <nav class="side-nav">
         <a class="nav-item active" href="/workspace"><span class="nav-icon">◈</span>Overview</a>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>Sessions</span>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>API Keys</span>
-        <span class="nav-item soon"><span class="nav-icon">▸</span>Billing</span>
+        <span class="nav-item soon"><span class="nav-icon">▸</span>Sessions<span class="nav-badge">soon</span></span>
+        <span class="nav-item soon"><span class="nav-icon">▸</span>API Keys<span class="nav-badge">soon</span></span>
+        <span class="nav-item soon"><span class="nav-icon">▸</span>Billing<span class="nav-badge">soon</span></span>
         <span class="nav-item soon"><span class="nav-icon">▸</span>Settings</span>
-        <div class="nav-spacer"></div>
-        <a class="nav-item" href="/status"><span class="nav-icon">◉</span>System Status</a>
-        <a class="nav-item" href="/docs"><span class="nav-icon">▹</span>Docs</a>
       </nav>
+
+      <div class="side-section">Links</div>
+      <nav class="side-nav">
+        <a class="nav-item" href="/status"><span class="nav-icon">◉</span>System Status</a>
+        <a class="nav-item" href="/changelog"><span class="nav-icon">↗</span>Changelog</a>
+        <a class="nav-item" href="/docs"><span class="nav-icon">▹</span>Documentation</a>
+      </nav>
+
+      <div class="nav-spacer"></div>
+
       <div class="side-footer">
-        <div class="side-user">
-          <span class="side-email" id="ws-email" title="Signed in as">—</span>
-          <span class="tier-badge free" id="ws-tier-badge">free</span>
+        <div class="side-status"><span class="dot"></span> Proxy connected</div>
+        <div class="side-user-row">
+          <div class="side-avatar" id="ws-avatar">?</div>
+          <div class="side-user-info">
+            <div class="side-email" id="ws-email">—</div>
+            <div class="side-tier free" id="ws-tier-label">free tier</div>
+          </div>
         </div>
         <button class="btn-signout" id="btn-signout">Sign out</button>
       </div>
@@ -44,43 +64,40 @@
         <div class="welcome">
           <div class="welcome-kicker">// workspace</div>
           <h1>Good to see you.</h1>
+          <div class="session-id">Session <span id="ws-session-id">—</span></div>
         </div>
 
-        <div class="err-banner" id="ws-error" style="display:none"></div>
+        <div class="err-banner" id="ws-error">⚠ Could not load workspace data. <button onclick="location.reload()">Retry</button></div>
 
         <div class="skeleton-pulse" id="ws-skeleton">
           <div class="sk-cards">
-            <div class="sk-card"><div class="sk-line w30"></div><div class="sk-line w60"></div></div>
-            <div class="sk-card"><div class="sk-line w30"></div><div class="sk-line w60"></div></div>
-            <div class="sk-card"><div class="sk-line w30"></div><div class="sk-line w60"></div></div>
+            <div class="sk-card"><div class="sk-line w30"></div><div class="sk-line w70"></div></div>
+            <div class="sk-card"><div class="sk-line w30"></div><div class="sk-line w70"></div></div>
+            <div class="sk-card"><div class="sk-line w30"></div><div class="sk-line w70"></div></div>
           </div>
         </div>
 
         <div class="stats-grid" id="ws-stats" style="display:none">
-          <div class="stat-card" id="card-balance">
-            <div class="stat-icon">$</div>
-            <div class="stat-body">
-              <div class="stat-label">Balance</div>
-              <div class="stat-value" id="ws-balance">—</div>
-              <div class="stat-sub" id="ws-balance-sub"></div>
-            </div>
+          <div class="stat-card">
+            <div class="stat-icon-row"><div class="stat-icon purple">$</div></div>
+            <div class="stat-label">Balance</div>
+            <div class="stat-value" id="ws-balance">—</div>
+            <div class="stat-sub" id="ws-balance-sub"></div>
+            <div class="stat-bar-wrap"><div class="stat-bar" id="ws-balance-bar" style="background:var(--accent)"></div></div>
           </div>
-          <div class="stat-card" id="card-credits">
-            <div class="stat-icon">◆</div>
-            <div class="stat-body">
-              <div class="stat-label">Credits</div>
-              <div class="stat-value" id="ws-credits">—</div>
-              <div class="stat-sub">1 credit = 1¢ USD</div>
-            </div>
+          <div class="stat-card">
+            <div class="stat-icon-row"><div class="stat-icon green">◆</div></div>
+            <div class="stat-label">Credits</div>
+            <div class="stat-value" id="ws-credits">—</div>
+            <div class="stat-sub">1 credit = 1¢ USD</div>
+            <div class="stat-bar-wrap"><div class="stat-bar" id="ws-credits-bar" style="background:var(--green)"></div></div>
           </div>
-          <div class="stat-card" id="card-usage">
-            <div class="stat-icon">↗</div>
-            <div class="stat-body">
-              <div class="stat-label">Today's Requests</div>
-              <div class="stat-value" id="ws-usage">—</div>
-              <div class="stat-sub" id="ws-usage-sub"></div>
-            </div>
-            <div class="usage-bar-wrap"><div class="usage-bar" id="ws-usage-bar"></div></div>
+          <div class="stat-card">
+            <div class="stat-icon-row"><div class="stat-icon amber">↗</div></div>
+            <div class="stat-label">Requests Today</div>
+            <div class="stat-value" id="ws-usage">—</div>
+            <div class="stat-sub" id="ws-usage-sub"></div>
+            <div class="stat-bar-wrap"><div class="stat-bar" id="ws-usage-bar" style="background:var(--accent)"></div></div>
           </div>
         </div>
 
@@ -88,6 +105,11 @@
           <a class="act-btn accent" href="/credits"><span>+</span> Buy Credits</a>
           <a class="act-btn" href="/status"><span>◉</span> System Status</a>
           <a class="act-btn" href="/changelog"><span>↗</span> Changelog</a>
+        </div>
+
+        <div class="quick-row">
+          <a class="quick-card" href="https://github.com/Lento47/arcana-community"><strong>CLI</strong>&nbsp;npx arcana-ai@latest</a>
+          <a class="quick-card" href="/auth"><strong>Account</strong>&nbsp;Manage your Arcana identity</a>
         </div>
       </div>
     </main>
