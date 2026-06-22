@@ -277,7 +277,7 @@
           showStatePanel('success');
           showBanner('success', 'Authenticated', 'Routing to your workspace…');
           // Redirect to workspace after brief display
-          setTimeout(() => { window.location.replace('/'); }, 1500);
+          setTimeout(() => { window.location.replace('/workspace'); }, 1500);
         }
       });
 
@@ -333,7 +333,7 @@
         if (data.session) {
           showStatePanel('success');
           showBanner('success', 'Account created', 'Your Arcana workspace is ready.');
-          setTimeout(() => { window.location.replace('/'); }, 1500);
+          setTimeout(() => { window.location.replace('/workspace'); }, 1500);
         } else {
           // Email confirmation sent
           showBanner('info', 'Verify your email', 'A confirmation link was sent to your inbox. Verify to complete sign-up.');
@@ -514,7 +514,7 @@
         document.getElementById('success-session').textContent = 'arc-' + session.user.id.slice(0, 8);
         showStatePanel('success');
         showBanner('success', 'Authenticated', 'Routing to your workspace…');
-        setTimeout(() => { window.location.replace('/'); }, 1500);
+        setTimeout(() => { window.location.replace('/workspace'); }, 1500);
       }
 
       if (authReady) {

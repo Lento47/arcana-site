@@ -17,3 +17,6 @@
 
 /auth
   X-Robots-Tag: noindex
+
+/workspace
+  X-Robots-Tag: noindex

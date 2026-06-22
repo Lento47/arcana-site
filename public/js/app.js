@@ -23,7 +23,7 @@ function showSignedIn(session) {
   const shortEmail = email.length > 24 ? email.slice(0, 22) + '…' : email;
   document.querySelectorAll('a[href="/auth"]').forEach(a => {
     a.textContent = shortEmail;
-    a.href = '#';
+    a.href = '/workspace';
     a.className = 'signin signed-in';
     a.title = 'Signed in as ' + email;
   });

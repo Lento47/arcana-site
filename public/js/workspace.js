@@ -1,0 +1,140 @@
+// Arcana Workspace — app shell
+(function () {
+  'use strict';
+  const PROXY = 'https://proxy.arcana.otnelhq.com';
+  const sb = window.__ARCANA_SB__;
+
+  // Session guard
+  if (!sb) { window.location.replace('/auth'); return; }
+
+  const el = {
+    email: document.getElementById('ws-email'),
+    tierBadge: document.getElementById('ws-tier-badge'),
+    balance: document.getElementById('ws-balance'),
+    balanceSub: document.getElementById('ws-balance-sub'),
+    credits: document.getElementById('ws-credits'),
+    usage: document.getElementById('ws-usage'),
+    usageSub: document.getElementById('ws-usage-sub'),
+    statsGrid: document.getElementById('ws-stats'),
+    skeleton: document.getElementById('ws-skeleton'),
+    errorBanner: document.getElementById('ws-error'),
+    signOut: document.getElementById('btn-signout'),
+    mobileMenu: document.getElementById('mobile-menu-btn'),
+    sidebar: document.getElementById('sidebar'),
+  };
+
+  let session = null;
+
+  async function proxyFetch(path, token) {
+    const r = await fetch(PROXY + path, { headers: { Authorization: 'Bearer ' + token } });
+    if (r.status === 401) {
+      // Try token refresh
+      const { data } = await sb.auth.refreshSession();
+      if (data.session) {
+        session = data.session;
+        const r2 = await fetch(PROXY + path, { headers: { Authorization: 'Bearer ' + data.session.access_token } });
+        if (r2.ok) return r2.json();
+      }
+      sb.auth.signOut();
+      window.location.replace('/auth');
+      return null;
+    }
+    if (!r.ok) throw new Error('Proxy ' + r.status);
+    return r.json();
+  }
+
+  function showError(msg) {
+    if (el.errorBanner) {
+      el.errorBanner.innerHTML = '⚠ ' + msg + ' <button onclick="location.reload()">Retry</button>';
+      el.errorBanner.style.display = 'flex';
+    }
+  }
+
+  function showSkeleton(s) {
+    if (el.skeleton) el.skeleton.style.display = s ? 'block' : 'none';
+    if (el.statsGrid) el.statsGrid.style.display = s ? 'none' : '';
+  }
+
+  async function init(s) {
+    session = s;
+    if (el.email) el.email.textContent = session.user.email || '';
+    showSkeleton(true);
+
+    try {
+      const [health, balance, usage] = await Promise.all([
+        proxyFetch('/v1/health', session.access_token),
+        proxyFetch('/v1/balance', session.access_token),
+        proxyFetch('/v1/usage', session.access_token),
+      ]);
+
+      // Tier
+      const tier = health?.tier || 'free';
+      if (el.tier) el.tier.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
+      if (el.tierBadge) {
+        el.tierBadge.textContent = tier;
+        el.tierBadge.className = 'tier-badge ' + tier;
+      }
+
+      // Balance
+      const credits = balance?.credits ?? 0;
+      const dollars = balance?.dollars ?? '0.00';
+      if (el.balance) el.balance.textContent = '$' + dollars;
+      if (el.balanceSub) el.balanceSub.textContent = 'USD';
+      if (el.credits) el.credits.textContent = credits.toLocaleString('en');
+
+      // Usage
+      const used = usage?.requests ?? usage?.count ?? 0;
+      const limit = tier === 'enterprise' ? '∞' : tier === 'pro' ? '2,000' : tier === 'trial' ? '200' : '50';
+      if (el.usage) el.usage.textContent = used.toLocaleString('en') + ' / ' + limit;
+      if (el.usageSub) el.usageSub.textContent = 'requests today';
+    } catch (e) {
+      showError('Could not load workspace data. Proxy may be unavailable.');
+    }
+
+    showSkeleton(false);
+  }
+
+  // Sign out
+  if (el.signOut) {
+    el.signOut.addEventListener('click', async () => {
+      await sb.auth.signOut();
+      window.location.replace('/');
+    });
+  }
+
+  // Mobile menu
+  if (el.mobileMenu) {
+    el.mobileMenu.addEventListener('click', () => {
+      el.sidebar.classList.toggle('open');
+    });
+    // Close sidebar on nav click
+    el.sidebar.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => el.sidebar.classList.remove('open'));
+    });
+  }
+
+  // Nav: "coming soon" items
+  document.querySelectorAll('.nav-item.soon').forEach(item => {
+    item.addEventListener('click', () => {
+      const placeholder = document.getElementById('ws-placeholder');
+      if (placeholder) placeholder.style.display = 'block';
+    });
+  });
+
+  // Listen for signed-out event from other tabs
+  window.addEventListener('arcana:signed-out', () => {
+    window.location.replace('/');
+  });
+
+  // Check session and init
+  sb.auth.getSession().then(({ data }) => {
+    if (!data.session) { window.location.replace('/auth'); return; }
+    init(data.session);
+  });
+
+  // Listen for auth state changes
+  sb.auth.onAuthStateChange((event, s) => {
+    if (event === 'SIGNED_OUT') window.location.replace('/');
+    if (event === 'TOKEN_REFRESHED' && s) init(s);
+  });
+})();

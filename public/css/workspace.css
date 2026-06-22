@@ -1,0 +1,77 @@
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#08070B;--surface:#111018;--surface2:#18151F;--line:#282638;--text:#F4F0FF;--muted:#A19AAD;--soft:#736C80;--accent:#B38CFF;--green:#8CFFBF;--red:#FF6B6B;--amber:#FFD36E;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+html,body{background:var(--bg);color:var(--text);min-height:100vh;font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+body{background:radial-gradient(circle at 50% -8%,rgba(179,140,255,.1),transparent 24rem),linear-gradient(180deg,#09070D,#08070B 42%,#060507)}
+.app{display:grid;grid-template-columns:220px 1fr;height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* Sidebar */
+.sidebar{background:rgba(13,12,18,.95);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow-y:auto;padding:1.25rem 0}
+.side-brand{display:flex;align-items:center;gap:8px;padding:0 1.25rem 1rem;font-weight:700;font-size:.9rem;letter-spacing:-.01em;border-bottom:1px solid var(--line);margin-bottom:.75rem}
+.side-brand img{width:22px;height:22px}
+.side-nav{flex:1;display:flex;flex-direction:column;gap:2px;padding:0 .75rem}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;font-size:.8rem;color:var(--muted);transition:background .15s,color .15s,border .15s;cursor:pointer;border-left:2px solid transparent;border:1px solid transparent}
+.nav-item:hover{background:rgba(179,140,255,.06);color:var(--text)}
+.nav-item.active{background:rgba(179,140,255,.08);color:var(--accent);border-color:rgba(179,140,255,.15)}
+.nav-item .icon{width:18px;text-align:center;font-family:var(--mono);font-size:.7rem;flex-shrink:0}
+.nav-item.soon{opacity:.5;cursor:default}
+.nav-item.soon:hover{background:transparent;color:var(--muted)}
+.nav-spacer{flex:1}
+.side-footer{padding:.75rem 1.25rem 0;border-top:1px solid var(--line);margin-top:.5rem}
+.btn-signout{width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;font-size:.78rem;color:var(--soft);background:transparent;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-signout:hover{color:var(--red);background:rgba(255,107,107,.06);border-color:rgba(255,107,107,.15)}
+
+/* Content */
+.content{overflow-y:auto;padding:2rem}
+.content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.content-header h1{font-size:1.1rem;font-weight:600;letter-spacing:-.01em}
+.user-bar{display:flex;align-items:center;gap:10px;font-size:.78rem}
+.user-email{color:var(--muted)}
+.tier-badge{font-family:var(--mono);font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:4px}
+.tier-badge.free{background:rgba(161,154,173,.1);color:var(--muted);border:1px solid rgba(161,154,173,.15)}
+.tier-badge.pro{background:rgba(140,255,191,.1);color:var(--green);border:1px solid rgba(140,255,191,.2)}
+.tier-badge.enterprise{background:rgba(179,140,255,.1);color:var(--accent);border:1px solid rgba(179,140,255,.2)}
+
+/* Cards */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem}
+.stat-card{background:rgba(17,16,24,.82);border:1px solid var(--line);border-radius:10px;padding:18px 20px;transition:border-color .3s}
+.stat-card:hover{border-color:rgba(179,140,255,.12)}
+.stat-label{font-size:.65rem;font-family:var(--mono);color:var(--soft);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.stat-value{font-family:var(--mono);font-size:1.4rem;font-weight:700;letter-spacing:-.03em;color:var(--text)}
+.stat-sub{font-size:.65rem;color:var(--muted);margin-top:2px;font-family:var(--mono)}
+.stat-card.green .stat-value{color:var(--green)}
+
+.actions-row{display:flex;gap:8px;margin-bottom:1.25rem}
+.actions-row .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 16px;border-radius:8px;font-family:var(--mono);font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid var(--line);background:rgba(17,16,24,.7);color:var(--text)}
+.actions-row .btn:hover{border-color:var(--accent);background:rgba(179,140,255,.06)}
+.actions-row .btn.accent{background:rgba(179,140,255,.1);border-color:rgba(179,140,255,.25);color:var(--accent)}
+.actions-row .btn.accent:hover{background:rgba(179,140,255,.16);border-color:rgba(179,140,255,.4)}
+
+.placeholder{background:rgba(17,16,24,.5);border:1px dashed var(--line);border-radius:10px;padding:32px;text-align:center;color:var(--muted);font-size:.8rem;line-height:1.6}
+.placeholder strong{color:var(--soft)}
+
+/* Skeleton */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skeleton{background:linear-gradient(90deg,rgba(17,16,24,.6) 25%,rgba(23,21,32,.8) 50%,rgba(17,16,24,.6) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px}
+.sk-line{height:14px;margin-bottom:8px}
+.sk-line.short{width:60%}
+
+/* Error banner */
+.err-banner{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.18);border-radius:8px;padding:12px 16px;margin-bottom:1rem;display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--red)}
+.err-banner button{font-family:var(--mono);font-size:.65rem;color:var(--red);background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);padding:4px 10px;border-radius:4px;cursor:pointer;margin-left:auto}
+
+@media(max-width:768px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none;position:fixed;inset:0;z-index:100;padding-top:3rem}
+  .sidebar.open{display:flex}
+  .mobile-menu-btn{display:flex!important;position:fixed;top:.75rem;left:.75rem;z-index:101;width:36px;height:36px;align-items:center;justify-content:center;background:rgba(17,16,24,.9);border:1px solid var(--line);border-radius:6px;color:var(--text);cursor:pointer}
+  .stats-grid{grid-template-columns:1fr}
+  .actions-row{flex-direction:column}
+  .content{padding:1.25rem}
+}
+@media(min-width:769px){.mobile-menu-btn{display:none}}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .skeleton{animation:none}
+}
