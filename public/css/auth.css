@@ -55,13 +55,13 @@
       --border-default: rgba(255, 255, 255, 0.09);
       --border-subtle: rgba(255, 255, 255, 0.05);
       --border-strong: rgba(255, 255, 255, 0.16);
-      --border-accent: rgba(51, 177, 163, 0.45);
+      --border-accent: rgba(179, 140, 255, 0.45);
 
-      --accent: #33b1a3;
-      --accent-hover: #40c4b5;
-      --accent-active: #2a9388;
-      --accent-subtle: rgba(51, 177, 163, 0.12);
-      --accent-glow: rgba(51, 177, 163, 0.18);
+      --accent: #B38CFF;
+      --accent-hover: #C4A3FF;
+      --accent-active: #9E74F0;
+      --accent-subtle: rgba(179, 140, 255, 0.12);
+      --accent-glow: rgba(179, 140, 255, 0.18);
 
       --amber: #c49b5b;
       --amber-subtle: rgba(196, 155, 91, 0.12);
@@ -84,7 +84,7 @@
       --shadow-focus: 0 0 0 2px var(--bg-base), 0 0 0 4px var(--border-accent);
 
       --noise-opacity: 0.04;
-      --radial-1: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(51, 177, 163, 0.09), transparent 55%);
+      --radial-1: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(179, 140, 255, 0.09), transparent 55%);
       --radial-2: radial-gradient(ellipse 60% 50% at 85% 15%, rgba(139, 139, 181, 0.06), transparent 50%);
       --radial-3: radial-gradient(ellipse 70% 40% at 70% 90%, rgba(196, 155, 91, 0.05), transparent 50%);
     }
@@ -109,13 +109,13 @@
       --border-default: rgba(10, 11, 12, 0.10);
       --border-subtle: rgba(10, 11, 12, 0.06);
       --border-strong: rgba(10, 11, 12, 0.18);
-      --border-accent: rgba(33, 138, 127, 0.45);
+      --border-accent: rgba(158, 116, 240, 0.45);
 
-      --accent: #218a7f;
-      --accent-hover: #1a7068;
-      --accent-active: #166b63;
-      --accent-subtle: rgba(33, 138, 127, 0.10);
-      --accent-glow: rgba(33, 138, 127, 0.14);
+      --accent: #9E74F0;
+      --accent-hover: #8B5CF6;
+      --accent-active: #7C3AED;
+      --accent-subtle: rgba(158, 116, 240, 0.10);
+      --accent-glow: rgba(158, 116, 240, 0.14);
 
       --amber: #9a7437;
       --amber-subtle: rgba(154, 116, 55, 0.10);
