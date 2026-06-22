@@ -69,10 +69,9 @@
 
       // Tier
       const tier = health?.tier || 'free';
-      if (el.tier) el.tier.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
       if (el.tierBadge) {
         el.tierBadge.textContent = tier;
-        el.tierBadge.className = 'tier-badge ' + tier;
+        el.tierBadge.className = 'tier-badge ' + (tier === 'enterprise' ? 'enterprise' : tier === 'pro' ? 'pro' : 'free');
       }
 
       // Balance
@@ -84,9 +83,18 @@
 
       // Usage
       const used = usage?.requests ?? usage?.count ?? 0;
-      const limit = tier === 'enterprise' ? '∞' : tier === 'pro' ? '2,000' : tier === 'trial' ? '200' : '50';
-      if (el.usage) el.usage.textContent = used.toLocaleString('en') + ' / ' + limit;
-      if (el.usageSub) el.usageSub.textContent = 'requests today';
+      const limits = { enterprise: Infinity, pro: 2000, trial: 200, free: 50 };
+      const limit = limits[tier] ?? 50;
+      const limitText = tier === 'enterprise' ? '∞' : limit.toLocaleString('en');
+      if (el.usage) el.usage.textContent = used.toLocaleString('en');
+      if (el.usageSub) el.usageSub.textContent = 'of ' + limitText + ' today';
+      // Usage bar
+      const bar = document.getElementById('ws-usage-bar');
+      if (bar) {
+        const pct = limit === Infinity ? 0 : Math.min(100, Math.round(used / limit * 100));
+        bar.style.width = pct + '%';
+        bar.style.background = pct > 80 ? 'var(--amber)' : pct > 95 ? 'var(--red)' : 'var(--accent)';
+      }
     } catch (e) {
       showError('Could not load workspace data. Proxy may be unavailable.');
     }
