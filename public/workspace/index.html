@@ -19,19 +19,19 @@
       <div class="side-head"><img src="/arcana.png" alt="" width="22" height="22"><span>ARCANA</span></div>
       <div class="side-content">
         <div class="side-section">Overview</div>
-        <a class="nav-item active" href="/workspace"><span class="nav-icon">◆</span>Dashboard</a>
+        <a class="nav-item active" href="/workspace">Dashboard</a>
         <div class="side-sep"></div>
         <div class="side-section">Workspace</div>
-        <span class="nav-item disabled"><span class="nav-icon">▸</span>Sessions</span>
-        <span class="nav-item disabled"><span class="nav-icon">▸</span>Memory</span>
+        <span class="nav-item disabled">Sessions</span>
+        <span class="nav-item disabled">Memory</span>
         <div class="side-sep"></div>
         <div class="side-section">Configuration</div>
-        <span class="nav-item disabled"><span class="nav-icon">▸</span>API Keys</span>
-        <span class="nav-item disabled"><span class="nav-icon">▸</span>Proxy</span>
+        <span class="nav-item disabled">API Keys</span>
+        <span class="nav-item disabled">Proxy</span>
         <div class="side-sep"></div>
         <div class="side-section">Account</div>
-        <span class="nav-item disabled"><span class="nav-icon">▸</span>Billing</span>
-        <span class="nav-item disabled"><span class="nav-icon">▸</span>Settings</span>
+        <span class="nav-item disabled">Billing</span>
+        <span class="nav-item disabled">Settings</span>
       </div>
       <div class="side-footer">
         <div class="side-user">
@@ -47,44 +47,26 @@
         <h1>Dashboard</h1>
 
         <div class="skel-grid" id="ws-skeleton">
-          <div class="skel"><div class="skel-icon"></div><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
-          <div class="skel"><div class="skel-icon"></div><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
-          <div class="skel"><div class="skel-icon"></div><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
+          <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
+          <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
+          <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
         </div>
 
         <div class="stats-grid" id="ws-stats" style="display:none">
           <div class="stat">
-            <div class="stat-top">
-              <div class="stat-icon accent">$</div>
-              <div class="stat-info">
-                <div class="stat-label">Balance</div>
-                <div class="stat-value" id="ws-balance">—</div>
-                <div class="stat-sub" id="ws-balance-sub"></div>
-              </div>
-            </div>
-            <div class="stat-bar" id="ws-balance-bar" style="background:var(--brand)"></div>
+            <div class="stat-label">Balance</div>
+            <div class="stat-value" id="ws-balance">—</div>
+            <div class="stat-sub" id="ws-balance-sub"></div>
           </div>
           <div class="stat">
-            <div class="stat-top">
-              <div class="stat-icon green">◆</div>
-              <div class="stat-info">
-                <div class="stat-label">Credits</div>
-                <div class="stat-value" id="ws-credits">—</div>
-                <div class="stat-sub">1 credit = 1¢ USD</div>
-              </div>
-            </div>
-            <div class="stat-bar" id="ws-credits-bar" style="background:var(--green)"></div>
+            <div class="stat-label">Credits</div>
+            <div class="stat-value" id="ws-credits">—</div>
+            <div class="stat-sub">1 credit = 1¢ USD</div>
           </div>
           <div class="stat">
-            <div class="stat-top">
-              <div class="stat-icon amber">↗</div>
-              <div class="stat-info">
-                <div class="stat-label">Requests Today</div>
-                <div class="stat-value" id="ws-usage">—</div>
-                <div class="stat-sub" id="ws-usage-sub"></div>
-              </div>
-            </div>
-            <div class="stat-bar" id="ws-usage-bar" style="background:var(--brand)"></div>
+            <div class="stat-label">Requests Today</div>
+            <div class="stat-value" id="ws-usage">—</div>
+            <div class="stat-sub" id="ws-usage-sub"></div>
           </div>
         </div>
 
