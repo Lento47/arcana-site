@@ -47,6 +47,21 @@
   </script>
 </head>
 <body>
+  <script>
+    // Redirect authenticated users to workspace immediately — no SDK dependency
+    (function(){
+      try {
+        var key = 'sb-ndaejikkbckaeygtruwl-auth-token';
+        var raw = localStorage.getItem(key);
+        if (raw) {
+          var data = JSON.parse(raw);
+          if (data.access_token && data.expires_at && data.expires_at > Date.now()/1000) {
+            window.location.replace('/workspace');
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
   <header>
     <div class="wrap nav">
       <a class="brand" href="/"><img class="mark" src="/arcana.png" alt="" width="30" height="30"> ARCANA</a>

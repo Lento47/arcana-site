@@ -277,6 +277,8 @@ footer{margin-top:48px;border-top:1px solid var(--line);padding:30px 0;color:var
 /* === Responsive === */
 @media(max-width:860px){
   nav{display:none}
+}
+@media(max-width:768px){
   .stats,.cards,.steps,.pricing{grid-template-columns:1fr}
   .section-head{display:block}
   .section-head p{margin-top:12px}
