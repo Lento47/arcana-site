@@ -1,3 +1,10 @@
 name = "arcana-otnelhq"
 pages_build_output_dir = "./public"
 compatibility_date = "2026-06-01"
+
+# KV namespace bindings for Pages Functions. Required for the device-flow
+# endpoints (functions/auth/device/*) to read/write device:<user_code> and
+# device_id:<device_code> entries. The same namespace backs the proxy Worker.
+[[kv_namespaces]]
+binding = "ARCANA_PROXY"
+id = "8c183296c8a14bd6857b1c896e7e5c3c"
