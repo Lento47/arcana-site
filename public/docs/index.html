@@ -5,21 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Docs · Arcana</title>
   <meta name="description" content="The Arcana reference. Install the CLI, sign in, and route requests through the proxy.">
-  <meta name="theme-color" content="#08070B">
+  <meta name="theme-color" content="#0c0a10">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://arcana.otnelhq.com/docs">
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="ARCANA">
   <meta property="og:title" content="Docs · Arcana">
-  <meta property="og:description" content="The Arcana reference. Install the CLI, sign in, and route requests through the proxy.">
+  <meta property="og:description" content="Install Arcana, sign in with device pairing, and use the proxy API. Friendly reference for the CLI and hosted proxy.">
   <meta property="og:url" content="https://arcana.otnelhq.com/docs">
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css" media="all">
   <link rel="stylesheet" href="/css/docs.css" media="all">
 </head>
 <body>
@@ -34,7 +33,7 @@
         <a href="/changelog">Changelog</a>
         <a href="/credits">Pricing</a>
         <a href="/status">Status</a>
-          <a class="docs-nav-cta" href="/auth">Sign in</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
       </nav>
     </div>
   </header>
@@ -98,19 +97,19 @@
 
     <article class="docs-content">
       <header class="docs-content-header">
-        <div class="docs-kicker">DOCS · REFERENCE</div>
-        <h1 class="docs-h1">The Arcana reference</h1>
-        <p class="docs-lead">Everything you need to install the terminal, sign in with device pairing, and route model requests through the proxy. The CLI is the operator; the proxy is the bearer.</p>
+        <div class="docs-kicker">Documentation</div>
+        <h1 class="docs-h1">Get started with Arcana</h1>
+        <p class="docs-lead">A calm, practical guide to install the CLI, pair your account, and call the hosted proxy. Skim the sidebar or jump to a section when you need a command.</p>
         <div class="docs-meta">
-          <span>Last reviewed <time datetime="2026-07-20">2026-07-20</time></span>
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
           <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.5</a>
+          <a href="/changelog">Release notes · v0.3.5</a>
         </div>
       </header>
 
       <!-- ============================ GETTING STARTED ============================ -->
       <h2 id="install">Install</h2>
-      <p>Install the CLI with your preferred package runner. The published package is <code>arcana-ai</code>; the binary is always <code>arcana</code>.</p>
+      <p>The npm package is <code>arcana-ai</code>. After install, the command you run is always <code>arcana</code>.</p>
 <pre data-lang="bash"><code># Quick start (downloads the binary on first run)
 npx arcana-ai
 
@@ -135,7 +134,7 @@ bun link   # from packages/arcana/</code></pre>
       </ul>
 
       <h2 id="first-login">First login</h2>
-      <p>Pair a terminal with your Arcana account using OAuth RFC 8628 device flow. The CLI shows a one-time seal code, opens your browser, and waits for approval.</p>
+      <p>Pair this machine with your Arcana account. The CLI shows a short seal code, opens your browser, and waits until you approve — no password is typed into the terminal.</p>
 <pre data-lang="bash"><code>arcana console login
 # default server: https://arcana.otnelhq.com
 # override: arcana console login https://arcana.otnelhq.com
@@ -231,8 +230,8 @@ arcana trust revoke
 # Dev escape: ARCANA_DISABLE_WORKSPACE_TRUST=1</code></pre>
 
       <!-- ============================ PROXY API ============================ -->
-      <h2 id="api-auth">Proxy API · Authentication</h2>
-      <p>Base URL: <code>https://proxy.arcana.otnelhq.com</code>. Authenticated routes expect:</p>
+      <h2 id="api-auth">Authentication</h2>
+      <p>Proxy base URL: <code>https://proxy.arcana.otnelhq.com</code>. Most routes expect:</p>
 <pre data-lang="bash"><code>Authorization: Bearer &lt;license_key&gt;</code></pre>
       <p>License keys look like <code>ARCANA-PRO-…</code> and are issued by device-flow login (or admin mint). Supabase access tokens and admin secrets are also accepted on some paths; end users should use the license key from console login.</p>
 <pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
@@ -417,9 +416,8 @@ arcana trust revoke
       <p>Also available (auth required, not admin): <code>POST /v1/embeddings</code>, <code>GET /v1/sessions</code>, <code>GET /v1/purchases</code>, <code>GET|PUT /v1/profile</code>, PayPal/billing routes under <code>/v1/pay/*</code>.</p>
 
       <!-- ============================ DEVICE FLOW ============================ -->
-      <h2 id="device-pairing">Device flow · Pairing</h2>
-      <p>The device-flow login pairs a terminal with a user account without the CLI ever seeing a password. The browser does the sign-in; the CLI waits for the result.</p>
-      <p>The full sequence, end to end:</p>
+      <h2 id="device-pairing">How device pairing works</h2>
+      <p>Device flow (RFC 8628) keeps passwords out of the CLI: the browser signs you in, the CLI only polls for a license. End-to-end:</p>
       <ol>
         <li><strong>Code request.</strong> CLI posts to <code>{site}/auth/device/code</code> with <code>{ client_id: "arcana-cli" }</code>. The site returns a <code>device_code</code> (UUID, secret) and a <code>user_code</code> (8 chars, public).</li>
         <li><strong>Browser open.</strong> CLI opens <code>{site}/auth/device?code={user_code}</code> in the user's default browser. The page shows a Supabase sign-in form (email/password, GitHub, Google, or magic link).</li>
