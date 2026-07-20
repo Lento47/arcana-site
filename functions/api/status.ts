@@ -1,5 +1,5 @@
 const SERVICES = [
-  { name: "AI Proxy", url: "https://arcana-proxy.lejzerv.workers.dev/v1/models" },
+  { name: "AI Proxy", url: "https://proxy-arcana.otnelhq.com/v1/models" },
   { name: "License Server", url: "https://api.arcana.otnelhq.com/api/health" },
   { name: "Website", url: "https://arcana.otnelhq.com" },
   { name: "R2 Releases", url: "https://releases.otnelhq.com" },

@@ -1,4 +1,4 @@
-const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
+const PROXY = "https://proxy-arcana.otnelhq.com"
 
 export async function onRequest({ request }: { request: Request }): Promise<Response> {
   if (request.method !== "GET") return new Response("Method not allowed", { status: 405 })

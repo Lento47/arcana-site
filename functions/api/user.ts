@@ -6,7 +6,7 @@
 // Without it, Cloudflare Pages serves the marketing SPA HTML and the CLI dies
 // with "Failed to decode response".
 
-const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
+const PROXY = "https://proxy-arcana.otnelhq.com"
 
 export async function onRequest({ request }: { request: Request }): Promise<Response> {
   if (request.method !== "GET") {

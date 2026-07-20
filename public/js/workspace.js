@@ -1,6 +1,6 @@
 // Arcana Workspace — shared auth shell
 (function(){'use strict';
-var P='https://arcana-proxy.lejzerv.workers.dev',sb=window.__ARCANA_SB__;
+var P='https://proxy-arcana.otnelhq.com',sb=window.__ARCANA_SB__;
 if(!sb){location.replace('/auth');return}
 var e=function(id){return document.getElementById(id)};
 
