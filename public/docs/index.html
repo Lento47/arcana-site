@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Docs · Arcana</title>
-  <meta name="description" content="The Arcana reference. Install the CLI, sign in, and route requests through the proxy.">
+  <meta name="description" content="Install Arcana, sign in, use the CLI, and call the public proxy API. Full user reference for arcana-ai.">
   <meta name="theme-color" content="#0c0a10">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://arcana.otnelhq.com/docs">
@@ -12,7 +12,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="ARCANA">
   <meta property="og:title" content="Docs · Arcana">
-  <meta property="og:description" content="Install Arcana, sign in with device pairing, and use the proxy API. Friendly reference for the CLI and hosted proxy.">
+  <meta property="og:description" content="Install Arcana, sign in, use the CLI, and call the public proxy API.">
   <meta property="og:url" content="https://arcana.otnelhq.com/docs">
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -39,57 +39,60 @@
   </header>
 
   <div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+    <!-- LEFT: documentation map (chapters) — not a duplicate of the right TOC -->
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
       <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>On this page</span>
+        <span>Documentation</span>
       </button>
       <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
         <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Getting started</div>
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="#overview"><span>Overview</span></a>
           <a class="docs-sidebar-link" href="#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="#first-login"><span>First login</span></a>
-          <a class="docs-sidebar-link" href="#add-a-key"><span>Add a key</span></a>
+          <a class="docs-sidebar-link" href="#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="#workspace-trust"><span>Workspace trust</span></a>
         </div>
 
         <div class="docs-sidebar-section">
           <div class="docs-sidebar-label">CLI</div>
-          <a class="docs-sidebar-link" href="#arcana-run"><code>arcana run</code></a>
-          <a class="docs-sidebar-link" href="#arcana-console-login"><code>arcana console login</code></a>
-          <a class="docs-sidebar-link" href="#arcana-models"><code>arcana models</code></a>
-          <a class="docs-sidebar-link" href="#arcana-providers"><code>arcana providers</code></a>
-          <a class="docs-sidebar-link" href="#arcana-session"><code>arcana session</code></a>
-          <a class="docs-sidebar-link" href="#arcana-stats"><code>arcana stats</code></a>
-          <a class="docs-sidebar-link" href="#arcana-serve"><code>arcana serve</code></a>
-          <a class="docs-sidebar-link" href="#arcana-trust"><code>arcana trust</code></a>
+          <a class="docs-sidebar-link" href="#cli-overview"><span>Command map</span></a>
+          <a class="docs-sidebar-link" href="#cli-core"><span>Core</span></a>
+          <a class="docs-sidebar-link" href="#cli-account"><span>Account &amp; license</span></a>
+          <a class="docs-sidebar-link" href="#cli-session"><span>Sessions &amp; data</span></a>
+          <a class="docs-sidebar-link" href="#cli-tools"><span>MCP, plugins, agents</span></a>
+          <a class="docs-sidebar-link" href="#cli-server"><span>Server &amp; integrations</span></a>
         </div>
 
         <div class="docs-sidebar-section">
           <div class="docs-sidebar-label">Proxy API</div>
+          <a class="docs-sidebar-link" href="#proxy-overview"><span>Overview</span></a>
           <a class="docs-sidebar-link" href="#api-auth"><span>Authentication</span></a>
-          <a class="docs-sidebar-link" href="#api-chat-completions"><code>POST /v1/chat/completions</code></a>
-          <a class="docs-sidebar-link" href="#api-models"><code>GET /v1/models</code></a>
-          <a class="docs-sidebar-link" href="#api-balance"><code>GET /v1/balance</code></a>
-          <a class="docs-sidebar-link" href="#api-usage"><code>GET /v1/usage</code></a>
-          <a class="docs-sidebar-link" href="#api-health"><code>GET /v1/health</code></a>
+          <a class="docs-sidebar-link" href="#api-chat"><span>Chat &amp; embeddings</span></a>
+          <a class="docs-sidebar-link" href="#api-models"><span>Models</span></a>
+          <a class="docs-sidebar-link" href="#api-billing"><span>Balance &amp; usage</span></a>
+          <a class="docs-sidebar-link" href="#api-account"><span>Health &amp; profile</span></a>
         </div>
 
         <div class="docs-sidebar-section">
           <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="#device-pairing"><span>Pairing</span></a>
-          <a class="docs-sidebar-link" href="#device-user-code"><span>user_code format</span></a>
+          <a class="docs-sidebar-link" href="#device-overview"><span>How pairing works</span></a>
           <a class="docs-sidebar-link" href="#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Site</div>
+          <a class="docs-sidebar-link" href="#site-surfaces"><span>Public surfaces</span></a>
         </div>
 
         <div class="docs-sidebar-footer">
           <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/changelog">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Changelog
-          </a>
-          <a href="/status">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            Status
-          </a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
         </div>
       </nav>
     </aside>
@@ -97,362 +100,419 @@
     <article class="docs-content">
       <header class="docs-content-header">
         <div class="docs-kicker">Documentation</div>
-        <h1 class="docs-h1">Get started with Arcana</h1>
-        <p class="docs-lead">A calm, practical guide to install the CLI, pair your account, and call the hosted proxy. Skim the sidebar or jump to a section when you need a command.</p>
+        <h1 class="docs-h1">Arcana user guide</h1>
+        <p class="docs-lead">Install the CLI, pair your account, trust a workspace, and use the hosted OpenAI-compatible proxy. The left menu is the guide; the right rail tracks where you are on this page.</p>
         <div class="docs-meta">
           <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
           <span class="docs-meta-sep">·</span>
-          <a href="/changelog">Release notes · v0.3.5</a>
+          <a href="/changelog">v0.3.5</a>
+          <span class="docs-meta-sep">·</span>
+          <span>Public API only</span>
         </div>
       </header>
 
-      <!-- ============================ GETTING STARTED ============================ -->
+      <!-- ========== GUIDE ========== -->
+      <h2 id="overview">Overview</h2>
+      <p>Arcana is a terminal AI agent (<code>arcana</code>) with an optional hosted console and proxy:</p>
+      <ul>
+        <li><strong>CLI</strong> — TUI sessions, tools, skills, memory, local server.</li>
+        <li><strong>Console</strong> — <code>arcana.otnelhq.com</code> sign-in, workspace UI, billing.</li>
+        <li><strong>Proxy</strong> — <code>proxy.arcana.otnelhq.com</code> OpenAI-compatible HTTP API billed against your license.</li>
+      </ul>
+      <p>You can use the CLI with your own provider keys only (BYOK), or pair with the console for a proxy license.</p>
+
       <h2 id="install">Install</h2>
-      <p>The npm package is <code>arcana-ai</code>. After install, the command you run is always <code>arcana</code>.</p>
-<pre data-lang="bash"><code># Quick start (downloads the binary on first run)
+      <p>The published package is <code>arcana-ai</code>. The binary name is always <code>arcana</code>.</p>
+<pre data-lang="bash"><code># Quick start
 npx arcana-ai
 
 # Global install
 npm install -g arcana-ai
-# or: pnpm add -g arcana-ai
-# or: bun add -g arcana-ai
+# pnpm add -g arcana-ai
+# bun add -g arcana-ai
 
-# From source (dev)
-# Clone the public Arcana repository, then:
-bun install
-bun link   # from packages/arcana/</code></pre>
-      <p>Confirm the install:</p>
+# From source
+git clone https://github.com/Lento47/arcana && cd arcana
+bun install && bun link   # from packages/arcana/</code></pre>
 <pre data-lang="bash"><code>arcana --version
-# &gt; 0.3.5</code></pre>
-      <p>The CLI stores state under <code>~/.arcana/</code> (or <code>ARCANA_HOME</code>):</p>
-      <ul>
-        <li><code>~/.arcana/</code> account store — console login tokens from device flow.</li>
-        <li>Provider keys — usually environment variables (<code>OPENAI_API_KEY</code>, <code>ANTHROPIC_API_KEY</code>, …) or <code>arcana providers</code>.</li>
-        <li>Session history and local DB under the Arcana data directory.</li>
-        <li>Workspace trust records at <code>~/.arcana/workspace-trust.json</code> after <code>arcana trust</code>.</li>
-      </ul>
+# 0.3.5</code></pre>
+      <p>Data lives under <code>~/.arcana/</code> (override with <code>ARCANA_HOME</code>): accounts, workspace trust, sessions, local DB.</p>
 
-      <h2 id="first-login">First login</h2>
-      <p>Pair this machine with your Arcana account. The CLI shows a short seal code, opens your browser, and waits until you approve — no password is typed into the terminal.</p>
+      <h2 id="quickstart">Quick start</h2>
+<pre data-lang="bash"><code># 1) Provider key (BYOK)
+export OPENAI_API_KEY=sk-...
+# or ANTHROPIC_API_KEY / GEMINI_API_KEY / …
+
+# 2) Optional: console + proxy license
+arcana console login
+
+# 3) Optional: trust this repo for project plugins/tools/MCP
+arcana trust
+
+# 4) Run
+arcana doctor
+arcana run "explain this codebase"
+# or open the TUI: arcana</code></pre>
+
+      <h2 id="first-login">Console login</h2>
+      <p>Device flow pairs this machine with your Arcana account. No password is typed into the CLI.</p>
 <pre data-lang="bash"><code>arcana console login
-# default server: https://arcana.otnelhq.com
-# override: arcana console login https://arcana.otnelhq.com
+# default server https://arcana.otnelhq.com
+arcana console login https://arcana.otnelhq.com
 
-# Terminal shows a seal (user_code), e.g. 3D8C-CVQA
-# Browser opens: https://arcana.otnelhq.com/auth/device?code=3D8C-CVQA
-# awaiting the seal…</code></pre>
+arcana console orgs
+arcana console switch
+arcana console logout [email]
+arcana console open</code></pre>
       <ol>
-        <li>Open the gate URL if the browser did not open automatically.</li>
-        <li>Sign in (email + password, GitHub, or Google).</li>
-        <li>The page confirms pairing. The CLI stores the account and license bearer.</li>
-        <li>Close the browser tab when the terminal shows bound / welcome.</li>
+        <li>CLI prints a seal code (e.g. <code>3D8C-CVQA</code>) and opens the browser.</li>
+        <li>Sign in on the site (password, GitHub, or Google).</li>
+        <li>Page completes pairing; CLI stores the license bearer and account.</li>
+        <li>Close the browser when the terminal shows success.</li>
       </ol>
-      <p>Related console commands:</p>
-<pre data-lang="bash"><code>arcana console orgs      # list orgs for logged-in accounts
-arcana console switch    # switch active org
-arcana console logout    # remove a stored account
-arcana console open      # open the active console in a browser</code></pre>
       <div class="docs-callout docs-callout-info">
         <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
         </svg>
         <div class="docs-callout-body">
-          <strong>Pairing is per-machine</strong>
-          <p>The license key is a bearer token. Anyone with read access to your Arcana data directory can act as you. Treat it like an SSH private key — never commit, never share.</p>
+          <strong>Treat the license like a private key</strong>
+          <p>Anyone with access to your Arcana data directory can use your proxy quota. Never commit credentials; use <code>arcana console logout</code> on shared machines.</p>
         </div>
       </div>
 
-      <h2 id="add-a-key">Add a key</h2>
-      <p>Provider keys let Arcana call OpenAI, Anthropic, Google, and other vendors. The usual path is environment variables; the CLI also exposes provider management.</p>
-<pre data-lang="bash"><code># Environment (recommended for CI / shells)
-export OPENAI_API_KEY=sk-...
+      <h2 id="provider-keys">Provider keys</h2>
+      <p>BYOK keys stay local. Prefer environment variables for CI and shells.</p>
+<pre data-lang="bash"><code>export OPENAI_API_KEY=sk-...
 export ANTHROPIC_API_KEY=sk-ant-...
 export GEMINI_API_KEY=...
 
-# Interactive / stored credentials
-arcana providers
-
-# License / machine activation (separate from console login)
-arcana license status
+arcana providers          # interactive provider management
+arcana models             # list available models
+arcana license status     # machine / license activation (separate from console)
 arcana license activate &lt;key&gt;</code></pre>
-      <p>After console login, the proxy license is used for routed models. Direct provider keys still work for BYOK paths when configured.</p>
+      <p>Console login does not replace provider keys: proxy models use the Arcana license; direct models use your vendor keys.</p>
 
-      <!-- ============================ CLI ============================ -->
-      <h2 id="arcana-run">arcana run</h2>
-      <p>Start an interactive TUI session (or one-shot run, depending on flags). Loads your agents, tools, skills, and session memory for the current project.</p>
-<pre data-lang="bash"><code>arcana run
-arcana run "summarize the auth flow"
-arcana run --model &lt;provider/model&gt;
-arcana models          # list models first</code></pre>
-      <p>Common companion commands: <code>arcana session</code>, <code>arcana export</code>, <code>arcana stats</code>, <code>arcana trust</code> (project plugins/tools).</p>
-
-      <h2 id="arcana-console-login">arcana console login</h2>
-      <p>Pair the terminal with your Arcana account via device flow. See <a href="#first-login">First login</a>.</p>
-<pre data-lang="bash"><code>arcana console login [server]   # default: https://arcana.otnelhq.com
-arcana console orgs
-arcana console switch
-arcana console logout [email]
-arcana console open</code></pre>
-
-      <h2 id="arcana-models">arcana models</h2>
-      <p>List configured providers and models available to this install.</p>
-<pre data-lang="bash"><code>arcana models</code></pre>
-
-      <h2 id="arcana-providers">arcana providers</h2>
-      <p>Manage provider credentials and connected backends (OpenAI, Anthropic, etc.). Prefer env vars for headless setups.</p>
-<pre data-lang="bash"><code>arcana providers
-export OPENAI_API_KEY=sk-...
-export ANTHROPIC_API_KEY=sk-ant-...</code></pre>
-
-      <h2 id="arcana-session">arcana session</h2>
-      <p>List and work with past sessions (export, continue, inspect).</p>
-<pre data-lang="bash"><code>arcana session list
-arcana export
-arcana import</code></pre>
-
-      <h2 id="arcana-stats">arcana stats</h2>
-      <p>Usage statistics for local activity and proxy-backed runs where available.</p>
-<pre data-lang="bash"><code>arcana stats</code></pre>
-
-      <h2 id="arcana-serve">arcana serve</h2>
-      <p>Start a headless Arcana HTTP server (local control plane). Defaults to loopback; non-loopback binds require <code>ARCANA_SERVER_PASSWORD</code>.</p>
-<pre data-lang="bash"><code>arcana serve
-arcana serve --hostname 127.0.0.1 --port 4096</code></pre>
-      <p>For OpenAI-compatible proxy traffic, use the hosted proxy at <code>https://proxy.arcana.otnelhq.com</code> with your license bearer (see below).</p>
-
-      <h2 id="arcana-trust">arcana trust</h2>
-      <p>Trust this workspace so project plugins, custom tools, agents, and local MCP can load (security gate).</p>
-<pre data-lang="bash"><code>arcana trust                 # trust cwd
+      <h2 id="workspace-trust">Workspace trust</h2>
+      <p>By default, project plugins, custom tools, agents on disk, and local MCP from the repo are not loaded until you trust the workspace.</p>
+<pre data-lang="bash"><code>arcana trust              # trust current directory
 arcana trust status
 arcana trust list
 arcana trust revoke
-# Dev escape: ARCANA_DISABLE_WORKSPACE_TRUST=1</code></pre>
 
-      <!-- ============================ PROXY API ============================ -->
-      <h2 id="api-auth">Authentication</h2>
-      <p>Proxy base URL: <code>https://proxy.arcana.otnelhq.com</code>. Most routes expect:</p>
-<pre data-lang="bash"><code>Authorization: Bearer &lt;license_key&gt;</code></pre>
-      <p>License keys look like <code>ARCANA-PRO-…</code> and are issued by device-flow login (or admin mint). Supabase access tokens and admin secrets are also accepted on some paths; end users should use the license key from console login.</p>
-<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
-     https://proxy.arcana.otnelhq.com/v1/balance</code></pre>
+# Dev / CI only — loads project executable config without a trust record
+export ARCANA_DISABLE_WORKSPACE_TRUST=1</code></pre>
+      <p>Trust is stored in <code>~/.arcana/workspace-trust.json</code> and is invalidated when executable project config changes.</p>
+
+      <!-- ========== CLI ========== -->
+      <h2 id="cli-overview">CLI command map</h2>
+      <p>Top-level commands registered by the engine (public user surface):</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Command</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>arcana run</code></td><td>TUI / agent session</td></tr>
+            <tr><td><code>arcana console …</code></td><td>Login, orgs, logout, open console</td></tr>
+            <tr><td><code>arcana models</code></td><td>List models</td></tr>
+            <tr><td><code>arcana providers</code></td><td>Provider credentials</td></tr>
+            <tr><td><code>arcana session …</code></td><td>List / delete sessions</td></tr>
+            <tr><td><code>arcana export</code> / <code>import</code></td><td>Session export / import</td></tr>
+            <tr><td><code>arcana stats</code></td><td>Usage stats</td></tr>
+            <tr><td><code>arcana serve</code></td><td>Headless local server</td></tr>
+            <tr><td><code>arcana attach</code></td><td>Attach to a running server</td></tr>
+            <tr><td><code>arcana trust …</code></td><td>Workspace trust</td></tr>
+            <tr><td><code>arcana license …</code></td><td>Activate / status / deactivate</td></tr>
+            <tr><td><code>arcana mcp …</code></td><td>MCP servers</td></tr>
+            <tr><td><code>arcana agent …</code></td><td>Agent config helpers</td></tr>
+            <tr><td><code>arcana plugin …</code></td><td>Plugins</td></tr>
+            <tr><td><code>arcana plugin-store …</code></td><td>Plugin store</td></tr>
+            <tr><td><code>arcana github …</code> / <code>pr …</code></td><td>GitHub helpers</td></tr>
+            <tr><td><code>arcana web</code></td><td>Optional web app</td></tr>
+            <tr><td><code>arcana upgrade</code> / <code>uninstall</code></td><td>Lifecycle</td></tr>
+            <tr><td><code>arcana audit</code></td><td>Audit helpers</td></tr>
+            <tr><td><code>arcana db …</code></td><td>Local DB utilities</td></tr>
+            <tr><td><code>arcana proxy …</code></td><td>Proxy helpers</td></tr>
+            <tr><td><code>arcana team …</code></td><td>Team helpers</td></tr>
+            <tr><td><code>arcana generate</code></td><td>Generation utilities</td></tr>
+            <tr><td><code>arcana acp</code></td><td>ACP mode</td></tr>
+            <tr><td><code>arcana debug …</code></td><td>Debug tools</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Run <code>arcana --help</code> or <code>arcana &lt;command&gt; --help</code> for flags on your installed version.</p>
+
+      <h2 id="cli-core">Core</h2>
+      <h3 id="cmd-run">arcana run</h3>
+      <p>Start an interactive or one-shot agent session in the current project.</p>
+<pre data-lang="bash"><code>arcana run
+arcana run "summarize the auth flow"
+arcana run --model &lt;provider/model&gt;</code></pre>
+
+      <h3 id="cmd-models">arcana models</h3>
+<pre data-lang="bash"><code>arcana models</code></pre>
+
+      <h3 id="cmd-providers">arcana providers</h3>
+<pre data-lang="bash"><code>arcana providers</code></pre>
+
+      <h2 id="cli-account">Account &amp; license</h2>
+      <h3 id="cmd-console">arcana console</h3>
+<pre data-lang="bash"><code>arcana console login [url]
+arcana console logout [email]
+arcana console orgs
+arcana console switch
+arcana console open</code></pre>
+
+      <h3 id="cmd-license">arcana license</h3>
+<pre data-lang="bash"><code>arcana license activate &lt;key&gt;
+arcana license status
+arcana license deactivate</code></pre>
+
+      <h3 id="cmd-trust">arcana trust</h3>
+<pre data-lang="bash"><code>arcana trust
+arcana trust status [path]
+arcana trust list
+arcana trust revoke [path]
+arcana trust grant [path]</code></pre>
+
+      <h2 id="cli-session">Sessions &amp; data</h2>
+      <h3 id="cmd-session">arcana session</h3>
+<pre data-lang="bash"><code>arcana session list
+arcana session delete &lt;sessionID&gt;</code></pre>
+
+      <h3 id="cmd-export-import">export / import</h3>
+<pre data-lang="bash"><code>arcana export
+arcana import</code></pre>
+
+      <h3 id="cmd-stats">arcana stats</h3>
+<pre data-lang="bash"><code>arcana stats</code></pre>
+
+      <h3 id="cmd-db">arcana db</h3>
+      <p>Local database utilities for the Arcana data store (inspect / path). Prefer higher-level session commands unless you are debugging.</p>
+<pre data-lang="bash"><code>arcana db --help</code></pre>
+
+      <h2 id="cli-tools">MCP, plugins, agents</h2>
+      <h3 id="cmd-mcp">arcana mcp</h3>
+<pre data-lang="bash"><code>arcana mcp list
+arcana mcp add [name]
+arcana mcp auth [name]
+arcana mcp logout [name]
+arcana mcp debug &lt;name&gt;</code></pre>
+      <p>Local MCP from a project directory requires workspace trust.</p>
+
+      <h3 id="cmd-plugin">arcana plugin / plugin-store</h3>
+<pre data-lang="bash"><code>arcana plugin --help
+arcana plugin-store --help</code></pre>
+
+      <h3 id="cmd-agent">arcana agent</h3>
+<pre data-lang="bash"><code>arcana agent --help</code></pre>
+
+      <h2 id="cli-server">Server &amp; integrations</h2>
+      <h3 id="cmd-serve">arcana serve</h3>
+      <p>Headless control plane. Defaults to loopback. Non-loopback binds require <code>ARCANA_SERVER_PASSWORD</code>.</p>
+<pre data-lang="bash"><code>arcana serve
+arcana serve --hostname 127.0.0.1 --port 4096</code></pre>
+
+      <h3 id="cmd-attach">arcana attach</h3>
+<pre data-lang="bash"><code>arcana attach --help</code></pre>
+
+      <h3 id="cmd-web">arcana web</h3>
+<pre data-lang="bash"><code>arcana web
+arcana web --build</code></pre>
+
+      <h3 id="cmd-github">github / pr</h3>
+<pre data-lang="bash"><code>arcana github --help
+arcana pr --help</code></pre>
+
+      <h3 id="cmd-lifecycle">upgrade / uninstall / audit</h3>
+<pre data-lang="bash"><code>arcana upgrade
+arcana uninstall
+arcana audit --help</code></pre>
+
+      <!-- ========== PROXY ========== -->
+      <h2 id="proxy-overview">Proxy overview</h2>
+      <p><strong>Base URL:</strong> <code>https://proxy.arcana.otnelhq.com</code></p>
+      <p>OpenAI-compatible surface for chat, embeddings, models, balance, and account-style helpers. Use after <code>arcana console login</code> (or another valid license bearer).</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Auth</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>POST</td><td><code>/v1/chat/completions</code></td><td>License</td><td>Streaming SSE</td></tr>
+            <tr><td>POST</td><td><code>/v1/embeddings</code></td><td>License</td><td>Embeddings</td></tr>
+            <tr><td>GET</td><td><code>/v1/models</code></td><td>License</td><td>Model list</td></tr>
+            <tr><td>GET</td><td><code>/v1/balance</code></td><td>License</td><td>Credits</td></tr>
+            <tr><td>GET</td><td><code>/v1/usage</code></td><td>License</td><td>Daily meters</td></tr>
+            <tr><td>GET</td><td><code>/v1/free-usage/sessions/current</code></td><td>License</td><td>Free tier snapshot</td></tr>
+            <tr><td>GET</td><td><code>/v1/health</code></td><td>License</td><td>Identity + liveness</td></tr>
+            <tr><td>GET</td><td><code>/v1/sessions</code></td><td>License</td><td>Session list</td></tr>
+            <tr><td>GET</td><td><code>/v1/sessions/:id</code></td><td>License</td><td>Session detail</td></tr>
+            <tr><td>GET</td><td><code>/v1/purchases</code></td><td>License</td><td>Purchase history</td></tr>
+            <tr><td>GET / PUT</td><td><code>/v1/profile</code></td><td>License</td><td>Profile</td></tr>
+            <tr><td>POST</td><td><code>/v1/send-receipt</code></td><td>License</td><td>Test receipt email</td></tr>
+            <tr><td>GET</td><td><code>/v1/auth/resolve-email</code></td><td>License</td><td>Email resolution</td></tr>
+            <tr><td>GET</td><td><code>/v1/identity/validate-email</code></td><td>Public</td><td>Email has account?</td></tr>
+            <tr><td>POST</td><td><code>/v1/trial/start</code></td><td>Public</td><td>Trial token (if enabled)</td></tr>
+            <tr><td>*</td><td><code>/v1/pay/*</code></td><td>Mixed</td><td>Billing / PayPal (site flows)</td></tr>
+          </tbody>
+        </table>
+      </div>
       <div class="docs-callout docs-callout-warn">
         <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
         <div class="docs-callout-body">
-          <strong>Do not send provider API keys as the proxy bearer.</strong>
-          <p>OpenAI/Anthropic keys belong in your local environment or <code>arcana providers</code>. The proxy bearer is your Arcana license (or JWT for workspace UI), not <code>sk-…</code>.</p>
+          <strong>Infrastructure routes are not public</strong>
+          <p>Operator-only admin APIs exist for Arcana’s own systems. They are not documented here and are not for application use.</p>
         </div>
       </div>
 
-      <h2 id="api-chat-completions">POST /v1/chat/completions</h2>
-      <p>OpenAI Chat Completions-compatible. Streams SSE by default. Accepts the full OpenAI parameter set: <code>model</code>, <code>messages</code>, <code>temperature</code>, <code>top_p</code>, <code>stream</code>, <code>tools</code>, <code>tool_choice</code>, <code>response_format</code>, <code>seed</code>, etc.</p>
+      <h2 id="api-auth">Authentication</h2>
+<pre data-lang="bash"><code>Authorization: Bearer &lt;license_key&gt;</code></pre>
+      <p>License keys look like <code>ARCANA-PRO-…</code> and come from console login. Do <strong>not</strong> send vendor API keys (<code>sk-…</code>) as the proxy bearer.</p>
+<pre data-lang="bash"><code>export ARCANA_LICENSE='ARCANA-PRO-…'
+curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/balance</code></pre>
+
+      <h2 id="api-chat">Chat &amp; embeddings</h2>
+      <h3 id="api-chat-completions">POST /v1/chat/completions</h3>
       <div class="docs-endpoint">
         <div class="docs-endpoint-head">
           <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
           <span class="docs-endpoint-path">/v1/chat/completions</span>
-          <span class="docs-endpoint-auth">License or provider key</span>
+          <span class="docs-endpoint-auth">License</span>
         </div>
         <div class="docs-endpoint-body">
-          <h4>Example</h4>
+          <p>OpenAI Chat Completions compatible. Supports streaming SSE.</p>
 <pre data-lang="bash"><code>curl -N -X POST https://proxy.arcana.otnelhq.com/v1/chat/completions \
   -H "Authorization: Bearer $ARCANA_LICENSE" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "anthropic/claude-sonnet-4",
-    "messages": [
-      { "role": "user", "content": "summarize RFC 8628 in one paragraph" }
-    ],
-    "stream": true,
-    "temperature": 0.3
+    "messages": [{ "role": "user", "content": "hello" }],
+    "stream": true
   }'</code></pre>
-          <h4>Response (non-streaming)</h4>
-<pre data-lang="json"><code>{
-  "id": "chatcmpl-...",
-  "object": "chat.completion",
-  "created": 1721000000,
-  "model": "claude-sonnet-4-5",
-  "choices": [
-    {
-      "index": 0,
-      "message": { "role": "assistant", "content": "RFC 8628 ..." },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 38,
-    "completion_tokens": 144,
-    "total_tokens": 182
-  }
-}</code></pre>
-          <h4>Notes</h4>
-          <p>Streaming responses use the same SSE format as OpenAI. The proxy adds two response headers: <code>x-arcana-tier</code> (the license tier that served the request) and <code>x-arcana-cost-credits</code> (credits consumed, when applicable).</p>
         </div>
       </div>
 
-      <h2 id="api-models">GET /v1/models</h2>
-      <p>List the models the proxy can route to. Equivalent to <code>arcana models</code> in the CLI but returns a flat JSON array in OpenAI's shape.</p>
+      <h3 id="api-embeddings">POST /v1/embeddings</h3>
       <div class="docs-endpoint">
         <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
-          <span class="docs-endpoint-path">/v1/models</span>
-          <span class="docs-endpoint-auth">License or provider key</span>
-        </div>
-        <div class="docs-endpoint-body">
-<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
-     https://proxy.arcana.otnelhq.com/v1/models | jq '.data[].id'</code></pre>
-        </div>
-      </div>
-
-      <h2 id="api-balance">GET /v1/balance</h2>
-      <p>Credit balance for the authenticated license subject.</p>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
-          <span class="docs-endpoint-path">/v1/balance</span>
+          <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
+          <span class="docs-endpoint-path">/v1/embeddings</span>
           <span class="docs-endpoint-auth">License</span>
         </div>
         <div class="docs-endpoint-body">
+          <p>OpenAI-compatible embeddings request body.</p>
+        </div>
+      </div>
+
+      <h2 id="api-models">Models</h2>
+      <h3 id="api-models-get">GET /v1/models</h3>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/models</code></pre>
+
+      <h2 id="api-billing">Balance &amp; usage</h2>
+      <h3 id="api-balance">GET /v1/balance</h3>
 <pre data-lang="json"><code>{
   "userId": "you@domain.com",
   "credits": 842,
   "dollars": "8.42"
 }</code></pre>
-          <p><code>credits</code> are integer units (100 credits = $1.00). <code>dollars</code> is a display string.</p>
-        </div>
-      </div>
+      <p><code>credits</code> are integer units (100 = $1.00).</p>
 
-      <h2 id="api-usage">GET /v1/usage</h2>
-      <p>Daily request counters for the authenticated subject (proxy-side usage meter).</p>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
-          <span class="docs-endpoint-path">/v1/usage</span>
-          <span class="docs-endpoint-auth">License</span>
-        </div>
-        <div class="docs-endpoint-body">
-<pre data-lang="json"><code>{
-  "userId": "you@domain.com",
-  "date": "2026-07-20"
-  /* plus meter fields for the day when present */
-}</code></pre>
-          <p>Free tier also exposes <code>GET /v1/free-usage/sessions/current</code> for the weekly free-session snapshot.</p>
-        </div>
-      </div>
+      <h3 id="api-usage">GET /v1/usage</h3>
+      <p>Daily request counters for the authenticated subject.</p>
 
-      <h2 id="api-health">GET /v1/health</h2>
-      <p>Authenticated liveness + identity. Used by the site workspace and by <code>/api/user</code> after device login.</p>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
-          <span class="docs-endpoint-path">/v1/health</span>
-          <span class="docs-endpoint-auth">License / JWT / admin</span>
-        </div>
-        <div class="docs-endpoint-body">
+      <h3 id="api-free-usage">GET /v1/free-usage/sessions/current</h3>
+      <p>Free-tier session snapshot (turns, weekly tokens) when on free plan.</p>
+
+      <h2 id="api-account">Health, sessions, profile</h2>
+      <h3 id="api-health">GET /v1/health</h3>
 <pre data-lang="json"><code>{
   "status": "ok",
   "service": "arcana-proxy",
   "user": "you@domain.com",
   "tier": "pro"
 }</code></pre>
-        </div>
-      </div>
 
-      <div class="docs-callout docs-callout-info">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Other user APIs</strong>
-          <p>Also available with your license bearer: <code>POST /v1/embeddings</code>, <code>GET /v1/sessions</code>, <code>GET /v1/purchases</code>, and <code>GET|PUT /v1/profile</code>. Infrastructure-only admin routes exist for Arcana operators and are <strong>not part of the public API</strong>.</p>
-        </div>
-      </div>
+      <h3 id="api-sessions">GET /v1/sessions</h3>
+      <p>List recent proxy-recorded sessions. Detail: <code>GET /v1/sessions/:id</code>.</p>
 
-      <!-- ============================ DEVICE FLOW ============================ -->
-      <h2 id="device-pairing">How device pairing works</h2>
-      <p>Device flow (RFC 8628) keeps passwords out of the CLI: the browser signs you in, the CLI only polls for a license. End-to-end:</p>
+      <h3 id="api-profile">GET / PUT /v1/profile</h3>
+      <p>User profile preferences used by the workspace UI.</p>
+
+      <h3 id="api-purchases">GET /v1/purchases</h3>
+      <p>Purchase history for the authenticated account.</p>
+
+      <!-- ========== DEVICE ========== -->
+      <h2 id="device-overview">How device pairing works</h2>
       <ol>
-        <li><strong>Code request.</strong> CLI posts to <code>{site}/auth/device/code</code> with <code>{ client_id: "arcana-cli" }</code>. The site returns a <code>device_code</code> (UUID, secret) and a <code>user_code</code> (8 chars, public).</li>
-        <li><strong>Browser open.</strong> CLI opens <code>{site}/auth/device?code={user_code}</code> in the user's default browser. The page shows a Supabase sign-in form (email/password, GitHub, Google, or magic link).</li>
-        <li><strong>Poll loop.</strong> CLI starts polling <code>{site}/auth/device/token</code> every <code>interval</code> seconds (server returns <code>interval: 5</code>). While the user is signing in, the response is <code>400 { error: "authorization_pending" }</code>.</li>
-        <li><strong>Approve.</strong> On successful sign-in, the page completes pairing with the site. The site mints a license through a <strong>private server-to-server</strong> step (not a public client API), then stores it for this device session.</li>
-        <li><strong>License returned.</strong> The CLI's next poll returns <code>200 { access_token: license_key, refresh_token, token_type: "Bearer", expires_in: 31536000 }</code>. The engine also loads <code>/api/user</code> and <code>/api/orgs</code>, then persists the account locally.</li>
+        <li><strong>Code.</strong> CLI → <code>POST /auth/device/code</code> with <code>{ client_id: "arcana-cli" }</code> → <code>device_code</code>, <code>user_code</code>, <code>interval</code>, <code>expires_in</code>.</li>
+        <li><strong>Browser.</strong> Opens <code>/auth/device?code=XXXX-XXXX</code> for sign-in.</li>
+        <li><strong>Poll.</strong> CLI → <code>POST /auth/device/token</code> until approved or expired.</li>
+        <li><strong>Complete.</strong> Browser page finishes pairing with the site; site mints a license privately and stores it for this device session.</li>
+        <li><strong>Token.</strong> Poll returns <code>access_token</code> (license). CLI loads <code>/api/user</code> and <code>/api/orgs</code>, then persists the account.</li>
       </ol>
-      <div class="docs-callout docs-callout-success">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Rotate by logging in again</strong>
-          <p>Run <code>arcana console login</code> (and <code>logout</code> if you need a clean slate). Each successful pairing issues a fresh license key for this machine.</p>
-        </div>
-      </div>
-
-      <h2 id="device-user-code">user_code format</h2>
-      <p>The <code>user_code</code> is the short, human-typable string the user sees in the browser URL. Format:</p>
+      <h3 id="device-user-code">user_code format</h3>
       <ul>
-        <li>8 characters, two groups of 4 separated by a dash: <code>XXXX-XXXX</code>.</li>
-        <li>Alphabet is confusable-free: <code>ABCDEFGHJKLMNPQRSTUVWXYZ23456789</code>. No <code>0</code>, <code>O</code>, <code>1</code>, <code>I</code>, or <code>L</code>.</li>
-        <li>~20 bits of entropy. Combined with the 10-minute TTL and per-IP rate limit on the <code>/code</code> endpoint, brute force is not practical.</li>
+        <li>Shape: <code>XXXX-XXXX</code> (confusable-free alphabet, no 0/O/1/I/L).</li>
+        <li>~10 minute TTL; rate limits on issue and complete.</li>
       </ul>
-      <p>Server-side validation regex:</p>
-<pre data-lang="javascript"><code>const valid = /^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/.test(userCode)</code></pre>
+<pre data-lang="javascript"><code>/^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/</code></pre>
 
-      <h2 id="device-errors">Error codes</h2>
-      <p>The <code>/auth/device/token</code> poll endpoint returns standard RFC 8628 error codes:</p>
+      <h2 id="device-errors">Device error codes</h2>
       <div class="docs-table-wrap">
         <table class="docs-table">
           <thead>
-            <tr><th>Error</th><th>Status</th><th>Meaning</th><th>CLI behavior</th></tr>
+            <tr><th>Error</th><th>HTTP</th><th>Meaning</th><th>What to do</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td><code>authorization_pending</code></td>
-              <td>400</td>
-              <td>User has not yet approved.</td>
-              <td>Keep polling at <code>interval</code>.</td>
-            </tr>
-            <tr>
-              <td><code>slow_down</code></td>
-              <td>400</td>
-              <td>Polling too fast. Back off <code>interval + 5s</code>.</td>
-              <td>Increase poll interval.</td>
-            </tr>
-            <tr>
-              <td><code>expired_token</code></td>
-              <td>400</td>
-              <td>More than 10 minutes elapsed.</td>
-              <td>Print a hint, exit. User retries with a new <code>arcana console login</code>.</td>
-            </tr>
-            <tr>
-              <td><code>access_denied</code></td>
-              <td>400</td>
-              <td>User explicitly rejected the pairing on the page.</td>
-              <td>Print the rejection, exit.</td>
-            </tr>
-            <tr>
-              <td><code>rate_limited</code></td>
-              <td>429</td>
-              <td>Too many requests from this IP. <code>Retry-After</code> header set.</td>
-              <td>Wait and retry.</td>
-            </tr>
+            <tr><td><code>authorization_pending</code></td><td>400</td><td>Not approved yet</td><td>Keep polling</td></tr>
+            <tr><td><code>slow_down</code></td><td>400</td><td>Polling too fast</td><td>Increase interval</td></tr>
+            <tr><td><code>expired_token</code></td><td>400</td><td>Code expired</td><td>Run login again</td></tr>
+            <tr><td><code>access_denied</code></td><td>400</td><td>User refused</td><td>Exit / retry later</td></tr>
+            <tr><td><code>rate_limited</code></td><td>429</td><td>Too many attempts</td><td>Wait / Retry-After</td></tr>
           </tbody>
         </table>
       </div>
-      <p>The <code>/auth/device/complete</code> endpoint has its own per-<code>user_code</code> rate limit (5 attempts per 5 minutes) to prevent a leaked user_code from being hijacked before the legitimate user finishes signing in.</p>
+
+      <!-- ========== SITE ========== -->
+      <h2 id="site-surfaces">Public site surfaces</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Path</th><th>What it is</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>/</code></td><td>Marketing home</td></tr>
+            <tr><td><code>/docs</code></td><td>This guide</td></tr>
+            <tr><td><code>/changelog</code></td><td>Release notes</td></tr>
+            <tr><td><code>/credits</code></td><td>Pricing / credits</td></tr>
+            <tr><td><code>/status</code></td><td>Service status</td></tr>
+            <tr><td><code>/auth</code></td><td>Sign in</td></tr>
+            <tr><td><code>/auth/device</code></td><td>Device pairing page</td></tr>
+            <tr><td><code>/workspace</code></td><td>Account workspace (signed in)</td></tr>
+            <tr><td><code>/api/user</code></td><td>JSON identity for CLI after login</td></tr>
+            <tr><td><code>/api/orgs</code></td><td>JSON orgs for CLI after login</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/changelog">
+        <a class="docs-pager-prev" href="/">
           <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">Changelog</span>
+          <span class="docs-pager-title">Home</span>
         </a>
-        <a class="docs-pager-next" href="/status">
+        <a class="docs-pager-next" href="/changelog">
           <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Status</span>
+          <span class="docs-pager-title">Changelog</span>
         </a>
       </nav>
     </article>
 
+    <!-- RIGHT: on-this-page only (auto-built from h2/h3) -->
     <aside class="docs-toc" id="docs-toc" aria-label="On this page">
       <div class="docs-toc-label">On this page</div>
     </aside>
@@ -463,9 +523,11 @@ arcana trust revoke
       <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
       <div class="docs-footer-links">
         <a href="/">Home</a>
+        <a href="/docs">Docs</a>
         <a href="/changelog">Changelog</a>
         <a href="/credits">Pricing</a>
         <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
       </div>
     </div>
   </footer>

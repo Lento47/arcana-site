@@ -62,48 +62,59 @@
     }
   }
 
-  // --- 2. Sidebar active-section highlighting ---
+  // --- 2. Left sidebar: highlight chapter for the heading in view ---
+  // Sidebar only lists chapters; map any h2/h3 id up to the nearest sidebar link.
   function setupSidebarObserver() {
-    const sections = $$(".docs-content h2[id], .docs-content h3[id]")
-    if (!sections.length) return
+    const headings = $$(".docs-content h2[id], .docs-content h3[id]")
+    if (!headings.length) return
 
+    const chapterIds = []
     const linkByHash = new Map()
     for (const a of $$(".docs-sidebar-link")) {
       const hash = a.getAttribute("href") || ""
-      if (hash.startsWith("#")) linkByHash.set(hash.slice(1), a)
+      if (!hash.startsWith("#")) continue
+      const id = hash.slice(1)
+      linkByHash.set(id, a)
+      chapterIds.push(id)
+    }
+    if (!chapterIds.length) return
+
+    // For each heading, resolve which left-nav chapter it belongs to.
+    const chapterForHeading = new Map()
+    let currentChapter = chapterIds[0]
+    for (const h of headings) {
+      if (linkByHash.has(h.id)) currentChapter = h.id
+      chapterForHeading.set(h.id, currentChapter)
     }
 
-    const setActive = (id) => {
+    const setActive = (chapterId) => {
       for (const a of $$(".docs-sidebar-link")) a.classList.remove("is-active")
-      const target = linkByHash.get(id)
+      const target = linkByHash.get(chapterId)
       if (target) target.classList.add("is-active")
     }
 
-    // Pre-mark the hash on first paint, before observer fires.
     if (location.hash) {
       const id = decodeURIComponent(location.hash.slice(1))
-      if (linkByHash.has(id)) setActive(id)
+      setActive(chapterForHeading.get(id) || (linkByHash.has(id) ? id : chapterIds[0]))
     }
 
-    // Track the section closest to the top of the viewport.
     const visible = new Map()
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) visible.set(e.target.id, e.intersectionRatio)
+          if (e.isIntersecting) visible.set(e.target.id, e.boundingClientRect.top)
           else visible.delete(e.target.id)
         }
         if (visible.size === 0) return
-        // Pick the topmost visible section.
-        const ordered = sections.filter((s) => visible.has(s.id))
-        if (ordered.length) {
-          ordered.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)
-          setActive(ordered[0].id)
-        }
+        const ordered = headings.filter((h) => visible.has(h.id))
+        if (!ordered.length) return
+        ordered.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)
+        const chapter = chapterForHeading.get(ordered[0].id)
+        if (chapter) setActive(chapter)
       },
-      { rootMargin: "-80px 0px -65% 0px", threshold: [0, 0.2, 0.5, 1] }
+      { rootMargin: "-80px 0px -65% 0px", threshold: [0, 0.15, 0.4, 1] },
     )
-    for (const s of sections) io.observe(s)
+    for (const h of headings) io.observe(h)
   }
 
   // --- 3. Mobile sidebar accordion ---
@@ -130,10 +141,14 @@
     sync()
   }
 
-  // --- 4. Right-rail TOC (desktop ≥1280px) ---
+  // --- 4. Right-rail: on-this-page only (all h2/h3) ---
   function buildToc() {
     const toc = $("#docs-toc")
     if (!toc) return
+    // Clear any static children except the label
+    for (const child of Array.from(toc.children)) {
+      if (!child.classList.contains("docs-toc-label")) child.remove()
+    }
     const headings = $$(".docs-content h2[id], .docs-content h3[id]")
     if (!headings.length) return
 
@@ -141,7 +156,10 @@
       const a = document.createElement("a")
       a.href = `#${h.id}`
       a.dataset.depth = h.tagName === "H3" ? "3" : "2"
-      a.textContent = h.textContent.replace(/#$/, "").trim()
+      // Don't include the "#" anchor we inject into headings
+      a.textContent = (h.childNodes[0]?.textContent || h.textContent || "")
+        .replace(/#$/, "")
+        .trim()
       toc.appendChild(a)
     }
 
