@@ -1,0 +1,364 @@
+/* public/css/device.css
+ * Visual polish for the device-flow verification page (/auth/device?code=…).
+ * Reuses the design tokens from auth.css (dark theme forced by [data-theme="dark"]
+ * on <html>). Sits on top of auth.css — no overlap of selectors.
+ *
+ * The "seal" is the small block that displays the device code itself (4RXT-3H9B),
+ * with a copy button and an expiry countdown. It is the visual anchor of the page
+ * and bridges the form to the rest of arcana.otnelhq.com.
+ */
+
+:root {
+  --seal-bg: rgba(179, 140, 255, 0.05);
+  --seal-border: rgba(179, 140, 255, 0.32);
+  --seal-border-soft: rgba(179, 140, 255, 0.18);
+  --seal-mono: var(--font-mono);
+  --seal-mark-size: 22px;
+  --seal-code-size: 22px;
+  --seal-code-size-lg: 26px;
+}
+
+@media (min-width: 720px) {
+  :root {
+    --seal-code-size: var(--seal-code-size-lg);
+  }
+}
+
+/* — Page shell — */
+.device-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-page .auth-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* — Sticky header — */
+.device-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 56px;
+  padding: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  border-bottom: 1px solid rgba(179, 140, 255, 0.10);
+  background: rgba(8, 7, 11, 0.76);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(179, 140, 255, 0.04);
+}
+
+.device-header .auth-logo {
+  font: 700 13px/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.device-header .auth-logo:hover {
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+.device-header .auth-logo .mark {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  vertical-align: -5px;
+  transition: filter var(--duration-base) var(--ease-out);
+}
+
+.device-header .auth-logo:hover .mark {
+  filter: drop-shadow(0 0 6px rgba(179, 140, 255, 0.4));
+}
+
+.device-header .device-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--seal-border-soft);
+  background: var(--seal-bg);
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.device-header .device-pill .device-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+  animation: pill-pulse 2.4s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-header .device-pill .device-pill-dot {
+    animation: none;
+  }
+}
+
+@keyframes pill-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* — Seal block — */
+.device-seal {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding: 14px var(--space-md);
+  border: 1px solid var(--seal-border);
+  border-radius: var(--radius-lg);
+  background: var(--seal-bg);
+  position: relative;
+  overflow: hidden;
+  animation: seal-reveal var(--duration-slow) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-seal {
+    animation: none;
+  }
+}
+
+@keyframes seal-reveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle inner glow that pulses on the seal border. */
+.device-seal::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 100% at 0% 50%,
+    rgba(179, 140, 255, 0.10),
+    transparent 65%
+  );
+  opacity: 0.8;
+  animation: seal-glow 4s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-seal::before {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+@keyframes seal-glow {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.9; }
+}
+
+.device-seal-mark {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: rgba(179, 140, 255, 0.12);
+  border: 1px solid var(--seal-border);
+  color: var(--accent);
+  font-size: var(--seal-mark-size);
+  line-height: 1;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  user-select: none;
+  z-index: 1;
+}
+
+.device-seal-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1;
+}
+
+.device-seal-label {
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.device-seal-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.device-seal-code {
+  font: 600 var(--seal-code-size)/1.1 var(--seal-mono);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  user-select: all;
+  -webkit-user-select: all;
+  cursor: text;
+  text-shadow: 0 0 18px rgba(179, 140, 255, 0.18);
+}
+
+.device-seal-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-input);
+  color: var(--text-tertiary);
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.device-seal-copy:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+.device-seal-copy:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.device-seal-copy svg {
+  width: 12px;
+  height: 12px;
+}
+
+.device-seal-copy.copied {
+  color: var(--success);
+  border-color: rgba(77, 179, 148, 0.45);
+  background: var(--success-subtle);
+  box-shadow: 0 0 0 1px rgba(77, 179, 148, 0.25);
+}
+
+.device-seal-expiry {
+  font: 500 11px/1.3 var(--font-mono);
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+}
+
+.device-seal-expiry .expiry-num {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.device-seal-expiry.expired {
+  color: var(--warning);
+}
+
+.device-seal-expiry.expired .expiry-num {
+  color: var(--warning);
+}
+
+/* — Footer — */
+.device-footer {
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.device-footer-links {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.device-footer a {
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.device-footer a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.device-footer .device-footer-tag {
+  color: var(--text-muted);
+}
+
+/* — Mobile polish — */
+@media (max-width: 480px) {
+  .device-header {
+    padding: 0 var(--space-md);
+  }
+
+  .device-page .auth-page {
+    padding: var(--space-md);
+  }
+
+  .device-seal {
+    padding: 12px var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  :root {
+    --seal-code-size: 18px;
+  }
+
+  .device-seal-mark {
+    display: none;
+  }
+
+  .device-seal-copy {
+    padding: 5px 8px;
+  }
+
+  .device-seal-copy .device-seal-copy-label {
+    display: none;
+  }
+
+  .device-footer {
+    padding: var(--space-sm) var(--space-md);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+}

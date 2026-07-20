@@ -50,7 +50,8 @@ export async function onRequest({ request, env }: { request: Request; env: any }
     }
 
     const ip = clientIp(request)
-    const rlKey = `device_rl:${ip}:${clientId}`
+    // Keep KV keys short (CF limit 512 bytes). client_id is expected short, but hash anyway.
+    const rlKey = `device_rl:${await shortHash(`${ip}|${clientId.slice(0, 64)}`)}`
     const rlRaw = await env.ARCANA_PROXY.get(rlKey)
     const rlCount = rlRaw ? parseInt(rlRaw, 10) || 0 : 0
     if (rlCount >= 10) {
@@ -94,4 +95,13 @@ function jsonError(status: number, error: string, description: string): Response
     status,
     headers: { "Content-Type": "application/json;charset=utf-8", "X-Content-Type-Options": "nosniff" },
   })
+}
+
+async function shortHash(input: string): Promise<string> {
+  const data = new TextEncoder().encode(input)
+  const digest = await crypto.subtle.digest("SHA-256", data)
+  return Array.from(new Uint8Array(digest))
+    .slice(0, 16)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
 }

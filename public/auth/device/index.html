@@ -1,20 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in · Arcana</title>
+  <title>Approve sign-in · Arcana</title>
   <meta name="robots" content="noindex">
+  <meta name="description" content="Approve a terminal sign-in on Arcana.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/css/device.css">
 </head>
-<body>
-  <main class="auth-page">
-    <header class="auth-header">
-      <a href="/" class="auth-logo" aria-label="Arcana home">ARCANA</a>
-    </header>
+<body class="device-page">
+  <header class="device-header" role="banner">
+    <a href="/" class="auth-logo" aria-label="Arcana home">
+      <img class="mark" src="/arcana.png" alt="" width="22" height="22">
+      <span>ARCANA</span>
+    </a>
+    <span class="device-pill" aria-label="Device pairing session">
+      <span class="device-pill-dot" aria-hidden="true"></span>
+      <span>device pairing</span>
+    </span>
+  </header>
 
+  <main class="auth-page">
     <section class="auth-system" aria-label="Device sign-in">
       <div class="auth-card">
         <div class="auth-card-header">
@@ -23,6 +35,27 @@
         </div>
 
         <div class="auth-card-body">
+          <!-- Device seal: shows the actual code the CLI generated. -->
+          <section class="device-seal" id="device-seal" aria-labelledby="device-seal-label">
+            <span class="device-seal-mark" aria-hidden="true">&#x26B7;</span>
+            <div class="device-seal-text">
+              <div class="device-seal-label" id="device-seal-label">// device seal</div>
+              <div class="device-seal-row">
+                <code class="device-seal-code" id="device-seal-code">---- - ----</code>
+                <button class="device-seal-copy" type="button" id="device-seal-copy" aria-label="Copy device code">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  <span class="device-seal-copy-label">copy</span>
+                </button>
+              </div>
+              <div class="device-seal-expiry" id="device-seal-expiry" aria-live="polite">
+                <span class="expiry-num">10:00</span> remaining
+              </div>
+            </div>
+          </section>
+
           <!-- Loading skeleton (kept until Supabase is wired) -->
           <div class="skeleton" id="skeleton" aria-hidden="true">
             <div class="skeleton-line short"></div>
@@ -63,7 +96,7 @@
             </svg>
             <div class="banner-content">
               <div class="banner-title">Working</div>
-              <div class="banner-message" id="banner-info-message">Completing device sign-in…</div>
+              <div class="banner-message" id="banner-info-message">Completing device sign-in&hellip;</div>
             </div>
           </div>
 
@@ -80,7 +113,7 @@
                 <div class="form-group">
                   <label class="form-label" for="signin-password">Password</label>
                   <div class="input-wrap">
-                    <input class="input" id="signin-password" type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+                    <input class="input" id="signin-password" type="password" name="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
                     <span class="input-suffix">
                       <button type="button" class="toggle-password" aria-label="Show password" data-target="signin-password">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -92,7 +125,7 @@
                   </div>
                   <div class="form-error hidden" id="signin-password-error" aria-live="polite"></div>
                 </div>
-                <button type="submit" class="btn btn-primary" id="btn-signin">Sign in & approve</button>
+                <button type="submit" class="btn btn-primary" id="btn-signin">Sign in &amp; approve</button>
               </form>
 
               <div class="divider" aria-hidden="true">Or continue with</div>
@@ -124,6 +157,16 @@
       </div>
     </section>
   </main>
+
+  <footer class="device-footer" role="contentinfo">
+    <div class="device-footer-links">
+      <a href="https://arcana.otnelhq.com/privacy">Privacy</a>
+      <a href="https://arcana.otnelhq.com/terms">Terms</a>
+      <a href="https://arcana.otnelhq.com/docs">Docs</a>
+      <a href="https://arcana.otnelhq.com/status">Status</a>
+    </div>
+    <span class="device-footer-tag">device pairing &middot; arcana</span>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase.js" defer></script>

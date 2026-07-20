@@ -1,6 +1,37 @@
+# Dependencies
 node_modules/
-.wrangler/fnbuild/
+
+# Cloudflare / Pages local
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+tmp_admin*.txt
+tmp_*key*.txt
+tmp_*secret*.txt
+*secret*.txt
+*credentials*.txt
+*.pem
+*.key
+
+# OS / editor
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+
+# Local tooling / vault
 vault/
 .agents/
 .claude/

@@ -60,18 +60,31 @@ export async function onRequest({ request, env }: { request: Request; env: any }
       })
     }
 
-    // Mint via the proxy. The site holds ARCANA_PROXY_ADMIN_KEY as a Pages secret;
-    // it is the same admin key the proxy's getUser() honors.
-    const adminKey = env.ARCANA_PROXY_ADMIN_KEY
+    // Mint via the proxy. Site secret ARCANA_PROXY_ADMIN_KEY must match one of
+    // the proxy's ARCANA_ADMIN_KEY / ARCANA_ADMIN_KEYS values (short secrets).
+    const adminKey = String(env.ARCANA_PROXY_ADMIN_KEY ?? "").trim()
     if (!adminKey) {
       return jsonError(500, "site_misconfigured", "ARCANA_PROXY_ADMIN_KEY is not set")
+    }
+    // Guard: a JWT/service-role accidentally pasted as the admin secret is ~900–1100
+    // bytes. That is the smoking gun for CF KV error "length of 999" (license: + 991).
+    const adminKeyBytes = new TextEncoder().encode(adminKey).length
+    if (adminKeyBytes > 200) {
+      console.error(
+        `[device/complete] ARCANA_PROXY_ADMIN_KEY is ${adminKeyBytes} bytes — expected a short admin secret, not a JWT`,
+      )
+      return jsonError(
+        500,
+        "site_misconfigured",
+        `ARCANA_PROXY_ADMIN_KEY looks too long (${adminKeyBytes} bytes). Use the same short admin secret as the proxy, not a Supabase JWT/service_role key.`,
+      )
     }
 
     let upstream: Response
     try {
       upstream = await fetch(`${PROXY}/v1/admin/licenses`, {
         method: "POST",
-        headers: { "Authorization": `Bearer ${adminKey}`, "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${adminKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({ supabaseUserId, email, plan: "pro" }),
         signal: AbortSignal.timeout(10000),
       })
@@ -81,6 +94,13 @@ export async function onRequest({ request, env }: { request: Request; env: any }
 
     if (!upstream.ok) {
       const text = await upstream.text().catch(() => "")
+      if (text.includes("key length limit") || text.includes("414")) {
+        return jsonError(
+          502,
+          "upstream_kv_key",
+          "Proxy hit a KV key length limit (usually license:<~991-byte bearer>). Check that ARCANA_PROXY_ADMIN_KEY matches a short proxy admin key, then redeploy proxy with admin routes bypassing getUser.",
+        )
+      }
       return jsonError(upstream.status, "upstream_error", `Proxy returned ${upstream.status}: ${text.slice(0, 200)}`)
     }
 

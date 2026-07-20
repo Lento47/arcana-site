@@ -11,7 +11,75 @@ const params = new URLSearchParams(location.search)
 const userCode = (params.get("code") || "").trim()
 const codeValid = /^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/.test(userCode)
 
+// Total lifetime of a device code in seconds. Must match the server's
+// `expires_in` returned by /auth/device/code (currently 600 = 10 min).
+const DEVICE_TTL_SECONDS = 600
+
 const $ = (id) => document.getElementById(id)
+
+// --- Seal: populate the code, document title, copy button, countdown. ---
+function populateSeal() {
+  const codeEl = $("device-seal-code")
+  if (codeEl) codeEl.textContent = userCode
+  document.title = `${userCode} · Approve sign-in · Arcana`
+
+  const copyBtn = $("device-seal-copy")
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      const label = copyBtn.querySelector(".device-seal-copy-label") || copyBtn
+      const original = label.textContent || "copy"
+      let ok = false
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(userCode)
+          ok = true
+        } else {
+          // Fallback: select the <code> element so the user can hit ⌘/Ctrl-C.
+          const sel = window.getSelection()
+          const range = document.createRange()
+          range.selectNodeContents(codeEl)
+          sel.removeAllRanges()
+          sel.addRange(range)
+          ok = document.execCommand && document.execCommand("copy")
+          sel.removeAllRanges()
+        }
+      } catch {
+        ok = false
+      }
+      copyBtn.classList.add("copied")
+      label.textContent = ok ? "copied" : "select & ⌘C"
+      setTimeout(() => {
+        copyBtn.classList.remove("copied")
+        label.textContent = original
+      }, 1200)
+    })
+  }
+
+  const expiryEl = $("device-seal-expiry")
+  if (!expiryEl) return
+  const start = Date.now()
+  const tick = () => {
+    const elapsed = Math.floor((Date.now() - start) / 1000)
+    const remaining = Math.max(0, DEVICE_TTL_SECONDS - elapsed)
+    const mm = String(Math.floor(remaining / 60)).padStart(2, "0")
+    const ss = String(remaining % 60).padStart(2, "0")
+    if (remaining > 0) {
+      expiryEl.classList.remove("expired")
+      expiryEl.innerHTML = `<span class="expiry-num">${mm}:${ss}</span> remaining`
+    } else {
+      expiryEl.classList.add("expired")
+      expiryEl.innerHTML = `<span class="expiry-num">00:00</span> · expired — restart login`
+      clearInterval(handle)
+    }
+  }
+  tick()
+  const handle = setInterval(tick, 1000)
+}
+
+function hideSeal() {
+  const seal = $("device-seal")
+  if (seal) seal.style.display = "none"
+}
 
 function showOnly(id) {
   for (const el of document.querySelectorAll(".banner, .skeleton, .auth-mode")) {
@@ -141,8 +209,11 @@ async function init() {
     $("device-title").textContent = "Invalid sign-in link"
     $("device-subtitle").textContent = "This link is missing a valid code. Run the login command again from your terminal."
     showError("Invalid code", "The URL does not contain a valid device code.")
+    hideSeal()
     return
   }
+
+  populateSeal()
 
   // Reveal the form once Supabase is available.
   const waitForSb = () => new Promise((resolve) => {
