@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Arcana — Settings</title>
+  <meta name="theme-color" content="#0a0a0a"><meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/workspace.css">
+  <link rel="stylesheet" href="/css/workspace-pages.css">
+</head>
+<body>
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+  </button>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-head"><img src="/arcana.png" alt="" width="22" height="22"><span>ARCANA</span></div>
+      <div class="side-content">
+        <div class="side-section">Overview</div>
+        <a class="nav-item" href="/workspace">Dashboard</a>
+        <div class="side-sep"></div>
+        <div class="side-section">Workspace</div>
+        <a class="nav-item" href="/workspace/sessions">Sessions</a>
+        <span class="nav-item disabled">Memory</span>
+        <div class="side-sep"></div>
+        <div class="side-section">Configuration</div>
+        <span class="nav-item disabled">API Keys</span>
+        <a class="nav-item" href="/workspace/proxy">Proxy</a>
+        <div class="side-sep"></div>
+        <div class="side-section">Account</div>
+        <a class="nav-item" href="/workspace/billing">Billing</a>
+        <a class="nav-item active" href="/workspace/settings">Settings</a>
+      </div>
+      <div class="side-footer">
+        <div class="side-user">
+          <div class="side-avatar" id="ws-avatar">?</div>
+          <div class="side-email" id="ws-email">—</div>
+        </div>
+        <div class="side-id" id="ws-session-id">—</div>
+        <button class="btn-signout" id="btn-signout">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-inner">
+        <h1>Settings</h1>
+
+        <div class="card" style="margin-bottom:0.5rem">
+          <div class="card-head"><h2>Profile</h2></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="s-name">Display Name</label>
+              <input type="text" id="s-name" class="form-input" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="s-email">Email</label>
+              <input type="email" id="s-email" class="form-input" disabled>
+              <div class="hint">Email is managed by Supabase Auth</div>
+            </div>
+            <button class="btn-primary" id="s-save">Save Changes</button>
+            <div class="msg" id="s-msg"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Preferences</h2></div>
+          <div class="card-body">
+            <div class="pref-row">
+              <div>
+                <div class="pref-label">Theme</div>
+                <div class="pref-desc">Dark / Light mode</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="s-theme">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="pref-row">
+              <div>
+                <div class="pref-label">Email Receipts</div>
+                <div class="pref-desc">Receive purchase receipts via email</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="s-receipts" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="pref-row">
+              <div>
+                <div class="pref-label">Usage Alerts</div>
+                <div class="pref-desc">Notify when approaching daily limit</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="s-alerts">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/supabase.js"></script>
+  <script src="/js/workspace.js"></script>
+  <script src="/js/workspace-settings.js"></script>
+</body>
+</html>

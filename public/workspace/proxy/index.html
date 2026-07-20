@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Arcana</title>
+  <title>Arcana — Proxy</title>
   <meta name="theme-color" content="#0a0a0a"><meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
       <div class="side-head"><img src="/arcana.png" alt="" width="22" height="22"><span>ARCANA</span></div>
       <div class="side-content">
         <div class="side-section">Overview</div>
-        <a class="nav-item active" href="/workspace">Dashboard</a>
+        <a class="nav-item" href="/workspace">Dashboard</a>
         <div class="side-sep"></div>
         <div class="side-section">Workspace</div>
         <a class="nav-item" href="/workspace/sessions">Sessions</a>
@@ -28,7 +28,7 @@
         <div class="side-sep"></div>
         <div class="side-section">Configuration</div>
         <span class="nav-item disabled">API Keys</span>
-        <a class="nav-item" href="/workspace/proxy">Proxy</a>
+        <a class="nav-item active" href="/workspace/proxy">Proxy</a>
         <div class="side-sep"></div>
         <div class="side-section">Account</div>
         <a class="nav-item" href="/workspace/billing">Billing</a>
@@ -46,54 +46,49 @@
 
     <main class="content">
       <div class="content-inner">
-        <h1>Dashboard</h1>
+        <h1>Proxy Configuration</h1>
 
-        <div class="skel-grid" id="ws-skeleton">
+        <div class="skel-grid" id="p-skeleton">
+          <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
           <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
           <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
           <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
         </div>
 
-        <div class="stats-grid" id="ws-stats" style="display:none">
-          <div class="stat">
-            <div class="stat-label">Balance</div>
-            <div class="stat-value" id="ws-balance">—</div>
-            <div class="stat-sub" id="ws-balance-sub"></div>
-            <div class="bar-track"><div class="bar-fill" id="ws-balance-bar" style="width:0%"></div></div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Credits</div>
-            <div class="stat-value" id="ws-credits">—</div>
-            <div class="stat-sub">1 credit = 1¢ USD</div>
-            <div class="bar-track"><div class="bar-fill" id="ws-credits-bar" style="width:0%"></div></div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Requests Today</div>
-            <div class="stat-value" id="ws-usage">—</div>
-            <div class="stat-sub" id="ws-usage-sub"></div>
-            <div class="bar-track"><div class="bar-fill" id="ws-usage-bar" style="width:0%"></div></div>
-          </div>
-        </div>
-
-        <div class="dashboard-grid">
+        <div class="proxy-grid" id="p-content" style="display:none">
           <div class="card">
-            <div class="card-head"><h2>7-Day Cost</h2></div>
+            <div class="card-head"><h2>Credit Balance</h2></div>
             <div class="card-body">
-              <svg class="sparkline" id="ws-sparkline" viewBox="0 0 200 40" preserveAspectRatio="none"></svg>
+              <div class="big-stat" id="p-balance">—</div>
+              <div class="stat-sub">1 credit = 1¢ USD</div>
+              <div class="bar-track"><div class="bar-fill" id="p-balance-bar" style="width:0%"></div></div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-head"><h2>Model Usage</h2></div>
-            <div class="card-body" id="ws-model-usage">
-              <div class="empty-state" style="padding:1rem 0">Loading...</div>
-            </div>
-          </div>
-        </div>
 
-        <div class="card">
-          <div class="card-head"><h2>Recent Sessions</h2></div>
-          <div class="card-body" id="ws-recent-sessions">
-            <div class="empty-state">No sessions yet. Run <code style="font-family:var(--font-mono);background:var(--color-surface-2);padding:2px 8px;border-radius:var(--radius-sm);color:var(--color-text);border:1px solid var(--color-border)">arcana</code> in your terminal.</div>
+          <div class="card">
+            <div class="card-head"><h2>Daily Usage</h2></div>
+            <div class="card-body" id="p-usage">
+              <div class="p-row"><span class="label">Used today</span><span class="value" id="p-used">—</span></div>
+              <div class="p-row"><span class="label">Daily limit</span><span class="value" id="p-limit">—</span></div>
+              <div class="p-row"><span class="label">Remaining</span><span class="value" id="p-remaining">—</span></div>
+              <div class="bar-track" style="margin-top:0.5rem"><div class="bar-fill" id="p-usage-bar" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Plan</h2></div>
+            <div class="card-body" id="p-plan">
+              <div class="p-row"><span class="label">Tier</span><span class="value" id="p-tier">—</span></div>
+              <div class="p-row"><span class="label">Status</span><span class="value" id="p-status">Active</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Provider</h2></div>
+            <div class="card-body" id="p-providers">
+              <div class="p-row"><span class="label">Primary</span><span class="value">OpenRouter</span></div>
+              <div class="p-row"><span class="label">Models</span><span class="value">350+</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -104,6 +99,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase.js"></script>
   <script src="/js/workspace.js"></script>
-  <script src="/js/workspace-dashboard.js"></script>
+  <script src="/js/workspace-proxy.js"></script>
 </body>
 </html>
