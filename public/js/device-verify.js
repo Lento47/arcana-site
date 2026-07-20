@@ -20,7 +20,7 @@ const EXPIRY_ANNOUNCE_THRESHOLDS = [600, 300, 120, 60, 30, 10, 0]
 
 let state = "loading"
 let userCode = ""
-let sb = null
+let sbClient = null  // avoid name collision with supabase.js's `let sb` in shared script scope
 let expiresAt = 0
 let expiryIntervalId = 0
 let copyTimeoutId = 0
@@ -169,7 +169,7 @@ function init() {
     }, SB_LOAD_TIMEOUT_MS)),
   ])
     .then((client) => {
-      sb = client
+      sbClient = client
       enterState("ready")
       attemptAutoComplete()
     })
@@ -235,7 +235,7 @@ const sbPoll = setInterval(() => { if (bindSbReady()) clearInterval(sbPoll) }, 5
 
 async function onSubmit(e) {
   e.preventDefault()
-  if (!sb) { enterState("error-network"); return }
+  if (!sbClient) { enterState("error-network"); return }
   const email = emailEl.value.trim()
   const password = passwordEl.value
   if (!email || !password) {
@@ -245,7 +245,7 @@ async function onSubmit(e) {
   }
   passwordErrorEl.hidden = true
   try {
-    const { data, error } = await sb.auth.signInWithPassword({ email, password })
+    const { data, error } = await sbClient.auth.signInWithPassword({ email, password })
     if (error) {
       bannerAuthTitle.textContent = "Sign-in failed"
       bannerAuthMessage.textContent = error.message || "Check your credentials and try again."
@@ -261,9 +261,9 @@ async function onSubmit(e) {
 }
 
 async function onOAuth(provider) {
-  if (!sb) { enterState("error-network"); return }
+  if (!sbClient) { enterState("error-network"); return }
   try {
-    const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo: location.href } })
+    const { error } = await sbClient.auth.signInWithOAuth({ provider, options: { redirectTo: location.href } })
     if (error) {
       bannerAuthTitle.textContent = "Sign-in failed"
       bannerAuthMessage.textContent = error.message || "Unexpected error."
@@ -275,9 +275,9 @@ async function onOAuth(provider) {
 }
 
 async function attemptAutoComplete() {
-  if (!sb) return
+  if (!sbClient) return
   try {
-    const { data } = await sb.auth.getSession()
+    const { data } = await sbClient.auth.getSession()
     if (data?.session) {
       enterState("pending-auto")
       await postComplete(data.session)
