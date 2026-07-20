@@ -98,6 +98,12 @@ function load(){
     var msg=err&&err.message?String(err.message):'Failed to load memory from proxy.';
     if(/429|rate_limited/i.test(msg)){
       msg='Rate limited — wait a few seconds and refresh. Workspace reads no longer share the free LLM burst bucket after the latest proxy deploy.';
+    }else if(/CSP|Failed to fetch|Network error/i.test(msg)){
+      msg='Browser blocked the proxy URL (Content-Security-Policy). Hard-refresh the page after the latest site deploy, or open DevTools → Console for connect-src errors.';
+    }else if(/401|unauthorized/i.test(msg)){
+      msg='Session expired or proxy rejected the login token. Sign out and sign in again.';
+    }else{
+      msg='Failed to load memory from proxy. '+msg;
     }
     if(emptyEl){emptyEl.style.display='';emptyEl.textContent=msg;}
     showMsg(msg,false);

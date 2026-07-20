@@ -7,11 +7,81 @@ var e=function(id){return document.getElementById(id)};
 // Sidebar elements
 var emailEl=e('ws-email'),avatarEl=e('ws-avatar'),sidEl=e('ws-session-id');
 
-// Proxy fetch with auto-refresh on 401
-async function pf(path,token){var r=await fetch(P+path,{headers:{Authorization:'Bearer '+token}});if(r.status===401){var ref=await sb.auth.refreshSession();if(ref.data.session){r=await fetch(P+path,{headers:{Authorization:'Bearer '+ref.data.session.access_token}});if(r.ok)return r.json()}await sb.auth.signOut();location.replace('/auth');return null}if(!r.ok)throw Error('Proxy '+r.status);return r.json()}
+function proxyErr(status,text){
+  var msg='Proxy '+status;
+  if(!text)return msg;
+  try{
+    var j=JSON.parse(text);
+    var detail=j.message||j.error?.message||(typeof j.error==='string'?j.error:null);
+    if(detail)msg+': '+String(detail).slice(0,180);
+    else msg+=': '+text.slice(0,120);
+  }catch(_){msg+=': '+String(text).slice(0,120)}
+  return msg;
+}
 
-async function proxyFetch(path,opts){var t=opts?.token||null;if(!t){var s=(await sb.auth.getSession()).data.session;if(!s){location.replace('/auth');return null}t=s.access_token}var method=opts?.method||'GET';var r=await fetch(P+path,{method:method,headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:opts?.body?JSON.stringify(opts.body):undefined});if(r.status===401){var ref=await sb.auth.refreshSession();if(ref.data.session){r=await fetch(P+path,{method:method,headers:{Authorization:'Bearer '+ref.data.session.access_token,'Content-Type':'application/json'},body:opts?.body?JSON.stringify(opts.body):undefined});if(r.ok)return r.json()}await sb.auth.signOut();location.replace('/auth');return null}if(!r.ok){var errText='';try{errText=await r.text()}catch(_){}throw Error('Proxy '+r.status+(errText?': '+errText.slice(0,120):''))}// DELETE may return empty; still try json
-if(r.status===204)return{ok:true};var text=await r.text();if(!text)return{ok:true};try{return JSON.parse(text)}catch(_){return{ok:true,raw:text}}}
+// Proxy fetch with auto-refresh on 401
+async function pf(path,token){
+  var r;
+  try{
+    r=await fetch(P+path,{headers:{Authorization:'Bearer '+token}});
+  }catch(e){
+    throw Error('Network error reaching proxy (CSP or offline). '+String(e&&e.message||e));
+  }
+  if(r.status===401){
+    var ref=await sb.auth.refreshSession();
+    if(ref.data.session){
+      r=await fetch(P+path,{headers:{Authorization:'Bearer '+ref.data.session.access_token}});
+      if(r.ok)return r.json();
+    }
+    await sb.auth.signOut();location.replace('/auth');return null;
+  }
+  if(!r.ok){
+    var errText='';try{errText=await r.text()}catch(_){}
+    throw Error(proxyErr(r.status,errText));
+  }
+  return r.json();
+}
+
+async function proxyFetch(path,opts){
+  var t=opts?.token||null;
+  if(!t){
+    var s=(await sb.auth.getSession()).data.session;
+    if(!s){location.replace('/auth');return null}
+    t=s.access_token;
+  }
+  var method=opts?.method||'GET';
+  var r;
+  try{
+    r=await fetch(P+path,{
+      method:method,
+      headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},
+      body:opts?.body?JSON.stringify(opts.body):undefined
+    });
+  }catch(e){
+    throw Error('Network error reaching proxy (CSP or offline). '+String(e&&e.message||e));
+  }
+  if(r.status===401){
+    var ref=await sb.auth.refreshSession();
+    if(ref.data.session){
+      r=await fetch(P+path,{
+        method:method,
+        headers:{Authorization:'Bearer '+ref.data.session.access_token,'Content-Type':'application/json'},
+        body:opts?.body?JSON.stringify(opts.body):undefined
+      });
+      if(r.ok)return r.json();
+    }
+    await sb.auth.signOut();location.replace('/auth');return null;
+  }
+  if(!r.ok){
+    var errText='';try{errText=await r.text()}catch(_){}
+    throw Error(proxyErr(r.status,errText));
+  }
+  // DELETE may return empty; still try json
+  if(r.status===204)return{ok:true};
+  var text=await r.text();
+  if(!text)return{ok:true};
+  try{return JSON.parse(text)}catch(_){return{ok:true,raw:text}}
+}
 
 function initSidebar(s){
   if(emailEl)emailEl.textContent=s.user.email||'';

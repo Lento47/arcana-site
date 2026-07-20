@@ -18,16 +18,21 @@ const CODE_REGEX = /^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/
 const COPY_RESET_MS = 1200
 const EXPIRY_ANNOUNCE_THRESHOLDS = [600, 300, 120, 60, 30, 10, 0]
 
+// Wrap in IIFE so top-level lets never collide with other classic scripts
+// (browsers share one global lexical env for non-module scripts).
+;(function () {
+"use strict"
+
 let state = "loading"
 let userCode = ""
-let sbClient = null  // avoid name collision with supabase.js's `let sb` in shared script scope
+let deviceSb = null
 let expiresAt = 0
 let expiryIntervalId = 0
 let copyTimeoutId = 0
 let lastAnnouncedSecond = -1
-let sbResolved = false
-let sbResolve, sbReject
-const sbReady = new Promise((res, rej) => { sbResolve = res; sbReject = rej })
+let deviceSbResolved = false
+let deviceSbResolve, deviceSbReject
+const deviceSbReady = new Promise((res, rej) => { deviceSbResolve = res; deviceSbReject = rej })
 
 // — DOM cache —
 let pageEl, codeEl, expiryEl, expiryNumEl, expirySuffixEl,
@@ -147,7 +152,7 @@ function init() {
 
   // supabase.js dispatches arcana:auth-offline if the SDK never appeared
   window.addEventListener("arcana:auth-offline", () => {
-    if (!sbResolved) { sbResolved = true; sbReject(new Error("Supabase unavailable")) }
+    if (!deviceSbResolved) { deviceSbResolved = true; deviceSbReject(new Error("Supabase unavailable")) }
   })
 
   // Parse + validate
@@ -163,13 +168,13 @@ function init() {
   document.title = "Approve sign-in · Arcana"
 
   Promise.race([
-    sbReady,
+    deviceSbReady,
     new Promise((_, rej) => setTimeout(() => {
-      if (!sbResolved) { sbResolved = true; rej(new Error("Supabase load timeout")) }
+      if (!deviceSbResolved) { deviceSbResolved = true; rej(new Error("Supabase load timeout")) }
     }, SB_LOAD_TIMEOUT_MS)),
   ])
     .then((client) => {
-      sbClient = client
+      deviceSb = client
       enterState("ready")
       attemptAutoComplete()
     })
@@ -221,21 +226,21 @@ function tickExpiry() {
 // — Supabase bridge —
 
 function bindSbReady() {
-  if (window.__ARCANA_SB__ && !sbResolved) {
-    sbResolved = true
-    sbResolve(window.__ARCANA_SB__)
+  if (window.__ARCANA_SB__ && !deviceSbResolved) {
+    deviceSbResolved = true
+    deviceSbResolve(window.__ARCANA_SB__)
     return true
   }
   return false
 }
 
-const sbPoll = setInterval(() => { if (bindSbReady()) clearInterval(sbPoll) }, 50)
+const deviceSbPoll = setInterval(() => { if (bindSbReady()) clearInterval(deviceSbPoll) }, 50)
 
 // — Form —
 
 async function onSubmit(e) {
   e.preventDefault()
-  if (!sbClient) { enterState("error-network"); return }
+  if (!deviceSb) { enterState("error-network"); return }
   const email = emailEl.value.trim()
   const password = passwordEl.value
   if (!email || !password) {
@@ -245,7 +250,7 @@ async function onSubmit(e) {
   }
   passwordErrorEl.hidden = true
   try {
-    const { data, error } = await sbClient.auth.signInWithPassword({ email, password })
+    const { data, error } = await deviceSb.auth.signInWithPassword({ email, password })
     if (error) {
       bannerAuthTitle.textContent = "Sign-in failed"
       bannerAuthMessage.textContent = error.message || "Check your credentials and try again."
@@ -261,9 +266,9 @@ async function onSubmit(e) {
 }
 
 async function onOAuth(provider) {
-  if (!sbClient) { enterState("error-network"); return }
+  if (!deviceSb) { enterState("error-network"); return }
   try {
-    const { error } = await sbClient.auth.signInWithOAuth({ provider, options: { redirectTo: location.href } })
+    const { error } = await deviceSb.auth.signInWithOAuth({ provider, options: { redirectTo: location.href } })
     if (error) {
       bannerAuthTitle.textContent = "Sign-in failed"
       bannerAuthMessage.textContent = error.message || "Unexpected error."
@@ -275,9 +280,9 @@ async function onOAuth(provider) {
 }
 
 async function attemptAutoComplete() {
-  if (!sbClient) return
+  if (!deviceSb) return
   try {
-    const { data } = await sbClient.auth.getSession()
+    const { data } = await deviceSb.auth.getSession()
     if (data?.session) {
       enterState("pending-auto")
       await postComplete(data.session)
@@ -414,5 +419,7 @@ if (document.readyState === "loading") {
 window.addEventListener("beforeunload", () => {
   if (expiryIntervalId) clearInterval(expiryIntervalId)
   if (copyTimeoutId) clearTimeout(copyTimeoutId)
-  clearInterval(sbPoll)
+  clearInterval(deviceSbPoll)
 })
+
+})() // end IIFE — isolate from other classic scripts
