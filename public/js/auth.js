@@ -535,5 +535,10 @@
 
       // Initial state
       setMode('personal');
-      setTab('signin');
+      // Allow ?tab= deep links from /auth/device's "email me a magic link
+      // instead" so the user lands on the right tab instead of having to
+      // click it. Validated against the three known tab keys.
+      const validTabs = ['signin', 'signup', 'magic']
+      const requestedTab = new URLSearchParams(location.search).get('tab')
+      setTab(validTabs.includes(requestedTab) ? requestedTab : 'signin')
     })();
