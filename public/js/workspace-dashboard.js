@@ -40,7 +40,10 @@ function renderModelBreakdown(sessions){
 
 function renderRecent(sessions){
   if(!recentEl)return;
-  if(!sessions||sessions.length===0){recentEl.innerHTML='<div class="empty-state">No sessions yet.</div>';return}
+  if(!sessions||sessions.length===0){
+    recentEl.innerHTML='<div class="empty-state">No sessions for this web account yet. Open <a href="/workspace/sessions" style="color:var(--color-primary)">Sessions</a> for details.</div>';
+    return
+  }
   var list=sessions.slice(0,5);
   var html=list.map(function(s){
     var tokens=((s.tokensIn||0)+(s.tokensOut||0)).toLocaleString();

@@ -40,7 +40,12 @@ function render(){
     if(emptyEl){
       emptyEl.style.display='';
       emptyEl.innerHTML=allFacts.length===0
-        ?'No cloud memory yet.<br><br>Push local facts from the CLI:<br><code>arcana memory push</code><br><br>Or add a fact below.'
+        ?'No memory facts for <b>this web account</b> yet.<br><br>'
+          +'Cloud memory is keyed by your site login (Supabase user), not by an unrelated CLI license.<br><br>'
+          +'1. Sign in here with the same email you use for device login<br>'
+          +'2. <code>arcana console login</code> → same email<br>'
+          +'3. <code>arcana memory compile</code> then <code>arcana memory push</code><br><br>'
+          +'Or add a fact with the form below (stored under this web user).'
         :'No facts match your search.';
     }
     return;

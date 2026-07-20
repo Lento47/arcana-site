@@ -66,8 +66,11 @@ function renderPage(){
     tableEl.style.display='none';
     if(emptyEl){
       emptyEl.style.display='';
-      emptyEl.textContent=allSessions.length===0
-        ?'No proxy sessions yet. Use Arcana Proxy from the CLI or TUI and they will appear here.'
+      emptyEl.innerHTML=allSessions.length===0
+        ?'No sessions for <b>this web account</b> yet.<br><br>'
+          +'Sessions are recorded when this signed-in user hits Arcana Proxy.<br>'
+          +'CLI data under a different license id (e.g. an old <code>enterprise</code> key) will not show here.<br><br>'
+          +'Fix: run <code>arcana console login</code> (device login with the same email as the site), then use the CLI so sessions land on your Supabase user id.'
         :'No sessions match your filters.';
     }
     if(pagEl)pagEl.style.display='none';
