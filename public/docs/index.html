@@ -71,7 +71,6 @@
           <a class="docs-sidebar-link" href="#api-balance"><code>GET /v1/balance</code></a>
           <a class="docs-sidebar-link" href="#api-usage"><code>GET /v1/usage</code></a>
           <a class="docs-sidebar-link" href="#api-health"><code>GET /v1/health</code></a>
-          <a class="docs-sidebar-link" href="#api-admin"><span>Admin endpoints</span></a>
         </div>
 
         <div class="docs-sidebar-section">
@@ -359,61 +358,15 @@ arcana trust revoke
         </div>
       </div>
 
-      <h2 id="api-admin">Admin endpoints</h2>
-      <p>The proxy exposes a small admin surface for license management and provider configuration. All admin endpoints require a bearer from <code>ARCANA_ADMIN_KEYS</code> — a short secret held in the proxy's environment.</p>
-      <div class="docs-callout docs-callout-danger">
+      <div class="docs-callout docs-callout-info">
         <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
         </svg>
         <div class="docs-callout-body">
-          <strong>Admin keys are not for end users.</strong>
-          <p>These endpoints are intended for the Arcana site and infrastructure tooling. End-user code should call the user-facing endpoints above. The admin secret rotates via Cloudflare Worker secrets — never commit it, never log it.</p>
+          <strong>Other user APIs</strong>
+          <p>Also available with your license bearer: <code>POST /v1/embeddings</code>, <code>GET /v1/sessions</code>, <code>GET /v1/purchases</code>, and <code>GET|PUT /v1/profile</code>. Infrastructure-only admin routes exist for Arcana operators and are <strong>not part of the public API</strong>.</p>
         </div>
       </div>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
-          <span class="docs-endpoint-path">/v1/admin/licenses</span>
-          <span class="docs-endpoint-auth">Admin key</span>
-        </div>
-        <div class="docs-endpoint-body">
-          <p>Mint a fresh license. Called by the Arcana site after a user completes device-flow sign-in.</p>
-<pre data-lang="bash"><code>curl -X POST https://proxy.arcana.otnelhq.com/v1/admin/licenses \
-  -H "Authorization: Bearer $ARCANA_ADMIN_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "supabaseUserId": "8c2b...",
-    "email": "user@domain.com",
-    "plan": "pro"
-  }'</code></pre>
-<pre data-lang="json"><code>{
-  "licenseKey": "ARCANA-PRO-...",
-  "tier": "pro",
-  "createdAt": 1721000000000
-}</code></pre>
-        </div>
-      </div>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
-          <span class="docs-endpoint-path">/v1/admin/providers</span>
-          <span class="docs-endpoint-auth">Admin key</span>
-        </div>
-        <div class="docs-endpoint-body">
-          <p>Read the active provider priority list and which upstreams are configured (no raw API secrets returned).</p>
-        </div>
-      </div>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-put">PUT</span>
-          <span class="docs-endpoint-path">/v1/admin/providers</span>
-          <span class="docs-endpoint-auth">Admin key</span>
-        </div>
-        <div class="docs-endpoint-body">
-          <p>Set provider priority. Body: <code>{ "priority": ["openrouter","omniroute","aihubmix","cloudflare"] }</code> (subset / order only).</p>
-        </div>
-      </div>
-      <p>Also available (auth required, not admin): <code>POST /v1/embeddings</code>, <code>GET /v1/sessions</code>, <code>GET /v1/purchases</code>, <code>GET|PUT /v1/profile</code>, PayPal/billing routes under <code>/v1/pay/*</code>.</p>
 
       <!-- ============================ DEVICE FLOW ============================ -->
       <h2 id="device-pairing">How device pairing works</h2>
@@ -422,7 +375,7 @@ arcana trust revoke
         <li><strong>Code request.</strong> CLI posts to <code>{site}/auth/device/code</code> with <code>{ client_id: "arcana-cli" }</code>. The site returns a <code>device_code</code> (UUID, secret) and a <code>user_code</code> (8 chars, public).</li>
         <li><strong>Browser open.</strong> CLI opens <code>{site}/auth/device?code={user_code}</code> in the user's default browser. The page shows a Supabase sign-in form (email/password, GitHub, Google, or magic link).</li>
         <li><strong>Poll loop.</strong> CLI starts polling <code>{site}/auth/device/token</code> every <code>interval</code> seconds (server returns <code>interval: 5</code>). While the user is signing in, the response is <code>400 { error: "authorization_pending" }</code>.</li>
-        <li><strong>Approve.</strong> On successful sign-in, the page calls <code>{site}/auth/device/complete</code> with the user's Supabase ID and email. The site calls the proxy's <code>POST /v1/admin/licenses</code> to mint a fresh license, then writes the resulting <code>license_key</code> back to its KV entry.</li>
+        <li><strong>Approve.</strong> On successful sign-in, the page completes pairing with the site. The site mints a license through a <strong>private server-to-server</strong> step (not a public client API), then stores it for this device session.</li>
         <li><strong>License returned.</strong> The CLI's next poll returns <code>200 { access_token: license_key, refresh_token, token_type: "Bearer", expires_in: 31536000 }</code>. The engine also loads <code>/api/user</code> and <code>/api/orgs</code>, then persists the account locally.</li>
       </ol>
       <div class="docs-callout docs-callout-success">
@@ -431,7 +384,7 @@ arcana trust revoke
         </svg>
         <div class="docs-callout-body">
           <strong>Rotate by logging in again</strong>
-          <p>Run <code>arcana console login</code> (and <code>logout</code> if you need a clean slate). Each successful pairing mints a fresh license key via the site → proxy admin path.</p>
+          <p>Run <code>arcana console login</code> (and <code>logout</code> if you need a clean slate). Each successful pairing issues a fresh license key for this machine.</p>
         </div>
       </div>
 
