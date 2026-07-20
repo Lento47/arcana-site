@@ -1,3 +1,2 @@
 # Explicit path redirects (no splats) prevent open redirects.
-/docs  https://github.com/Lento47/arcana-community  302
 /api   https://api.arcana.otnelhq.com              302

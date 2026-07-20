@@ -181,7 +181,6 @@
         <a href="/auth">Sign In</a>
         <a href="/credits">Buy Credits</a>
         <a href="/status">Status</a>
-        <a href="https://github.com/Lento47/arcana-community">GitHub</a>
       </nav>
     </div>
   </header>
@@ -190,51 +189,72 @@
     <div class="kicker">// releases</div>
     <h1>Changelog</h1>
     <p class="sub">Every arcana release — features, fixes, and infrastructure updates. Published from CI on every tagged push.</p>
-    <div id="releases">Loading releases…</div>
+    <div id="releases">
+      <article class="release">
+        <div class="rel-top">
+          <span class="tag latest">v0.3.5 — latest</span>
+          <span class="date">Jul 19, 2026</span>
+        </div>
+        <ul class="changes">
+          <li class="feat">Added <code>/docs</code> reference page covering install, CLI, proxy API, and device flow.</li>
+          <li class="fix">Removed lingering opencode references in the device seal copy.</li>
+          <li class="perf">Tighter pause-on-redirect for the workspace <code>/api/orgs</code> loader.</li>
+        </ul>
+      </article>
+
+      <article class="release">
+        <div class="rel-top">
+          <span class="tag">v0.3.4</span>
+          <span class="date">Jul 12, 2026</span>
+        </div>
+        <ul class="changes">
+          <li class="feat">Council mode (multi-model debate) gated behind paid licenses.</li>
+          <li class="feat">New <code>arcana trust</code> workspace plugin allowlist.</li>
+          <li class="fix">Device-flow countdown respects the seal's actual issuance time, not page-load.</li>
+        </ul>
+      </article>
+
+      <article class="release">
+        <div class="rel-top">
+          <span class="tag">v0.3.3</span>
+          <span class="date">Jul 03, 2026</span>
+        </div>
+        <ul class="changes">
+          <li class="perf">Compaction bar in the TUI status strip; per-turn caps match deployed weekly totals.</li>
+          <li class="feat">Sigil splash + idle-phrase rotation (30 s) on the dashboard.</li>
+          <li class="fix">OAuth refresh on the proxy honors the license tier before fallback.</li>
+        </ul>
+      </article>
+
+      <article class="release">
+        <div class="rel-top">
+          <span class="tag">v0.3.2</span>
+          <span class="date">Jun 27, 2026</span>
+        </div>
+        <ul class="changes">
+          <li class="feat">Five new Arcana brand themes (bloodmoon, coven, crypt, dragon, lich, wraith).</li>
+          <li class="fix">Session list honors PIN locks for forked worktrees.</li>
+        </ul>
+      </article>
+
+      <article class="release">
+        <div class="rel-top">
+          <span class="tag">v0.3.1</span>
+          <span class="date">Jun 20, 2026</span>
+        </div>
+        <ul class="changes">
+          <li class="feat">SDK rebrand from <code>opencode</code> → <code>arcana</code> across all packages and bins.</li>
+          <li class="feat">Health check + graceful shutdown on <code>arcana serve</code>.</li>
+          <li class="perf"><code>arcana.ps1</code> launch path tightened — saves 2–3 s on cold start.</li>
+        </ul>
+      </article>
+    </div>
   </main>
-
-  <script>
-    (async function () {
-      const el = document.getElementById('releases');
-      const REPO = 'Lento47/arcana-community';
-      try {
-        const r = await fetch('https://api.github.com/repos/' + REPO + '/releases?per_page=20');
-        if (!r.ok) throw new Error('GitHub API ' + r.status);
-        const releases = await r.json();
-        if (!releases.length) { el.textContent = 'No releases found.'; return; }
-
-        let html = '';
-        releases.forEach(function(rel, i) {
-          const tag = rel.tag_name || rel.name || 'untagged';
-          const isLatest = i === 0;
-          const date = new Date(rel.published_at || rel.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
-          const body = rel.body || '';
-          // Parse conventional commit lines
-          const lines = body.split('\n').filter(function(l) { return l.trim(); });
-          const changes = lines.map(function(l) {
-            let cls = 'fix';
-            if (/^feat/i.test(l)) cls = 'feat';
-            else if (/^fix/i.test(l)) cls = 'fix';
-            else if (/^sec/i.test(l) || /security/i.test(l)) cls = 'sec';
-            else if (/^perf/i.test(l)) cls = 'perf';
-            let text = l.replace(/^(feat|fix|sec|perf|chore|docs|refactor|style|test|build|ci)(\(.*?\))?:\s*/i, '');
-            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-            return '<li class="' + cls + '">' + text + '</li>';
-          }).join('');
-          html += '<article class="release"><div class="rel-top"><span class="tag' + (isLatest ? ' latest' : '') + '">' + tag + (isLatest ? ' — latest' : '') + '</span><span class="date">' + date + '</span></div><ul class="changes">' + changes + '</ul></article>';
-        });
-        el.innerHTML = html;
-      } catch(e) {
-        el.innerHTML = '<div class="release" style="text-align:center;padding:32px;color:var(--muted)">Could not load releases. <a href="https://github.com/' + REPO + '/releases" style="color:var(--accent)">View on GitHub →</a></div>';
-      }
-    })();
-  </script>
 
   <footer>
     <div class="wrap footer">
       <div><img src="/arcana.png" alt="" width="16" height="16" style="vertical-align:text-bottom;margin-right:4px"> ARCANA · Terminal Interface For AI Keys</div>
       <div class="links">
-        <a href="https://github.com/Lento47/arcana-community">GitHub</a>
         <a href="/changelog">Changelog</a>
         <a href="/auth">Sign In</a>
         <a href="/credits">Buy Credits</a>
