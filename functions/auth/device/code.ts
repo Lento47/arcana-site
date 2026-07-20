@@ -1,4 +1,4 @@
-// functions/auth/device-code.ts
+// functions/auth/device/code.ts
 // POST /auth/device/code — OAuth RFC 8628 device-flow code issuance.
 // Body: { client_id: string }
 // Response: { device_code, user_code, verification_uri_complete, expires_in, interval }
@@ -25,7 +25,7 @@ function randomUserCode(): string {
   return `${s.slice(0, 4)}-${s.slice(4, 8)}`
 }
 
-function clientIp(request: Request, context: { request: Request; env: any }): string {
+function clientIp(request: Request): string {
   return (
     request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -34,52 +34,64 @@ function clientIp(request: Request, context: { request: Request; env: any }): st
 }
 
 export async function onRequest({ request, env }: { request: Request; env: any }): Promise<Response> {
-  if (request.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 })
-  }
+  try {
+    if (request.method !== "POST") {
+      return new Response("Method not allowed", { status: 405 })
+    }
 
-  const body = await request.json().catch(() => ({})) as any
-  const clientId = String(body?.client_id ?? "").trim()
-  if (!clientId) {
-    return new Response(JSON.stringify({ error: "missing_client_id" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json;charset=utf-8" },
+    if (!env?.ARCANA_PROXY || typeof env.ARCANA_PROXY.get !== "function") {
+      return jsonError(500, "missing_kv_binding", "ARCANA_PROXY KV namespace is not bound to this Pages project")
+    }
+
+    const body = await request.json().catch(() => ({})) as any
+    const clientId = String(body?.client_id ?? "").trim()
+    if (!clientId) {
+      return jsonError(400, "missing_client_id", "client_id is required")
+    }
+
+    const ip = clientIp(request)
+    const rlKey = `device_rl:${ip}:${clientId}`
+    const rlRaw = await env.ARCANA_PROXY.get(rlKey)
+    const rlCount = rlRaw ? parseInt(rlRaw, 10) || 0 : 0
+    if (rlCount >= 10) {
+      return new Response(JSON.stringify({ error: "rate_limited", error_description: "Too many device codes from this IP" }), {
+        status: 429,
+        headers: { "Content-Type": "application/json;charset=utf-8", "Retry-After": "60" },
+      })
+    }
+
+    const device_code = crypto.randomUUID()
+    const user_code = randomUserCode()
+    const now = Date.now()
+
+    await env.ARCANA_PROXY.put(`device:${user_code}`, JSON.stringify({
+      device_code,
+      supabase_user_id: null,
+      license_key: null,
+      created_at: now,
+    }), { expirationTtl: USER_CODE_TTL })
+    await env.ARCANA_PROXY.put(`device_id:${device_code}`, user_code, { expirationTtl: USER_CODE_TTL })
+    await env.ARCANA_PROXY.put(rlKey, String(rlCount + 1), { expirationTtl: KV_RATE_TTL })
+
+    const origin = new URL(request.url).origin
+    return new Response(JSON.stringify({
+      device_code,
+      user_code,
+      verification_uri_complete: `${origin}/auth/device?code=${user_code}`,
+      expires_in: 600,
+      interval: 5,
+    }), {
+      status: 200,
+      headers: { "Content-Type": "application/json;charset=utf-8", "X-Content-Type-Options": "nosniff" },
     })
+  } catch (err) {
+    return jsonError(500, "internal_error", err instanceof Error ? err.message : String(err))
   }
+}
 
-  const ip = clientIp(request, { request, env })
-  const rlKey = `device_rl:${ip}:${clientId}`
-  const rlRaw = await env.ARCANA_PROXY.get(rlKey)
-  const rlCount = rlRaw ? parseInt(rlRaw, 10) || 0 : 0
-  if (rlCount >= 10) {
-    return new Response(JSON.stringify({ error: "rate_limited", error_description: "Too many device codes from this IP" }), {
-      status: 429,
-      headers: { "Content-Type": "application/json;charset=utf-8", "Retry-After": "60" },
-    })
-  }
-
-  const device_code = crypto.randomUUID()
-  const user_code = randomUserCode()
-  const now = Date.now()
-
-  await env.ARCANA_PROXY.put(`device:${user_code}`, JSON.stringify({
-    device_code,
-    supabase_user_id: null,
-    license_key: null,
-    created_at: now,
-  }), { expirationTtl: USER_CODE_TTL })
-  await env.ARCANA_PROXY.put(`device_id:${device_code}`, user_code, { expirationTtl: USER_CODE_TTL })
-  await env.ARCANA_PROXY.put(rlKey, String(rlCount + 1), { expirationTtl: KV_RATE_TTL })
-
-  const origin = new URL(request.url).origin
-  return new Response(JSON.stringify({
-    device_code,
-    user_code,
-    verification_uri_complete: `${origin}/auth/device?code=${user_code}`,
-    expires_in: 600,
-    interval: 5,
-  }), {
-    status: 200,
+function jsonError(status: number, error: string, description: string): Response {
+  return new Response(JSON.stringify({ error, error_description: description }), {
+    status,
     headers: { "Content-Type": "application/json;charset=utf-8", "X-Content-Type-Options": "nosniff" },
   })
 }
