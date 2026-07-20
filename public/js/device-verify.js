@@ -103,6 +103,18 @@ function enterState(next) {
     expiryIntervalId = 0
   }
 
+  // Per-state banner copy. The error/warn banners share DOM elements, so each
+  // state that uses them must set its own title + message — otherwise the
+  // previous state's text leaks through.
+  if (next === "error-expired" && bannerErrTitle && bannerErrMessage) {
+    bannerErrTitle.textContent = "Code expired"
+    bannerErrMessage.innerHTML = "Codes expire after ten minutes. Run <code style=\"font-family: var(--mono); font-size: 11px;\">arcana sign-in</code> in your terminal to start over."
+  }
+  if (next === "error-invalid" && bannerErrTitle && bannerErrMessage) {
+    bannerErrTitle.textContent = "Invalid sign-in link"
+    bannerErrMessage.innerHTML = "This link is missing a valid code. Run <code style=\"font-family: var(--mono); font-size: 11px;\">arcana sign-in</code> in your terminal to start over."
+  }
+
   window.dispatchEvent(new CustomEvent("arcana:device:state", { detail: { state: next } }))
 }
 
@@ -375,13 +387,14 @@ function legacyCopy(text) {
 
 function onCancel(e) {
   e.preventDefault()
+  // The cancel link is visible during ready/error states; the close-tab link
+  // lives inside the success banner (hidden until success). Give the user
+  // visible feedback in the link they actually clicked.
   try { window.close() } catch {}
-  // window.close() silently fails for non-script-opened tabs; update the
-  // close-tab link copy so the user knows.
-  if (closeTabLink) {
-    setTimeout(() => {
-      closeTabLink.textContent = "close manually (⌘W)"
-    }, 100)
+  if (cancelLink) {
+    cancelLink.textContent = "Press ⌘W to close this tab"
+  } else if (closeTabLink) {
+    closeTabLink.textContent = "Press ⌘W to close this tab"
   }
 }
 

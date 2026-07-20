@@ -486,7 +486,7 @@ body {
 .page[data-state="error-claimed"] .form,
 .page[data-state="error-claimed"] .alt,
 .page[data-state="error-claimed"] .alt-link { display: none; }
-.page[data-state="error-claimed"] .banner-warn { display: flex; }
+.page[data-state="error-claimed"] .banner-claimed { display: flex; }
 
 /* — Skeleton (very small, just a quiet pulse) — */
 
