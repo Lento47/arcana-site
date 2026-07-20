@@ -3,9 +3,16 @@ const PROXY = "https://proxy.arcana.otnelhq.com"
 export async function onRequest({ request }: { request: Request }): Promise<Response> {
   if (request.method !== "GET") return new Response("Method not allowed", { status: 405 })
 
+  const auth = request.headers.get("Authorization") || ""
+  if (!auth) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json;charset=utf-8", "X-Content-Type-Options": "nosniff" },
+    })
+  }
+
   const url = new URL(request.url)
   const target = `${PROXY}/v1/sessions${url.search}`
-  const auth = request.headers.get("Authorization") || ""
 
   let upstream: Response
   try {

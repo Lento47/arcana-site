@@ -6,6 +6,13 @@ export async function onRequest({ request }: { request: Request }): Promise<Resp
   }
 
   const auth = request.headers.get("Authorization") || ""
+  if (!auth) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json;charset=utf-8", "X-Content-Type-Options": "nosniff" },
+    })
+  }
+
   const body = request.method === "PUT" ? await request.text() : undefined
 
   let upstream: Response

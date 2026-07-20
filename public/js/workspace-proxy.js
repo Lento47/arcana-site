@@ -8,7 +8,15 @@ var balanceEl=e('p-balance'),balanceBar=e('p-balance-bar');
 var usedEl=e('p-used'),limitEl=e('p-limit'),remEl=e('p-remaining'),usageBar=e('p-usage-bar');
 var tierEl=e('p-tier');
 
-var DAILY_LIMITS={free:50,trial:200,pro:2000,team:5000,enterprise:Infinity};
+// Daily-limit display. The proxy is the source of truth for per-tier limits
+// via /v1/usage. If the response includes a numeric `limit` field, use it.
+// Otherwise, display "—" rather than a hardcoded client value.
+// See docs/providers-free-usage-deploy.md "Known limits" for the proxy contract.
+function getDailyLimit(usage, health) {
+  if (usage && typeof usage.limit === "number" && Number.isFinite(usage.limit)) return usage.limit
+  if (health && health.tier === "enterprise") return Infinity
+  return null  // unknown — show "—", not a lie
+}
 
 function showContent(vis){
   if(skelEl)skelEl.style.display=vis?'none':'';
@@ -32,23 +40,22 @@ function init(s){
     if(balanceEl)balanceEl.textContent=bd?'$'+((c/100).toFixed(2)):'—';
     if(balanceBar)balanceBar.style.width=bd?Math.min(100,(c/5000)*100)+'%':'0%';
 
-    // Daily usage
+    // Daily usage — limit from server, not a hardcoded table.
     var used=ud?ud.requests||ud.count||0:0;
-    var tier=hd?hd.tier||'free':'free';
-    var limit=DAILY_LIMITS[tier]||50;
-    var remaining=limit===Infinity?'∞':Math.max(0,limit-used);
+    var limit=getDailyLimit(ud, hd);
+    var remaining=limit===Infinity?'∞':(limit===null?'—':Math.max(0,limit-used));
 
     if(usedEl)usedEl.textContent=used.toLocaleString();
-    if(limitEl)limitEl.textContent=limit===Infinity?'Unlimited':limit.toLocaleString();
+    if(limitEl)limitEl.textContent=limit===Infinity?'Unlimited':(limit===null?'—':limit.toLocaleString());
     if(remEl)remEl.textContent=remaining;
     if(usageBar){
-      var pct=limit===Infinity?0:Math.min(100,Math.round(used/limit*100));
+      var pct=limit===Infinity?0:(limit===null?0:Math.min(100,Math.round(used/limit*100)));
       usageBar.style.width=pct+'%';
       usageBar.style.background=pct>95?'var(--color-error)':pct>80?'var(--color-warning)':'var(--color-primary)';
     }
 
     // Tier
-    if(tierEl)tierEl.textContent=tier.charAt(0).toUpperCase()+tier.slice(1);
+    if(tierEl)tierEl.textContent=(hd&&hd.tier)?hd.tier.charAt(0).toUpperCase()+hd.tier.slice(1):'—';
 
     showContent(true);
   })['catch'](function(){showContent(true)});

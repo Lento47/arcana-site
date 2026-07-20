@@ -1,8 +1,15 @@
 const PROXY = "https://proxy.arcana.otnelhq.com"
 
 export async function onRequest({ request }: { request: Request }): Promise<Response> {
-  const url = new URL(request.url)
   const auth = request.headers.get("Authorization") || ""
+  if (!auth) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json;charset=utf-8", "X-Content-Type-Options": "nosniff" },
+    })
+  }
+
+  const url = new URL(request.url)
   const path = url.searchParams.get("sub") ? `/v1/pay/sub-status?id=${url.searchParams.get("sub")}` : "/v1/purchases"
   const target = `${PROXY}${path}`
 
