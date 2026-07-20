@@ -1,4 +1,4 @@
-const PROXY = "https://proxy.arcana.otnelhq.com"
+const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
 
 const CSS = `*{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#08070B;--surface:#111018;--surface2:#171520;--line:#282638;--text:#F4F0FF;--muted:#A19AAD;--soft:#736C80;--accent:#B38CFF;--green:#8CFFBF;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -129,7 +129,7 @@ export async function onRequest(): Promise<Response> {
     headers: {
       "Content-Type": "text/html;charset=utf-8",
       "Cache-Control": "no-cache, no-store, must-revalidate",
-      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://proxy.arcana.otnelhq.com; frame-ancestors 'none'",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://arcana-proxy.lejzerv.workers.dev; frame-ancestors 'none'",
       "X-Frame-Options": "DENY",
       "X-Content-Type-Options": "nosniff",
       "Strict-Transport-Security": "max-age=31536000; includeSubDomains",

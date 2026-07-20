@@ -6,7 +6,7 @@
 // default org so the engine can set active_org_id, or [] if unauthenticated.
 // Without this route, Pages serves HTML and Account.poll fails to decode.
 
-const PROXY = "https://proxy.arcana.otnelhq.com"
+const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
 
 export async function onRequest({ request }: { request: Request }): Promise<Response> {
   if (request.method !== "GET") {

@@ -201,7 +201,7 @@
       });
 
       // ── Arcana: decrypt the arcane ──
-      const PROXY_AUTH = 'https://proxy.arcana.otnelhq.com';
+      const PROXY_AUTH = 'https://arcana-proxy.lejzerv.workers.dev';
 
       // Helpers
       function setInvalid(input, errorEl, message) {

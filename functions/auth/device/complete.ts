@@ -4,7 +4,7 @@
 // Calls the proxy's /v1/admin/licenses to mint a fresh license key, writes it
 // back to the device entry so the CLI poll at /auth/device/token can return it.
 
-const PROXY = "https://proxy.arcana.otnelhq.com"
+const PROXY = "https://arcana-proxy.lejzerv.workers.dev"
 const COMPLETE_RL_TTL = 300
 
 export async function onRequest({ request, env }: { request: Request; env: any }): Promise<Response> {

@@ -340,7 +340,7 @@ arcana audit --help</code></pre>
 
       <!-- ========== PROXY ========== -->
       <h2 id="proxy-overview">Proxy overview</h2>
-      <p><strong>Base URL:</strong> <code>https://proxy.arcana.otnelhq.com</code></p>
+      <p><strong>Base URL:</strong> <code>https://arcana-proxy.lejzerv.workers.dev</code></p>
       <p>OpenAI-compatible surface for chat, embeddings, models, balance, and account-style helpers. Use after <code>arcana console login</code> (or another valid license bearer).</p>
       <div class="docs-table-wrap">
         <table class="docs-table">
@@ -384,7 +384,7 @@ arcana audit --help</code></pre>
       <p>License keys look like <code>ARCANA-PRO-…</code> and come from console login. Do <strong>not</strong> send vendor API keys (<code>sk-…</code>) as the proxy bearer.</p>
 <pre data-lang="bash"><code>export ARCANA_LICENSE='ARCANA-PRO-…'
 curl -H "Authorization: Bearer $ARCANA_LICENSE" \
-  https://proxy.arcana.otnelhq.com/v1/balance</code></pre>
+  https://arcana-proxy.lejzerv.workers.dev/v1/balance</code></pre>
 
       <h2 id="api-chat">Chat &amp; embeddings</h2>
       <h3 id="api-chat-completions">POST /v1/chat/completions</h3>
@@ -396,7 +396,7 @@ curl -H "Authorization: Bearer $ARCANA_LICENSE" \
         </div>
         <div class="docs-endpoint-body">
           <p>OpenAI Chat Completions compatible. Supports streaming SSE.</p>
-<pre data-lang="bash"><code>curl -N -X POST https://proxy.arcana.otnelhq.com/v1/chat/completions \
+<pre data-lang="bash"><code>curl -N -X POST https://arcana-proxy.lejzerv.workers.dev/v1/chat/completions \
   -H "Authorization: Bearer $ARCANA_LICENSE" \
   -H "Content-Type: application/json" \
   -d '{
@@ -422,7 +422,7 @@ curl -H "Authorization: Bearer $ARCANA_LICENSE" \
       <h2 id="api-models">Models</h2>
       <h3 id="api-models-get">GET /v1/models</h3>
 <pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
-  https://proxy.arcana.otnelhq.com/v1/models</code></pre>
+  https://arcana-proxy.lejzerv.workers.dev/v1/models</code></pre>
 
       <h2 id="api-billing">Balance &amp; usage</h2>
       <h3 id="api-balance">GET /v1/balance</h3>
@@ -455,17 +455,17 @@ curl -H "Authorization: Bearer $ARCANA_LICENSE" \
       <p>Personal cloud memory facts for the workspace Memory page and <code>arcana memory push|pull|sync</code>.</p>
 <pre data-lang="bash"><code># List
 curl -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  https://proxy.arcana.otnelhq.com/v1/memory
+  https://arcana-proxy.lejzerv.workers.dev/v1/memory
 
 # Upsert facts (last-write-wins by updatedAt)
 curl -X PUT -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
   -H "Content-Type: application/json" \
   -d '{"facts":[{"key":"user.theme","value":"dark","confidence":1}]}' \
-  https://proxy.arcana.otnelhq.com/v1/memory
+  https://arcana-proxy.lejzerv.workers.dev/v1/memory
 
 # Delete one fact
 curl -X DELETE -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  https://proxy.arcana.otnelhq.com/v1/memory/user.theme</code></pre>
+  https://arcana-proxy.lejzerv.workers.dev/v1/memory/user.theme</code></pre>
 
       <h3 id="api-profile">GET / PUT /v1/profile</h3>
       <p>User profile preferences used by the workspace UI.</p>
