@@ -9,7 +9,12 @@ export async function onRequest(context) {
     (url.hostname === "arcana.otnelhq.com" || url.hostname === "arcana-staging.otnelhq.com") &&
     url.pathname.startsWith("/auth")
   ) {
-    const assetUrl = new URL("/auth/index.html", url.origin)
+    // /auth/device and its subpaths serve the device-flow verification page;
+    // everything else under /auth reuses the standard auth card.
+    const target = url.pathname.startsWith("/auth/device")
+      ? "/auth/device/index.html"
+      : "/auth/index.html"
+    const assetUrl = new URL(target, url.origin)
     return context.env.ASSETS.fetch(assetUrl)
   }
 
