@@ -87,10 +87,15 @@ function load(){
     allFacts=data&&data.facts?data.facts:[];
     if(skelEl)skelEl.style.display='none';
     applyFilters();
-  })['catch'](function(){
+    showMsg('',true);
+  })['catch'](function(err){
     if(skelEl)skelEl.style.display='none';
-    if(emptyEl){emptyEl.style.display='';emptyEl.textContent='Failed to load memory.';}
-    showMsg('Failed to load memory from proxy.',false);
+    var msg=err&&err.message?String(err.message):'Failed to load memory from proxy.';
+    if(/429|rate_limited/i.test(msg)){
+      msg='Rate limited — wait a few seconds and refresh. Workspace reads no longer share the free LLM burst bucket after the latest proxy deploy.';
+    }
+    if(emptyEl){emptyEl.style.display='';emptyEl.textContent=msg;}
+    showMsg(msg,false);
   });
 }
 
