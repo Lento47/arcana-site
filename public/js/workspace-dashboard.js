@@ -42,7 +42,12 @@ function renderRecent(sessions){
   if(!recentEl)return;
   if(!sessions||sessions.length===0){recentEl.innerHTML='<div class="empty-state">No sessions yet.</div>';return}
   var list=sessions.slice(0,5);
-  var html=list.map(function(s){return '<div class="session-row" onclick="location.href=\'/workspace/sessions\'" style="cursor:pointer;margin-bottom:2px"><span class="sr-model">'+esc(s.model||'')+'</span><span class="sr-tokens">'+(s.tokensIn+s.tokensOut||0).toLocaleString()+'</span><span class="sr-cost">$'+(s.costCredits?s.costCredits.toFixed(2):'0.00')+'</span><span class="sr-time">'+timeAgo(s.createdAt)+'</span><span class="sr-expand">→</span></div>'}).join('');
+  var html=list.map(function(s){
+    var tokens=((s.tokensIn||0)+(s.tokensOut||0)).toLocaleString();
+    var dollars=s.costCredits!=null?(Number(s.costCredits)/100).toFixed(2):'0.00';
+    var label=s.firstMessage?esc(String(s.firstMessage).slice(0,80)):esc(s.model||'');
+    return '<div class="session-row" onclick="location.href=\'/workspace/sessions\'" style="cursor:pointer;margin-bottom:2px"><div class="sr-main"><span class="sr-model">'+esc(s.model||'')+'</span>'+(s.firstMessage?'<span class="sr-preview">'+label+'</span>':'')+'</div><span class="sr-tokens">'+tokens+'</span><span class="sr-cost">$'+dollars+'</span><span class="sr-time">'+timeAgo(s.createdAt)+'</span><span class="sr-expand">→</span></div>';
+  }).join('');
   recentEl.innerHTML='<div class="session-table">'+html+'</div>';
 }
 

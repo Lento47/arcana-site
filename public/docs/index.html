@@ -280,6 +280,15 @@ arcana trust grant [path]</code></pre>
 <pre data-lang="bash"><code>arcana session list
 arcana session delete &lt;sessionID&gt;</code></pre>
 
+      <h3 id="cmd-memory">arcana memory</h3>
+      <p>Local memory lives under <code>~/.arcana/data/</code>. Cloud facts (visible on the workspace Memory page) sync via the proxy when you are logged in.</p>
+<pre data-lang="bash"><code>arcana memory facts
+arcana memory search --query &lt;q&gt;
+arcana memory stats
+arcana memory push    # local facts → cloud
+arcana memory pull    # cloud facts → local
+arcana memory sync    # push then pull</code></pre>
+
       <h3 id="cmd-export-import">export / import</h3>
 <pre data-lang="bash"><code>arcana export
 arcana import</code></pre>
@@ -348,6 +357,8 @@ arcana audit --help</code></pre>
             <tr><td>GET</td><td><code>/v1/health</code></td><td>License</td><td>Identity + liveness</td></tr>
             <tr><td>GET</td><td><code>/v1/sessions</code></td><td>License</td><td>Session list</td></tr>
             <tr><td>GET</td><td><code>/v1/sessions/:id</code></td><td>License</td><td>Session detail</td></tr>
+            <tr><td>GET / PUT</td><td><code>/v1/memory</code></td><td>License</td><td>Cloud memory facts</td></tr>
+            <tr><td>DELETE</td><td><code>/v1/memory/:key</code></td><td>License</td><td>Delete one fact</td></tr>
             <tr><td>GET</td><td><code>/v1/purchases</code></td><td>License</td><td>Purchase history</td></tr>
             <tr><td>GET / PUT</td><td><code>/v1/profile</code></td><td>License</td><td>Profile</td></tr>
             <tr><td>POST</td><td><code>/v1/send-receipt</code></td><td>License</td><td>Test receipt email</td></tr>
@@ -438,7 +449,23 @@ curl -H "Authorization: Bearer $ARCANA_LICENSE" \
 }</code></pre>
 
       <h3 id="api-sessions">GET /v1/sessions</h3>
-      <p>List recent proxy-recorded sessions. Detail: <code>GET /v1/sessions/:id</code>.</p>
+      <p>List recent proxy-recorded sessions (model, tokens, cost, optional message preview). Detail: <code>GET /v1/sessions/:id</code>. These are proxy usage records, not full local TUI transcripts.</p>
+
+      <h3 id="api-memory">GET / PUT /v1/memory</h3>
+      <p>Personal cloud memory facts for the workspace Memory page and <code>arcana memory push|pull|sync</code>.</p>
+<pre data-lang="bash"><code># List
+curl -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
+  https://proxy.arcana.otnelhq.com/v1/memory
+
+# Upsert facts (last-write-wins by updatedAt)
+curl -X PUT -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"facts":[{"key":"user.theme","value":"dark","confidence":1}]}' \
+  https://proxy.arcana.otnelhq.com/v1/memory
+
+# Delete one fact
+curl -X DELETE -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
+  https://proxy.arcana.otnelhq.com/v1/memory/user.theme</code></pre>
 
       <h3 id="api-profile">GET / PUT /v1/profile</h3>
       <p>User profile preferences used by the workspace UI.</p>

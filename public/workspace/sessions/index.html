@@ -24,7 +24,7 @@
         <div class="side-sep"></div>
         <div class="side-section">Workspace</div>
         <a class="nav-item active" href="/workspace/sessions">Sessions</a>
-        <span class="nav-item disabled">Memory</span>
+        <a class="nav-item" href="/workspace/memory">Memory</a>
         <div class="side-sep"></div>
         <div class="side-section">Configuration</div>
         <span class="nav-item disabled">API Keys</span>
@@ -46,13 +46,24 @@
 
     <main class="content">
       <div class="content-inner">
-        <h1>Sessions</h1>
+        <div class="page-head">
+          <h1>Sessions</h1>
+          <div class="page-head-meta">
+            <span id="s-count" class="page-count">—</span>
+          </div>
+        </div>
+
+        <p class="page-lead">
+          Proxy chat usage for your account (model, tokens, cost). Expand a row for detail.
+          Local TUI session transcripts live under <code>~/.arcana/</code> and are not uploaded here.
+        </p>
 
         <div class="toolbar">
-          <input type="text" id="s-search" class="search-input" placeholder="Search by model..." autocomplete="off">
+          <input type="text" id="s-search" class="search-input" placeholder="Search model, provider, preview…" autocomplete="off">
           <select id="s-filter-status" class="filter-select">
             <option value="">All statuses</option>
             <option value="completed">Completed</option>
+            <option value="streamed">Streamed</option>
             <option value="failed">Failed</option>
           </select>
         </div>

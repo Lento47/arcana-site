@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Arcana — Settings</title>
+  <title>Arcana — Memory</title>
   <meta name="theme-color" content="#0a0a0a"><meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
         <div class="side-sep"></div>
         <div class="side-section">Workspace</div>
         <a class="nav-item" href="/workspace/sessions">Sessions</a>
-        <a class="nav-item" href="/workspace/memory">Memory</a>
+        <a class="nav-item active" href="/workspace/memory">Memory</a>
         <div class="side-sep"></div>
         <div class="side-section">Configuration</div>
         <span class="nav-item disabled">API Keys</span>
@@ -32,7 +32,7 @@
         <div class="side-sep"></div>
         <div class="side-section">Account</div>
         <a class="nav-item" href="/workspace/billing">Billing</a>
-        <a class="nav-item active" href="/workspace/settings">Settings</a>
+        <a class="nav-item" href="/workspace/settings">Settings</a>
       </div>
       <div class="side-footer">
         <div class="side-user">
@@ -46,60 +46,51 @@
 
     <main class="content">
       <div class="content-inner">
-        <h1>Settings</h1>
-
-        <div class="card" style="margin-bottom:0.5rem">
-          <div class="card-head"><h2>Profile</h2></div>
-          <div class="card-body">
-            <div class="form-group">
-              <label for="s-name">Display Name</label>
-              <input type="text" id="s-name" class="form-input" placeholder="Your name" autocomplete="name">
-            </div>
-            <div class="form-group">
-              <label for="s-email">Email</label>
-              <input type="email" id="s-email" class="form-input" disabled>
-              <div class="hint">Email is managed by Supabase Auth</div>
-            </div>
-            <button class="btn-primary" id="s-save">Save Changes</button>
-            <div class="msg" id="s-msg"></div>
+        <div class="page-head">
+          <h1>Memory</h1>
+          <div class="page-head-meta">
+            <span id="m-count" class="page-count">—</span>
+            <button type="button" class="btn-ghost" id="m-refresh">Refresh</button>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-head"><h2>Preferences</h2></div>
+        <p class="page-lead">
+          Cloud facts synced from your local Arcana memory (<code>arcana memory push</code>) or added here.
+          Local wiki and full session transcripts stay on your machine.
+        </p>
+
+        <div class="card" style="margin-bottom:1rem">
+          <div class="card-head"><h2>Add fact</h2></div>
           <div class="card-body">
-            <div class="pref-row">
-              <div>
-                <div class="pref-label">Theme</div>
-                <div class="pref-desc">Dark / Light mode</div>
+            <div class="form-row">
+              <div class="form-group" style="flex:0 0 220px;margin-bottom:0">
+                <label for="m-key">Key</label>
+                <input type="text" id="m-key" class="form-input" placeholder="user.preference.theme" autocomplete="off" maxlength="120">
               </div>
-              <label class="toggle">
-                <input type="checkbox" id="s-theme">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="pref-row">
-              <div>
-                <div class="pref-label">Email Receipts</div>
-                <div class="pref-desc">Receive purchase receipts via email</div>
+              <div class="form-group" style="flex:1;margin-bottom:0">
+                <label for="m-value">Value</label>
+                <input type="text" id="m-value" class="form-input" placeholder="prefers dark mode" autocomplete="off" maxlength="2000">
               </div>
-              <label class="toggle">
-                <input type="checkbox" id="s-receipts" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="pref-row">
-              <div>
-                <div class="pref-label">Usage Alerts</div>
-                <div class="pref-desc">Notify when approaching daily limit</div>
+              <div class="form-group" style="flex:0 0 auto;margin-bottom:0;align-self:flex-end">
+                <button type="button" class="btn-primary" id="m-save">Save</button>
               </div>
-              <label class="toggle">
-                <input type="checkbox" id="s-alerts">
-                <span class="toggle-slider"></span>
-              </label>
             </div>
+            <div class="msg" id="m-msg"></div>
           </div>
         </div>
+
+        <div class="toolbar">
+          <input type="text" id="m-search" class="search-input" placeholder="Search keys and values…" autocomplete="off">
+        </div>
+
+        <div class="skel-list" id="m-skeleton">
+          <div class="skel-row"><div class="skel-line w50"></div><div class="skel-line w20"></div></div>
+          <div class="skel-row"><div class="skel-line w70"></div><div class="skel-line w30"></div></div>
+          <div class="skel-row"><div class="skel-line w40"></div><div class="skel-line w20"></div></div>
+        </div>
+
+        <div class="memory-list" id="m-list" style="display:none"></div>
+        <div class="empty-state" id="m-empty" style="display:none"></div>
       </div>
     </main>
   </div>
@@ -108,6 +99,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase.js"></script>
   <script src="/js/workspace.js"></script>
-  <script src="/js/workspace-settings.js"></script>
+  <script src="/js/workspace-memory.js"></script>
 </body>
 </html>
