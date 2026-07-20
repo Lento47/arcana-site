@@ -1,174 +1,145 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Approve sign-in · Arcana</title>
   <meta name="robots" content="noindex">
-  <meta name="description" content="Approve a terminal sign-in on Arcana.">
+  <meta name="description" content="Approve a CLI sign-in on Arcana.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/auth.css">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/device.css">
+  <script>document.documentElement.dataset.state = "loading";</script>
 </head>
-<body class="device-page">
-  <header class="device-header" role="banner">
-    <a href="/" class="auth-logo" aria-label="Arcana home">
-      <img class="mark" src="/arcana.png" alt="" width="22" height="22">
-      <span>ARCANA</span>
-    </a>
-    <span class="device-pill" aria-label="Device pairing session">
-      <span class="device-pill-dot" aria-hidden="true"></span>
-      <span>device pairing</span>
-    </span>
-  </header>
+<body>
 
-  <main class="auth-page">
-    <section class="auth-system" aria-label="Device sign-in">
-      <div class="auth-card">
-        <div class="auth-card-header">
-          <h1 class="auth-title" id="device-title">Approve sign-in</h1>
-          <p class="auth-subtitle" id="device-subtitle">Your terminal requested access. Sign in to continue.</p>
-        </div>
+  <main class="page" id="page" data-state="loading" aria-busy="true" aria-labelledby="headline">
 
-        <div class="auth-card-body">
-          <!-- Device seal: shows the actual code the CLI generated. -->
-          <section class="device-seal" id="device-seal" aria-labelledby="device-seal-label">
-            <span class="device-seal-mark" aria-hidden="true">&#x26B7;</span>
-            <div class="device-seal-text">
-              <div class="device-seal-label" id="device-seal-label">// device seal</div>
-              <div class="device-seal-row">
-                <code class="device-seal-code" id="device-seal-code">---- - ----</code>
-                <button class="device-seal-copy" type="button" id="device-seal-copy" aria-label="Copy device code">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                  </svg>
-                  <span class="device-seal-copy-label">copy</span>
-                </button>
-              </div>
-              <div class="device-seal-expiry" id="device-seal-expiry" aria-live="polite">
-                <span class="expiry-num">10:00</span> remaining
-              </div>
-            </div>
-          </section>
+    <div class="skeleton" aria-hidden="true">
+      <div class="skel-line short"></div>
+      <div class="skel-line mid"></div>
+      <div class="skel-line tall"></div>
+      <div class="skel-line mid"></div>
+      <div class="skel-line short"></div>
+    </div>
 
-          <!-- Loading skeleton (kept until Supabase is wired) -->
-          <div class="skeleton" id="skeleton" aria-hidden="true">
-            <div class="skeleton-line short"></div>
-            <div class="skeleton-line"></div>
-            <div class="skeleton-line"></div>
-            <div class="skeleton-line tiny"></div>
-          </div>
+    <div class="header-block">
+      <p class="kicker">CLI sign-in</p>
+      <h1 class="headline" id="headline">Your terminal is <em>waiting.</em></h1>
+      <p class="subline">Confirm this code to send a token back to your terminal.</p>
+    </div>
 
-          <!-- Banners -->
-          <div class="banner banner-success" id="banner-success" aria-hidden="true" role="status">
-            <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <div class="banner-content">
-              <div class="banner-title">Approved</div>
-              <div class="banner-message" id="banner-success-message">You can close this tab and return to your terminal.</div>
-            </div>
-          </div>
-
-          <div class="banner banner-error" id="banner-error" aria-hidden="true" role="alert">
-            <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <div class="banner-content">
-              <div class="banner-title" id="banner-error-title">Sign-in failed</div>
-              <div class="banner-message" id="banner-error-message">Check your credentials and try again.</div>
-            </div>
-          </div>
-
-          <div class="banner banner-info" id="banner-info" aria-hidden="true" role="status">
-            <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="16" x2="12" y2="12" />
-              <line x1="12" y1="8" x2="12.01" y2="8" />
-            </svg>
-            <div class="banner-content">
-              <div class="banner-title">Working</div>
-              <div class="banner-message" id="banner-info-message">Completing device sign-in&hellip;</div>
-            </div>
-          </div>
-
-          <!-- Sign-in form (reuses the personal signin form pattern) -->
-          <div class="auth-mode" id="mode-personal" role="tabpanel">
-            <div class="tab-panel" id="panel-signin" aria-hidden="false">
-              <h2 class="section-title">Sign in</h2>
-              <p class="section-desc">Use your Arcana account to approve this terminal.</p>
-              <form id="form-signin" novalidate>
-                <div class="form-group">
-                  <label class="form-label" for="signin-email">Email</label>
-                  <input class="input" id="signin-email" type="email" name="email" autocomplete="email" placeholder="you@domain.com" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="signin-password">Password</label>
-                  <div class="input-wrap">
-                    <input class="input" id="signin-password" type="password" name="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
-                    <span class="input-suffix">
-                      <button type="button" class="toggle-password" aria-label="Show password" data-target="signin-password">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                      </button>
-                    </span>
-                  </div>
-                  <div class="form-error hidden" id="signin-password-error" aria-live="polite"></div>
-                </div>
-                <button type="submit" class="btn btn-primary" id="btn-signin">Sign in &amp; approve</button>
-              </form>
-
-              <div class="divider" aria-hidden="true">Or continue with</div>
-
-              <div class="btn-row">
-                <button class="btn btn-oauth" id="oauth-github" type="button">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                  </svg>
-                  GitHub
-                </button>
-                <button class="btn btn-oauth" id="oauth-google" type="button">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.83z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83C6.71 7.31 9.14 5.38 12 5.38z"/>
-                  </svg>
-                  Google
-                </button>
-              </div>
-
-              <div class="auth-meta">
-                <a href="/auth/magic" class="link-subtle">Email me a magic link instead</a>
-              </div>
-            </div>
-          </div>
-        </div>
+    <section class="seal" aria-labelledby="seal-label">
+      <p class="seal-label" id="seal-label">Verification code</p>
+      <div class="code-row">
+        <code class="code" id="code" aria-live="polite">----&nbsp;-&nbsp;----</code>
+        <button class="copy" type="button" id="copy" aria-label="Copy verification code to clipboard">
+          <span id="copy-label">copy</span>
+        </button>
+      </div>
+      <div class="meta">
+        <span class="expiry" id="expiry" data-state="ok" aria-live="polite">
+          <span class="expiry-num" id="expiry-num">10:00</span> <span id="expiry-suffix">remaining</span>
+        </span>
+        <span class="expiry-hint">expires in 10 min</span>
       </div>
     </section>
+
+    <form class="form" id="form" novalidate>
+      <div class="field">
+        <label class="field-label" for="email">Email</label>
+        <input class="input" id="email" type="email" name="email" autocomplete="email" placeholder="you@domain.com" required>
+      </div>
+      <div class="field">
+        <label class="field-label" for="password">Password</label>
+        <div class="password-row">
+          <input class="input" id="password" type="password" name="password" autocomplete="current-password" placeholder="••••••••" required aria-describedby="password-error">
+          <button type="button" class="reveal" id="reveal" aria-label="Show password" data-target="password">show</button>
+        </div>
+        <p class="field-error" id="password-error" hidden></p>
+      </div>
+      <button type="submit" class="submit" id="submit">
+        <span>Sign in to approve</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+    </form>
+
+    <div class="alt" aria-hidden="true"><span class="alt-label">or</span></div>
+
+    <div class="oauth">
+      <button class="oauth-btn" type="button" id="oauth-github" aria-label="Continue with GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        GitHub
+      </button>
+      <button class="oauth-btn" type="button" id="oauth-google" aria-label="Continue with Google">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.83z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83C6.71 7.31 9.14 5.38 12 5.38z"/>
+        </svg>
+        Google
+      </button>
+    </div>
+
+    <a class="alt-link" id="magic-link" href="https://arcana.otnelhq.com/auth?tab=magic">Email me a magic link instead</a>
+
+    <a class="alt-link" id="cancel" href="#" style="color: var(--ink-4); margin-top: -4px;">This wasn't me — close this tab</a>
+
+    <div class="banner banner-pending" role="status">
+      <div>
+        <span class="banner-title">Completing sign-in</span>
+        Resuming your session and routing the token to your terminal.
+      </div>
+    </div>
+
+    <div class="banner banner-ok is-ok" role="status">
+      <div>
+        <span class="banner-title">Approved</span>
+        Your terminal received its access token. You can close this tab.
+        <a class="retry" href="#" id="close-tab">Close this tab</a>
+      </div>
+    </div>
+
+    <div class="banner banner-err is-err" id="banner-err" role="alert">
+      <div>
+        <span class="banner-title" id="banner-err-title">Invalid sign-in link</span>
+        <span id="banner-err-message">This link is missing a valid code. Run <code style="font-family: var(--mono); font-size: 11px;">arcana sign-in</code> in your terminal to start over.</span>
+      </div>
+    </div>
+
+    <div class="banner banner-auth is-err" id="banner-auth" role="alert">
+      <div>
+        <span class="banner-title" id="banner-auth-title">Sign-in failed</span>
+        <span id="banner-auth-message">Check your credentials and try again.</span>
+      </div>
+    </div>
+
+    <div class="banner banner-warn is-warn" id="banner-warn" role="alert">
+      <div>
+        <span class="banner-title" id="banner-warn-title">Sign-in unavailable</span>
+        <span id="banner-warn-message">Check your network and try again.</span>
+        <a class="retry" href="#" id="retry">Try again</a>
+      </div>
+    </div>
+
   </main>
 
-  <footer class="device-footer" role="contentinfo">
-    <div class="device-footer-links">
+  <footer class="footer" aria-label="Footer">
+    <div class="footer-links">
       <a href="https://arcana.otnelhq.com/privacy">Privacy</a>
       <a href="https://arcana.otnelhq.com/terms">Terms</a>
       <a href="https://arcana.otnelhq.com/docs">Docs</a>
-      <a href="https://arcana.otnelhq.com/status">Status</a>
     </div>
-    <span class="device-footer-tag">device pairing &middot; arcana</span>
+    <div>Arcana · CLI sign-in</div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Supabase: pinned v2.110.7, SRI-validated. Update hash in lockstep with upgrades. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7/dist/umd/supabase.min.js"
+          integrity="sha384-BmlQlKlDvXvKoxkn5OQuUo/aJQCTXeB+Kls6EccBmG4Kf8AXvp89RtO9MtPxP/r5"
+          crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
   <script src="/js/supabase.js" defer></script>
   <script src="/js/device-verify.js" defer></script>
 </body>
