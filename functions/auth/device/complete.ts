@@ -85,7 +85,7 @@ export async function onRequest({ request, env }: { request: Request; env: any }
       upstream = await fetch(`${PROXY}/v1/admin/licenses`, {
         method: "POST",
         headers: { Authorization: `Bearer ${adminKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ supabaseUserId, email, plan: "pro" }),
+        body: JSON.stringify({ supabaseUserId, email, plan: "free" }),
         signal: AbortSignal.timeout(10000),
       })
     } catch {
