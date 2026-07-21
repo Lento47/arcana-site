@@ -20,6 +20,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/docs.css" media="all">
+
+  <!-- Structured Data — TechArticle + BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Configuration Reference",
+    "description": "Full configuration reference for Arcana. All config.json options, environment variables, data directories, and trust settings.",
+    "url": "https://arcana.otnelhq.com/docs/configuration",
+    "dateModified": "2026-07-20",
+    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
+    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
+    "isPartOf": { "@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com" },
+    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" },
+      { "@type": "ListItem", "position": 3, "name": "Configuration", "item": "https://arcana.otnelhq.com/docs/configuration" }
+    ]}
+  }
+  </script>
 </head>
 <body>
   <header class="docs-header" role="banner">
@@ -107,7 +127,7 @@
         <div class="docs-meta">
           <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
           <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.5</a>
+          <a href="/changelog">v0.3.15</a>
         </div>
       </header>
 
@@ -315,7 +335,7 @@ arcana run "hello"  # Uses OpenAI automatically</code></pre>
 
   <footer class="docs-footer" role="contentinfo">
     <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
       <div class="docs-footer-links">
         <a href="/">Home</a>
         <a href="/docs">Docs</a>
