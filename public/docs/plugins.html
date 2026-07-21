@@ -4,17 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Plugins — ARCANA</title>
-  <meta name="description" content="Install, manage, and create plugins for Arcana — the terminal interface for AI keys.">
+  <meta name="description" content="Install, list, and manage Arcana plugins to extend functionality.">
   <meta name="theme-color" content="#08070B">
   <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
   <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
+  <script>
+  (function(){var t=localStorage.getItem('arcana-docs-theme');if(t==='light'){document.documentElement.classList.add('docs-light')}else if(!t&&window.matchMedia('(prefers-color-scheme:light)').matches){document.documentElement.classList.add('docs-light')}})();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "name": "Plugins",
-    "description": "Install, manage, and create plugins for Arcana.",
+    "description": "Install, list, and manage Arcana plugins to extend functionality.",
     "url": "https://arcana.otnelhq.com/docs/plugins",
     "dateModified": "2026-07-21",
     "author": {"@type": "Organization", "name": "OTNEL"},
@@ -32,7 +35,29 @@
   </script>
 </head>
 <body>
-  <header class="docs-header"><div class="docs-header-inner"><a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a><div class="docs-search" id="docs-search"><input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off"><span class="docs-search-kbd">⌘K</span><div class="docs-search-results" id="docs-search-results"></div></div><div class="docs-header-links"><a href="/docs">Docs</a><a href="/changelog">Changelog</a><a href="/status">Status</a><a class="docs-header-signin" href="/auth">Sign In</a></div></div></header>
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a>
+      <div class="docs-search" id="docs-search">
+        <input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off">
+        <span class="docs-search-kbd">⌘K</span>
+        <div class="docs-search-results" id="docs-search-results"></div>
+      </div>
+      <div class="docs-header-right">
+        <button class="docs-theme-toggle" id="docs-theme-toggle" type="button" aria-label="Switch to dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <div class="docs-header-links">
+          <a href="/docs">Docs</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/status">Status</a>
+          <a class="docs-header-signin" href="/auth">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <div class="docs-layout">
     <aside class="docs-sidebar" id="docs-sidebar">
       <nav>
@@ -45,24 +70,13 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="plugins">Plugins</h1>
-        <p>Extend Arcana's functionality with plugins. Plugins can add new tools, modify behavior, or integrate with external services.</p>
+        <p>Extend Arcana's functionality with community and custom plugins.</p>
         <h2 id="install">Install a Plugin</h2>
-        <pre><code># Install from registry
-arcana plugin install @arcana/git-tools
-
-# Install from URL
-arcana plugin install https://github.com/user/plugin</code></pre>
-        <h2 id="manage">Manage Plugins</h2>
-        <pre><code># List installed plugins
-arcana plugin list
-
-# Update plugins
-arcana plugin update --all
-
-# Remove a plugin
-arcana plugin remove @arcana/git-tools</code></pre>
-        <h2 id="create">Create a Plugin</h2>
-        <p>Plugins follow a standard interface. See the <a href="/docs/plugins#sdk">Plugin SDK</a> for details.</p>
+        <pre><code>arcana plugin install &lt;name&gt;</code></pre>
+        <h2 id="list">List Installed Plugins</h2>
+        <pre><code>arcana plugin list</code></pre>
+        <h2 id="remove">Remove a Plugin</h2>
+        <pre><code>arcana plugin remove &lt;name&gt;</code></pre>
         <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
       </article>
     </main>

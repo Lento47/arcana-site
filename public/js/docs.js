@@ -6,6 +6,7 @@
 //   4. Build a right-rail TOC from h2/h3 in the content area.
 //   5. Pre-mark the sidebar link matching location.hash on first paint.
 //   6. Search bar with keyboard shortcut (/), arrow-key navigation, and scroll-close.
+//   7. Dark/light theme toggle with localStorage persistence.
 
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel)
@@ -400,7 +401,54 @@
     kbd.textContent = isMac ? "\u2318K" : "Ctrl K"
   }
 
+  // --- 9. Dark/Light Theme Toggle ---
+  function setupThemeToggle() {
+    const toggle = $(".docs-theme-toggle")
+    if (!toggle) return
+
+    const STORAGE_KEY = "arcana-docs-theme"
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)")
+
+    // Get saved theme or follow system preference
+    function getPreferredTheme() {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved === "light" || saved === "dark") return saved
+      return prefersDark.matches ? "dark" : "light"
+    }
+
+    // Apply theme to body
+    function applyTheme(theme) {
+      if (theme === "light") {
+        document.body.classList.add("docs-light")
+      } else {
+        document.body.classList.remove("docs-light")
+      }
+      // Update toggle aria-label
+      toggle.setAttribute("aria-label", `Switch to ${theme === "light" ? "dark" : "light"} mode`)
+    }
+
+    // Initialize theme
+    const currentTheme = getPreferredTheme()
+    applyTheme(currentTheme)
+
+    // Toggle on click
+    toggle.addEventListener("click", () => {
+      const isLight = document.body.classList.contains("docs-light")
+      const newTheme = isLight ? "dark" : "light"
+      localStorage.setItem(STORAGE_KEY, newTheme)
+      applyTheme(newTheme)
+    })
+
+    // Follow system changes if no manual preference
+    prefersDark.addEventListener("change", () => {
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        applyTheme(prefersDark.matches ? "dark" : "light")
+      }
+    })
+  }
+
   const init = () => {
+    setupThemeToggle()
     attachCopyButtons()
     injectAnchors()
     setupSidebarObserver()
