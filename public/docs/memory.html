@@ -1,298 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memory · Arcana</title>
-  <meta name="description" content="Arcana memory system — FTS5-powered session memory, facts, search, and cloud sync. Save and retrieve knowledge across sessions.">
-  <meta name="theme-color" content="#0c0a10">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://arcana.otnelhq.com/docs/memory">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ARCANA">
-  <meta property="og:title" content="Memory · Arcana">
-  <meta property="og:description" content="FTS5-powered session memory, facts, search, and cloud sync.">
-  <meta property="og:url" content="https://arcana.otnelhq.com/docs/memory">
-
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Memory — ARCANA</title>
+  <meta name="description" content="Wiki-style memory system with FTS5-powered search, extracted facts, and cloud sync for Arcana.">
+  <meta name="theme-color" content="#08070B">
+  <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
-
-  <!-- Structured Data — TechArticle + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "name": "Memory",
-    "description": "Arcana memory system — FTS5-powered session memory, facts, search, and cloud sync.",
+    "description": "Wiki-style memory system with FTS5-powered search, extracted facts, and cloud sync for Arcana.",
     "url": "https://arcana.otnelhq.com/docs/memory",
-    "dateModified": "2026-07-20",
-    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "isPartOf": { "@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com" },
-    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" },
-      { "@type": "ListItem", "position": 3, "name": "Memory", "item": "https://arcana.otnelhq.com/docs/memory" }
-    ]}
+    "dateModified": "2026-07-21",
+    "author": {"@type": "Organization", "name": "OTNEL"},
+    "publisher": {"@type": "Organization", "name": "OTNEL"},
+    "isPartOf": {"@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com"},
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com"},
+        {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs"},
+        {"@type": "ListItem", "position": 3, "name": "Memory", "item": "https://arcana.otnelhq.com/docs/memory"}
+      ]
+    }
   }
   </script>
 </head>
 <body>
-  <header class="docs-header" role="banner">
-    <div class="docs-header-inner">
-      <a href="/" class="docs-brand" aria-label="Arcana home">
-        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
-        <span>ARCANA</span>
-      </a>
-      <form class="docs-search" role="search" aria-label="Search docs">
-        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
-        <kbd class="docs-search-kbd">/</kbd>
-        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
-      </form>
-      <nav class="docs-nav" aria-label="Primary">
-        <a href="/docs" class="is-active">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a class="docs-nav-cta" href="/auth">Sign in</a>
-      </nav>
-    </div>
-  </header>
-
+  <header class="docs-header"><div class="docs-header-inner"><a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a><div class="docs-search" id="docs-search"><input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off"><span class="docs-search-kbd">⌘K</span><div class="docs-search-results" id="docs-search-results"></div></div><div class="docs-header-links"><a href="/docs">Docs</a><a href="/changelog">Changelog</a><a href="/status">Status</a><a class="docs-header-signin" href="/auth">Sign In</a></div></div></header>
   <div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
-      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>Documentation</span>
-      </button>
-      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Guide</div>
-          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
-          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
-          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
-          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Features</div>
-          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
-          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
-          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
-          <a class="docs-sidebar-link is-active" href="/docs/memory"><span>Memory</span></a>
-          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
-          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
-          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Reference</div>
-          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
-          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
-          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
-          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
-          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
-        </div>
-
-        <div class="docs-sidebar-footer">
-          <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/docs/cli">CLI Reference</a>
-          <a href="/changelog">Changelog</a>
-          <a href="/credits">Pricing</a>
-          <a href="/status">Status</a>
-          <a href="/workspace">Workspace</a>
-          <a href="/auth">Sign in</a>
-        </div>
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <nav>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Getting Started</div><a class="docs-sidebar-link" href="/docs"><span>Overview</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Features</div><a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a><a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a><a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a><a class="docs-sidebar-link is-active" href="/docs/memory"><span>Memory</span></a><a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a><a class="docs-sidebar-link" href="/docs/mcp"><span>MCP & Tools</span></a><a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Reference</div><a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a><a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a><a class="docs-sidebar-link" href="/docs/cli"><span>CLI Commands</span></a><a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a></div>
       </nav>
+      <div class="docs-sidebar-footer"><a href="/changelog">v0.3.18</a></div>
     </aside>
+    <main class="docs-content" id="docs-content">
+      <article class="docs-article">
+        <h1 id="memory">Memory</h1>
+        <p>Arcana's wiki-style memory system uses FTS5-powered search, extracted facts, and optional cloud sync across machines.</p>
+        <h2 id="how-it-works">How It Works</h2>
+        <p>During each session, Arcana automatically extracts facts and stores them in a local SQLite database with full-text search.</p>
+        <h2 id="search">Search</h2>
+        <pre><code># Search memory
+arcana memory search "project architecture"
 
-    <article class="docs-content">
-      <header class="docs-content-header">
-        <div class="docs-kicker">Features</div>
-        <h1 class="docs-h1">Memory</h1>
-        <p class="docs-lead">Arcana remembers everything — session history, extracted facts, skill usage, and decisions. Search past conversations, sync facts to the cloud, and build a personal knowledge graph that grows with every session.</p>
-        <div class="docs-meta">
-          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
-          <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.15</a>
-          <span class="docs-meta-sep">·</span>
-          <span>FTS5-powered</span>
-        </div>
-      </header>
-
-      <h2 id="overview">Overview</h2>
-      <p>The memory system stores conversation history, extracted facts, artifacts, and skill usage statistics in a local SQLite database with full-text search (FTS5). It integrates with the agent, cron jobs, gateway chats, and the cloud workspace.</p>
-      <p>Memory lives under <code>~/.arcana/data/</code> by default (override with <code>dataDir</code> in config or <code>ARCANA_HOME</code>).</p>
-
-      <h2 id="commands">Commands</h2>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Command</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>arcana memory facts</code></td><td>List all extracted facts</td></tr>
-            <tr><td><code>arcana memory search --query &lt;q&gt;</code></td><td>Full-text search across sessions and facts</td></tr>
-            <tr><td><code>arcana memory stats</code></td><td>Show memory statistics (sessions, facts, size)</td></tr>
-            <tr><td><code>arcana memory push</code></td><td>Upload local facts to cloud</td></tr>
-            <tr><td><code>arcana memory pull</code></td><td>Download cloud facts to local</td></tr>
-            <tr><td><code>arcana memory sync</code></td><td>Push then pull (bidirectional sync)</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 id="search">Searching memory</h2>
-      <p>Arcana uses SQLite FTS5 for fast full-text search across all stored sessions and facts.</p>
-<pre data-lang="bash"><code># Search for anything
-arcana memory search "deployment config"
-
-# Search with a specific query
-arcana memory search --query "authentication flow"
-
-# Search session transcripts
-arcana memory sessions --limit 10</code></pre>
-      <p>Search returns ranked results with timestamps, source session, and relevance scores. The agent also uses search internally when answering questions about past work.</p>
-
-      <h2 id="facts">Facts</h2>
-      <p>During conversations, the agent automatically extracts key facts — decisions, preferences, patterns, and configuration details. These facts persist across sessions and are used to provide context-aware responses.</p>
-<pre data-lang="bash"><code># List all facts
+# List all facts
 arcana memory facts
 
-# Show stats
-arcana memory stats</code></pre>
-      <p>Fact examples:</p>
-      <ul>
-        <li><code>project.uses_bun</code> — "Project uses Bun as the runtime"</li>
-        <li><code>deploy.target</code> — "Deploys to Cloudflare Workers"</li>
-        <li><code>user.theme</code> — "User prefers dark theme"</li>
-        <li><code>team.review_style</code> — "Team prefers concise PR reviews"</li>
-      </ul>
+# Filter by topic
+arcana memory facts --topic "api"</code></pre>
+        <h2 id="cloud-sync">Cloud Sync</h2>
+        <p>Enable cloud sync to share knowledge across machines:</p>
+        <pre><code># Enable cloud sync
+arcana config set memory.cloudSync true
 
-      <h2 id="cloud-sync">Cloud sync</h2>
-      <p>When logged in with <code>arcana console login</code>, you can sync facts between your local machine and the Arcana cloud workspace. This is useful for cross-machine access and team collaboration.</p>
-<pre data-lang="bash"><code># Push local facts to cloud
+# Push local facts
 arcana memory push
 
-# Pull cloud facts to local
-arcana memory pull
-
-# Bidirectional sync
-arcana memory sync</code></pre>
-
-      <div class="docs-callout docs-callout-info">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Last-write-wins</strong>
-          <p>Cloud sync uses last-write-wins semantics by <code>updatedAt</code> timestamp. If the same fact key exists locally and in the cloud, the most recently updated version wins.</p>
-        </div>
-      </div>
-
-      <h3 id="api-sync">Via the Proxy API</h3>
-      <p>You can also manage cloud memory directly through the API:</p>
-<pre data-lang="bash"><code># List cloud facts
-curl -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  https://proxy-arcana.otnelhq.com/v1/memory
-
-# Upsert facts
-curl -X PUT -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"facts":[{"key":"user.theme","value":"dark","confidence":1}]}' \
-  https://proxy-arcana.otnelhq.com/v1/memory
-
-# Delete a fact
-curl -X DELETE -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  https://proxy-arcana.otnelhq.com/v1/memory/user.theme</code></pre>
-
-      <h2 id="how-memory-works">How memory works</h2>
-      <ul>
-        <li>Every session stores conversation history in the local SQLite database.</li>
-        <li>After each session, the agent extracts facts and patterns into the fact store.</li>
-        <li>FTS5 indexing enables fast full-text search across all sessions and facts.</li>
-        <li>Skill usage is tracked automatically — the agent learns which skills are most useful over time.</li>
-        <li>Cron jobs and gateway chats share the same memory store — context persists across interfaces.</li>
-        <li>Cloud sync is optional and requires a Pro or Enterprise license.</li>
-      </ul>
-
-      <h2 id="configuration">Configuration</h2>
-<pre data-lang="json"><code>{
-  "memory": {
-    "enabled": true,
-    "maxSessions": 1000
-  }
-}</code></pre>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>memory.enabled</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enable conversation memory and fact extraction</td></tr>
-            <tr><td><code>memory.maxSessions</code></td><td><code>number</code></td><td><code>1000</code></td><td>Maximum sessions to retain in local DB</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>See <a href="/docs/configuration">Configuration</a> for the full reference.</p>
-
-      <h2 id="data-location">Data location</h2>
-      <p>All memory data is stored under <code>~/.arcana/data/</code>:</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Path</th><th>Contents</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>sessions/</code></td><td>Session transcripts</td></tr>
-            <tr><td><code>memory.db</code></td><td>SQLite DB with facts, skill stats, and FTS5 index</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/docs/skills">
-          <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">Skills</span>
-        </a>
-        <a class="docs-pager-next" href="/docs/themes">
-          <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Themes</span>
-        </a>
-      </nav>
-    </article>
-
-    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
-      <div class="docs-toc-label">On this page</div>
-    </aside>
+# Pull from cloud
+arcana memory pull</code></pre>
+        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+      </article>
+    </main>
+    <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>
   </div>
-
-  <footer class="docs-footer" role="contentinfo">
-    <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
-      <div class="docs-footer-links">
-        <a href="/">Home</a>
-        <a href="/docs">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a href="/auth">Sign in</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/js/docs.js" defer></script>
+  <footer class="docs-footer"><div class="docs-footer-inner"><div class="docs-footer-mono">arcana · docs · v0.3.18</div><div class="docs-footer-links"><a href="/">Home</a><a href="/changelog">Changelog</a><a href="/status">Status</a></div></div></footer>
+  <script src="/js/docs.js"></script>
 </body>
 </html>

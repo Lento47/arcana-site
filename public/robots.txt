@@ -1,3 +1,21 @@
+# robots.txt — ARCANA
+# https://arcana.otnelhq.com
+
 User-agent: *
 Allow: /
+Allow: /docs
+Allow: /docs/*
+Allow: /changelog
+Allow: /credits
+Allow: /status
+
+# Block private/authenticated areas
+Disallow: /workspace
+Disallow: /workspace/*
+Disallow: /auth
+Disallow: /auth/*
+Disallow: /api
+Disallow: /api/*
+
+# Sitemap
 Sitemap: https://arcana.otnelhq.com/sitemap.xml

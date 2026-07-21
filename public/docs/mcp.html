@@ -1,431 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MCP &amp; Tools · Arcana</title>
-  <meta name="description" content="Set up MCP servers and configure tools in Arcana. Local and remote MCP, OAuth authentication, workspace trust, and tool profiles.">
-  <meta name="theme-color" content="#0c0a10">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://arcana.otnelhq.com/docs/mcp">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ARCANA">
-  <meta property="og:title" content="MCP &amp; Tools · Arcana">
-  <meta property="og:description" content="Set up MCP servers and configure tools. Local and remote MCP, OAuth, workspace trust.">
-  <meta property="og:url" content="https://arcana.otnelhq.com/docs/mcp">
-
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MCP & Tools — ARCANA</title>
+  <meta name="description" content="Model Context Protocol (MCP) server setup and tool configuration for Arcana.">
+  <meta name="theme-color" content="#08070B">
+  <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
-
-  <!-- Structured Data — TechArticle + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "name": "MCP & Tools",
-    "description": "Set up MCP servers and configure tools in Arcana. Local and remote MCP, OAuth authentication, workspace trust, and tool profiles.",
+    "description": "Model Context Protocol (MCP) server setup and tool configuration for Arcana.",
     "url": "https://arcana.otnelhq.com/docs/mcp",
-    "dateModified": "2026-07-20",
-    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "isPartOf": { "@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com" },
-    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" },
-      { "@type": "ListItem", "position": 3, "name": "MCP & Tools", "item": "https://arcana.otnelhq.com/docs/mcp" }
-    ]}
+    "dateModified": "2026-07-21",
+    "author": {"@type": "Organization", "name": "OTNEL"},
+    "publisher": {"@type": "Organization", "name": "OTNEL"},
+    "isPartOf": {"@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com"},
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com"},
+        {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs"},
+        {"@type": "ListItem", "position": 3, "name": "MCP & Tools", "item": "https://arcana.otnelhq.com/docs/mcp"}
+      ]
+    }
   }
   </script>
 </head>
 <body>
-  <header class="docs-header" role="banner">
-    <div class="docs-header-inner">
-      <a href="/" class="docs-brand" aria-label="Arcana home">
-        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
-        <span>ARCANA</span>
-      </a>
-      <form class="docs-search" role="search" aria-label="Search docs">
-        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
-        <kbd class="docs-search-kbd">/</kbd>
-        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
-      </form>
-      <nav class="docs-nav" aria-label="Primary">
-        <a href="/docs" class="is-active">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a class="docs-nav-cta" href="/auth">Sign in</a>
-      </nav>
-    </div>
-  </header>
-
+  <header class="docs-header"><div class="docs-header-inner"><a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a><div class="docs-search" id="docs-search"><input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off"><span class="docs-search-kbd">⌘K</span><div class="docs-search-results" id="docs-search-results"></div></div><div class="docs-header-links"><a href="/docs">Docs</a><a href="/changelog">Changelog</a><a href="/status">Status</a><a class="docs-header-signin" href="/auth">Sign In</a></div></div></header>
   <div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
-      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>Documentation</span>
-      </button>
-      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Guide</div>
-          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
-          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
-          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
-          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Features</div>
-          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
-          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
-          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
-          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
-          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
-          <a class="docs-sidebar-link is-active" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Reference</div>
-          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
-          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
-          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
-          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
-          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
-        </div>
-
-        <div class="docs-sidebar-footer">
-          <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/docs/cli">CLI Reference</a>
-          <a href="/changelog">Changelog</a>
-          <a href="/credits">Pricing</a>
-          <a href="/status">Status</a>
-          <a href="/workspace">Workspace</a>
-          <a href="/auth">Sign in</a>
-        </div>
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <nav>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Getting Started</div><a class="docs-sidebar-link" href="/docs"><span>Overview</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Features</div><a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a><a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a><a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a><a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a><a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a><a class="docs-sidebar-link is-active" href="/docs/mcp"><span>MCP & Tools</span></a><a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Reference</div><a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a><a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a><a class="docs-sidebar-link" href="/docs/cli"><span>CLI Commands</span></a><a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a></div>
       </nav>
+      <div class="docs-sidebar-footer"><a href="/changelog">v0.3.18</a></div>
     </aside>
+    <main class="docs-content" id="docs-content">
+      <article class="docs-article">
+        <h1 id="mcp-tools">MCP & Tools</h1>
+        <p>Arcana supports the Model Context Protocol (MCP) for connecting to external tool servers and configuring scoped tool access.</p>
+        <h2 id="mcp-servers">MCP Servers</h2>
+        <p>Connect to MCP-compatible tool servers:</p>
+        <pre><code># Add an MCP server
+arcana mcp add &lt;name&gt; --url http://localhost:3001
 
-    <article class="docs-content">
-      <header class="docs-content-header">
-        <div class="docs-kicker">Features</div>
-        <h1 class="docs-h1">MCP &amp; Tools</h1>
-        <p class="docs-lead">Connect external tools and services via the Model Context Protocol (MCP). Run local commands or connect to remote servers with OAuth support. All tools go through workspace trust and permission profiles.</p>
-        <div class="docs-meta">
-          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
-          <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.15</a>
-        </div>
-      </header>
-
-      <!-- ========== OVERVIEW ========== -->
-      <h2 id="overview">Overview</h2>
-      <p>MCP (Model Context Protocol) is a standard for connecting AI agents to external tools and data sources. Arcana supports both local and remote MCP servers, with OAuth authentication for remote connections.</p>
-      <p>Built-in tools include shell, filesystem, git, gateway, and skill tools — all running through explicit permission profiles with visible permissions.</p>
-
-      <!-- ========== COMMANDS ========== -->
-      <h2 id="commands">Commands</h2>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Command</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>arcana mcp list</code></td><td>List all configured MCP servers and their status</td></tr>
-            <tr><td><code>arcana mcp add [name]</code></td><td>Add an MCP server (interactive or non-interactive)</td></tr>
-            <tr><td><code>arcana mcp auth [name]</code></td><td>Authenticate with an OAuth-enabled MCP server</td></tr>
-            <tr><td><code>arcana mcp logout [name]</code></td><td>Remove OAuth credentials for an MCP server</td></tr>
-            <tr><td><code>arcana mcp debug &lt;name&gt;</code></td><td>Debug OAuth connection for an MCP server</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 id="list-servers">List servers</h3>
-<pre data-lang="bash"><code>arcana mcp list</code></pre>
-      <p>Shows each configured server with its connection status:</p>
-<pre data-lang="text"><code>✓ my-server connected (OAuth)
-    https://example.com/mcp
-✓ local-tools connected
-    npx @modelcontextprotocol/server-filesystem /path
-○ disabled-server disabled
-    npx some-server
-
-2 server(s)</code></pre>
-
-      <!-- ========== ADD SERVERS ========== -->
-      <h2 id="add-servers">Adding MCP servers</h2>
-
-      <h3 id="add-interactive">Interactive mode</h3>
-<pre data-lang="bash"><code>arcana mcp add</code></pre>
-      <p>The interactive wizard walks you through:</p>
-      <ol>
-        <li><strong>Scope</strong> — Current project or global (all projects)</li>
-        <li><strong>Name</strong> — A unique identifier for the server</li>
-        <li><strong>Type</strong> — Local (run a command) or Remote (connect to a URL)</li>
-        <li><strong>Configuration</strong> — Command/URL, environment variables, headers, OAuth settings</li>
-      </ol>
-
-      <h3 id="add-noninteractive">Non-interactive mode</h3>
-<pre data-lang="bash"><code># Local MCP server
-arcana mcp add my-tools -- npx @modelcontextprotocol/server-filesystem /path/to/dir
-
-# Local with environment variables
-arcana mcp add my-db --env DB_URL=postgres://localhost/mydb -- npx @anthropic-ai/server-postgres
-
-# Remote MCP server
-arcana mcp add my-api --url https://example.com/mcp
-
-# Remote with custom headers
-arcana mcp add my-api --url https://example.com/mcp --header "Authorization=Bearer token123"</code></pre>
-
-      <h3 id="add-options">Options</h3>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Flag</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>--url</code></td><td>URL for a remote MCP server</td></tr>
-            <tr><td><code>--env</code></td><td>Environment variable for a local server (<code>KEY=VALUE</code>)</td></tr>
-            <tr><td><code>--header</code></td><td>HTTP header for a remote server (<code>KEY=VALUE</code>)</td></tr>
-            <tr><td><code>--</code></td><td>Command and arguments for a local server (after <code>--</code>)</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- ========== CONFIGURATION ========== -->
-      <h2 id="configuration">Configuration</h2>
-      <p>MCP servers are configured in <code>~/.arcana/config.json</code> (global) or <code>arcana.json</code> (project):</p>
-
-      <h3 id="config-local">Local server</h3>
-<pre data-lang="json"><code>{
-  "mcp": {
-    "filesystem": {
-      "type": "local",
-      "command": ["npx", "@modelcontextprotocol/server-filesystem", "/path/to/dir"],
-      "environment": {
-        "NODE_ENV": "development"
-      }
-    }
+# List connected servers
+arcana mcp list</code></pre>
+        <h2 id="tool-profiles">Tool Profiles</h2>
+        <p>Control which tools are available per session:</p>
+        <pre><code>{
+  "tools": {
+    "shell": { "enabled": true, "allowCommands": ["git", "npm"] },
+    "filesystem": { "enabled": true, "root": "./src" },
+    "gateway": { "enabled": false }
   }
 }</code></pre>
-
-      <h3 id="config-remote">Remote server</h3>
-<pre data-lang="json"><code>{
-  "mcp": {
-    "my-api": {
-      "type": "remote",
-      "url": "https://example.com/mcp",
-      "headers": {
-        "Authorization": "Bearer token123"
-      }
-    }
-  }
-}</code></pre>
-
-      <h3 id="config-oauth">Remote with OAuth</h3>
-<pre data-lang="json"><code>{
-  "mcp": {
-    "my-service": {
-      "type": "remote",
-      "url": "https://example.com/mcp",
-      "oauth": {
-        "clientId": "your-client-id",
-        "clientSecret": "your-client-secret",
-        "scope": "read write"
-      }
-    }
-  }
-}</code></pre>
-      <p>If <code>oauth</code> is an empty object <code>{}</code>, Arcana will attempt dynamic client registration. If you have a pre-registered client, provide <code>clientId</code> and optionally <code>clientSecret</code>.</p>
-
-      <!-- ========== OAUTH ========== -->
-      <h2 id="oauth">OAuth authentication</h2>
-      <p>Remote MCP servers can require OAuth 2.0 authentication. Arcana handles the full OAuth flow including dynamic client registration, token refresh, and storage.</p>
-
-      <h3 id="auth-flow">Authentication flow</h3>
-      <ol>
-        <li>Run <code>arcana mcp auth</code> and select the server</li>
-        <li>Arcana opens your browser to the OAuth authorization page</li>
-        <li>Sign in and authorize the application</li>
-        <li>Arcana stores the tokens and connects to the server</li>
-      </ol>
-
-<pre data-lang="bash"><code># Authenticate with a specific server
-arcana mcp auth my-service
-
-# List OAuth status for all servers
-arcana mcp auth list
-
-# Logout (remove stored credentials)
-arcana mcp logout my-service</code></pre>
-
-      <h3 id="auth-status">Auth status icons</h3>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Icon</th><th>Status</th><th>Meaning</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>✓</code></td><td>authenticated</td><td>Valid credentials stored and connected</td></tr>
-            <tr><td><code>⚠</code></td><td>expired</td><td>Tokens expired — re-authenticate</td></tr>
-            <tr><td><code>✗</code></td><td>not authenticated</td><td>No credentials — run <code>arcana mcp auth</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 id="debug">Debugging connections</h3>
-<pre data-lang="bash"><code>arcana mcp debug my-service</code></pre>
-      <p>This tests the connection step by step:</p>
-      <ul>
-        <li>Checks stored auth status and token expiry</li>
-        <li>Tests HTTP connectivity to the server URL</li>
-        <li>Verifies OAuth metadata discovery</li>
-        <li>Reports WWW-Authenticate headers and error details</li>
-      </ul>
-
-      <!-- ========== BUILT-IN TOOLS ========== -->
-      <h2 id="built-in-tools">Built-in tools</h2>
-      <p>Arcana includes several built-in tools that run through the permission system:</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Tool</th><th>Description</th><th>Default permission</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>shell</code></td><td>Run shell commands</td><td><code>ask</code></td></tr>
-            <tr><td><code>filesystem</code></td><td>Read, write, and list files</td><td><code>allow</code></td></tr>
-            <tr><td><code>git</code></td><td>Git operations (status, diff, commit)</td><td><code>allow</code></td></tr>
-            <tr><td><code>gateway</code></td><td>Chat platform integrations</td><td><code>allow</code></td></tr>
-            <tr><td><code>skills</code></td><td>Skill loading and activation</td><td><code>allow</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 id="tool-permissions">Tool permissions</h3>
-      <p>Each tool has a permission level that controls how Arcana handles tool calls:</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Permission</th><th>Behavior</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>allow</code></td><td>Execute automatically without asking</td></tr>
-            <tr><td><code>ask</code></td><td>Confirm with the user before executing</td></tr>
-            <tr><td><code>deny</code></td><td>Block the tool call entirely</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>Configure permissions in your config or let Arcana use sensible defaults.</p>
-
-      <!-- ========== WORKSPACE TRUST ========== -->
-      <h2 id="workspace-trust">Workspace trust</h2>
-      <p>Project-local MCP servers and tools require workspace trust before they are loaded. This prevents untrusted project code from executing automatically.</p>
-
-      <h3 id="trust-commands">Trust commands</h3>
-<pre data-lang="bash"><code># Trust the current workspace
-arcana trust
-
-# Check trust status
-arcana trust status
-
-# List all trusted workspaces
-arcana trust list
-
-# Revoke trust
-arcana trust revoke</code></pre>
-
-      <div class="docs-callout docs-callout-info">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Trust is fingerprint-based</strong>
-          <p>Trust is stored in <code>~/.arcana/workspace-trust.json</code> and is invalidated when executable project config changes. Re-run <code>arcana trust</code> after updating project plugins or MCP servers.</p>
-        </div>
-      </div>
-
-      <h3 id="trust-bypass">Dev / CI bypass</h3>
-<pre data-lang="bash"><code># Skip trust checks (dev only)
-export ARCANA_DISABLE_WORKSPACE_TRUST=1
-
-# Force-trust for CI
-export ARCANA_TRUST_WORKSPACE=1</code></pre>
-
-      <!-- ========== EXAMPLES ========== -->
-      <h2 id="examples">Common setups</h2>
-
-      <h3 id="example-filesystem">Filesystem server</h3>
-<pre data-lang="bash"><code>arcana mcp add filesystem -- npx @modelcontextprotocol/server-filesystem ~/projects</code></pre>
-
-      <h3 id="example-github">GitHub server</h3>
-<pre data-lang="bash"><code>arcana mcp add github -- npx @modelcontextprotocol/server-github</code></pre>
-
-      <h3 id="example-postgres">PostgreSQL server</h3>
-<pre data-lang="bash"><code>arcana mcp add postgres \\
-  --env DATABASE_URL=postgres://localhost:5432/mydb \\
-  -- npx @anthropic-ai/server-postgres</code></pre>
-
-      <h3 id="example-remote">Remote API with OAuth</h3>
-<pre data-lang="bash"><code># Add remote server
-arcana mcp add my-api --url https://api.example.com/mcp
-
-# Authenticate
-arcana mcp auth my-api</code></pre>
-
-      <h2 id="how-it-works">How it works</h2>
-      <ul>
-        <li>MCP servers are started lazily on first use and persist for the session.</li>
-        <li>Local servers run as child processes; remote servers connect via HTTP.</li>
-        <li>OAuth tokens are stored securely and refreshed automatically.</li>
-        <li>Tool calls go through the permission system — check, ask, or allow.</li>
-        <li>Project-local MCP requires workspace trust; global MCP is always available.</li>
-        <li>The agent selects relevant tools based on your prompt and context.</li>
-      </ul>
-
-      <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/docs/themes">
-          <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">Themes</span>
-        </a>
-        <a class="docs-pager-next" href="/docs/plugins">
-          <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Plugins</span>
-        </a>
-      </nav>
-    </article>
-
-    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
-      <div class="docs-toc-label">On this page</div>
-    </aside>
+        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+      </article>
+    </main>
+    <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>
   </div>
-
-  <footer class="docs-footer" role="contentinfo">
-    <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
-      <div class="docs-footer-links">
-        <a href="/">Home</a>
-        <a href="/docs">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a href="/auth">Sign in</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/js/docs.js" defer></script>
+  <footer class="docs-footer"><div class="docs-footer-inner"><div class="docs-footer-mono">arcana · docs · v0.3.18</div><div class="docs-footer-links"><a href="/">Home</a><a href="/changelog">Changelog</a><a href="/status">Status</a></div></div></footer>
+  <script src="/js/docs.js"></script>
 </body>
 </html>

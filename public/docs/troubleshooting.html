@@ -1,319 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Troubleshooting · Arcana</title>
-  <meta name="description" content="Troubleshoot Arcana — run arcana doctor, fix common issues, and get answers to frequently asked questions.">
-  <meta name="theme-color" content="#0c0a10">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://arcana.otnelhq.com/docs/troubleshooting">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ARCANA">
-  <meta property="og:title" content="Troubleshooting · Arcana">
-  <meta property="og:description" content="Run arcana doctor, fix common issues, and get answers to frequently asked questions.">
-  <meta property="og:url" content="https://arcana.otnelhq.com/docs/troubleshooting">
-
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Troubleshooting — ARCANA</title>
+  <meta name="description" content="Common issues and solutions for Arcana — the terminal interface for AI keys.">
+  <meta name="theme-color" content="#08070B">
+  <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
-
-  <!-- Structured Data — TechArticle + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "name": "Troubleshooting",
-    "description": "Troubleshoot Arcana — run arcana doctor, fix common issues, and get answers to frequently asked questions.",
+    "description": "Common issues and solutions for Arcana.",
     "url": "https://arcana.otnelhq.com/docs/troubleshooting",
-    "dateModified": "2026-07-20",
-    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "isPartOf": { "@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com" },
-    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" },
-      { "@type": "ListItem", "position": 3, "name": "Troubleshooting", "item": "https://arcana.otnelhq.com/docs/troubleshooting" }
-    ]}
+    "dateModified": "2026-07-21",
+    "author": {"@type": "Organization", "name": "OTNEL"},
+    "publisher": {"@type": "Organization", "name": "OTNEL"},
+    "isPartOf": {"@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com"},
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com"},
+        {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs"},
+        {"@type": "ListItem", "position": 3, "name": "Troubleshooting", "item": "https://arcana.otnelhq.com/docs/troubleshooting"}
+      ]
+    }
   }
   </script>
 </head>
 <body>
-  <header class="docs-header" role="banner">
-    <div class="docs-header-inner">
-      <a href="/" class="docs-brand" aria-label="Arcana home">
-        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
-        <span>ARCANA</span>
-      </a>
-      <form class="docs-search" role="search" aria-label="Search docs">
-        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
-        <kbd class="docs-search-kbd">/</kbd>
-        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
-      </form>
-      <nav class="docs-nav" aria-label="Primary">
-        <a href="/docs" class="is-active">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a class="docs-nav-cta" href="/auth">Sign in</a>
-      </nav>
-    </div>
-  </header>
-
+  <header class="docs-header"><div class="docs-header-inner"><a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a><div class="docs-search" id="docs-search"><input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off"><span class="docs-search-kbd">⌘K</span><div class="docs-search-results" id="docs-search-results"></div></div><div class="docs-header-links"><a href="/docs">Docs</a><a href="/changelog">Changelog</a><a href="/status">Status</a><a class="docs-header-signin" href="/auth">Sign In</a></div></div></header>
   <div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
-      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>Documentation</span>
-      </button>
-      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Guide</div>
-          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
-          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
-          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
-          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Features</div>
-          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
-          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
-          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
-          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
-          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
-          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
-          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Reference</div>
-          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
-          <a class="docs-sidebar-link" href="/docs#cli-overview"><span>CLI commands</span></a>
-          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
-          <a class="docs-sidebar-link is-active" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
-          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
-        </div>
-
-        <div class="docs-sidebar-footer">
-          <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/docs/cli">CLI Reference</a>
-          <a href="/changelog">Changelog</a>
-          <a href="/credits">Pricing</a>
-          <a href="/status">Status</a>
-          <a href="/workspace">Workspace</a>
-          <a href="/auth">Sign in</a>
-        </div>
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <nav>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Getting Started</div><a class="docs-sidebar-link" href="/docs"><span>Overview</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Features</div><a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a><a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a><a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a><a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a><a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a><a class="docs-sidebar-link" href="/docs/mcp"><span>MCP & Tools</span></a><a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Reference</div><a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a><a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a><a class="docs-sidebar-link" href="/docs/cli"><span>CLI Commands</span></a><a class="docs-sidebar-link is-active" href="/docs/troubleshooting"><span>Troubleshooting</span></a></div>
       </nav>
+      <div class="docs-sidebar-footer"><a href="/changelog">v0.3.18</a></div>
     </aside>
-
-    <article class="docs-content">
-      <header class="docs-content-header">
-        <div class="docs-kicker">Reference</div>
-        <h1 class="docs-h1">Troubleshooting</h1>
-        <p class="docs-lead">Diagnose issues with <code>arcana doctor</code>, fix common problems, and get answers to frequently asked questions.</p>
-        <div class="docs-meta">
-          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
-          <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.15</a>
-        </div>
-      </header>
-
-      <h2 id="doctor">arcana doctor</h2>
-      <p>The <code>arcana doctor</code> command checks your system health — config, API keys, cache files, and runtime environment.</p>
-<pre data-lang="bash"><code>arcana doctor</code></pre>
-      <p>This will report:</p>
-      <ul>
-        <li><strong>Config</strong> — whether <code>~/.arcana/config.json</code> exists and is valid JSON</li>
-        <li><strong>API keys</strong> — which provider keys are detected (OpenAI, Anthropic, Gemini, etc.)</li>
-        <li><strong>Cache</strong> — skills cache, model catalog, and other cached data</li>
-        <li><strong>Runtime</strong> — Node/Bun version, platform, and shell</li>
-        <li><strong>License</strong> — active license status (if paired with console)</li>
-      </ul>
-<pre data-lang="bash"><code># Check if the web app is healthy
-arcana doctor --web</code></pre>
-
-      <h2 id="common-issues">Common issues</h2>
-
-      <h3 id="no-api-key">No API key detected</h3>
-      <p><strong>Symptom:</strong> Arcana says "no provider available" or refuses to start a session.</p>
-      <p><strong>Fix:</strong> Set a provider key as an environment variable:</p>
-<pre data-lang="bash"><code>export OPENAI_API_KEY=sk-...
-# or
-export ANTHROPIC_API_KEY=sk-ant-...
-# or
-export GEMINI_API_KEY=...
-
-# Verify detection
-arcana doctor</code></pre>
-      <p>You can also set <code>apiKey</code> in <code>~/.arcana/config.json</code>, but environment variables are preferred for security.</p>
-
-      <h3 id="console-login-fails">Console login fails</h3>
-      <p><strong>Symptom:</strong> Device flow doesn't complete, or the browser shows an error.</p>
-      <p><strong>Fix:</strong></p>
-      <ol>
-        <li>Ensure you have internet access and can reach <code>arcana.otnelhq.com</code>.</li>
-        <li>Try <code>arcana console login</code> again — the device code expires after ~10 minutes.</li>
-        <li>Check that you completed sign-in on the correct browser tab.</li>
-        <li>If on a shared machine, ensure no one else has <code>arcana console logout</code>'d your session.</li>
-      </ol>
-
-      <h3 id="workspace-trust">Workspace trust not loading</h3>
-      <p><strong>Symptom:</strong> Project plugins, custom tools, or local MCP are not loaded.</p>
-      <p><strong>Fix:</strong></p>
-<pre data-lang="bash"><code># Trust the current workspace
-arcana trust
-
-# Check trust status
-arcana trust status
-
-# List all trusted workspaces
-arcana trust list
-
-# Revoke trust (re-trust will re-fingerprint)
-arcana trust revoke</code></pre>
-      <p>Trust is invalidated when executable project config changes. Re-run <code>arcana trust</code> after updating project plugins or tools.</p>
-
-      <h3 id="gateway-not-starting">Gateway not starting</h3>
-      <p><strong>Symptom:</strong> <code>arcana gateway</code> exits immediately or shows "allowlist required".</p>
-      <p><strong>Fix:</strong> Every platform requires an allowlist. Add allowed users or channels to your config:</p>
-<pre data-lang="json"><code>{
-  "gateway": {
-    "telegram": { "token": "111:xxx", "allowedUsers": ["12345678"] }
-  }
-}</code></pre>
-      <p>For local development only, you can bypass allowlists:</p>
-<pre data-lang="bash"><code>export ARCANA_GATEWAY_OPEN=1
-arcana gateway</code></pre>
-
-      <h3 id="cron-not-running">Cron jobs not running</h3>
-      <p><strong>Symptom:</strong> Scheduled jobs don't execute at the expected time.</p>
-      <p><strong>Fix:</strong></p>
-      <ol>
-        <li>Start the cron daemon: <code>arcana cron start</code></li>
-        <li>Check job status: <code>arcana cron list</code> — ensure the job is <code>enabled</code>, not <code>paused</code>.</li>
-        <li>Run a job manually to test: <code>arcana cron run --id &lt;job-id&gt;</code></li>
-        <li>Verify your API key is set — cron jobs use your configured provider.</li>
-      </ol>
-
-      <h3 id="server-password">arcana serve requires password</h3>
-      <p><strong>Symptom:</strong> <code>arcana serve</code> fails when binding to a non-loopback address.</p>
-      <p><strong>Fix:</strong> Non-loopback binds require <code>ARCANA_SERVER_PASSWORD</code>:</p>
-<pre data-lang="bash"><code>export ARCANA_SERVER_PASSWORD=my-secret
-arcana serve --hostname 0.0.0.0 --port 4096</code></pre>
-
-      <h3 id="memory-search-empty">Memory search returns no results</h3>
-      <p><strong>Symptom:</strong> <code>arcana memory search</code> returns empty results despite having sessions.</p>
-      <p><strong>Fix:</strong></p>
-      <ul>
-        <li>Ensure memory is enabled: <code>"memory": { "enabled": true }</code> in config.</li>
-        <li>Check the database exists: <code>ls ~/.arcana/data/memory.db</code></li>
-        <li>Try a broader query — FTS5 requires at least 2 characters per token.</li>
-        <li>Run <code>arcana memory stats</code> to see how many sessions and facts are stored.</li>
-      </ul>
-
-      <h3 id="theme-not-applying">Theme not applying</h3>
-      <p><strong>Symptom:</strong> Changing theme in config doesn't reflect in the TUI.</p>
-      <p><strong>Fix:</strong></p>
-      <ul>
-        <li>Restart Arcana after changing <code>~/.config/arcana/tui.json</code>.</li>
-        <li>Use the in-TUI picker: press <code>⛧ themes</code> for live preview.</li>
-        <li>Verify the theme name is valid: <code>arcana</code>, <code>bloodmoon</code>, <code>coven</code>, <code>crypt</code>, <code>dragon</code>, <code>lich</code>, <code>wraith</code>.</li>
-      </ul>
-
-      <h2 id="faq">FAQ</h2>
-
-      <h3 id="faq-byok">Does Arcana sell API access?</h3>
-      <p>No. Arcana works with your own provider keys (BYOK). Model costs stay with your provider. Arcana charges only for the terminal layer, memory services, sync, and team features.</p>
-
-      <h3 id="faq-free">Is Arcana free?</h3>
-      <p>Yes. The local CLI with your own API keys is free. Pro ($19/mo) adds unlimited provider keys, advanced memory search, multi-model rooms, and cost tracking. Enterprise adds encrypted sync, gateway relay, and team features.</p>
-
-      <h3 id="faq-proxy">What is the proxy?</h3>
-      <p>The proxy (<code>proxy.arcana.otnelhq.com</code>) is an OpenAI-compatible HTTP API that routes requests through your Arcana license. It adds memory, tools, and session tracking on top of raw model calls. You can also use your own provider keys directly — the proxy is optional.</p>
-
-      <h3 id="faq-models">Which models are supported?</h3>
-      <p>Arcana supports OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Cloudflare Workers AI, xAI (Grok), OpenRouter, Cerebras, Ollama, and any custom OpenAI-compatible endpoint. Use <code>arcana models</code> to list available models.</p>
-
-      <h3 id="faq-data">Where does Arcana store data?</h3>
-      <p>All local data lives under <code>~/.arcana/</code> — sessions, memory, config, and trust records. Override with <code>ARCANA_HOME</code>. No data is sent to Arcana's servers unless you explicitly enable cloud sync.</p>
-
-      <h3 id="faq-security">Is Arcana secure?</h3>
-      <p>Arcana runs locally by default. Workspace trust gates project plugins and tools. The server requires a password for non-loopback binds. Gateway adapters enforce allowlists. See the <a href="/docs#workspace-trust">security section</a> for details.</p>
-
-      <h3 id="faq-upgrade">How do I upgrade?</h3>
-<pre data-lang="bash"><code>arcana upgrade</code></pre>
-      <p>Or reinstall from npm:</p>
-<pre data-lang="bash"><code>npm install -g arcana-ai@latest</code></pre>
-
-      <h2 id="dev-escape-hatches">Dev escape hatches</h2>
-      <p>These environment variables are for development and debugging only. Do not use in production.</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Env var</th><th>Effect</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>ARCANA_DISABLE_WORKSPACE_TRUST=1</code></td><td>Load project config without trust checks</td></tr>
-            <tr><td><code>ARCANA_TRUST_WORKSPACE=1</code></td><td>Force-trust for CI pipelines</td></tr>
-            <tr><td><code>ARCANA_GATEWAY_OPEN=1</code></td><td>Allow empty gateway allowlists</td></tr>
-            <tr><td><code>ARCANA_WHATSAPP_INSECURE=1</code></td><td>Skip WhatsApp webhook signature verification</td></tr>
-            <tr><td><code>ARCANA_SERVER_PASSWORD</code></td><td>Required for non-loopback <code>arcana serve</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 id="getting-help">Getting help</h2>
-      <ul>
-        <li>Run <code>arcana doctor</code> to diagnose issues automatically.</li>
-        <li>Check the <a href="/docs">main docs</a> for feature references.</li>
-        <li>Visit the <a href="/changelog">changelog</a> for recent fixes and updates.</li>
-        <li>Open an issue on <a href="https://github.com/Lento47/arcana">GitHub</a> for bugs.</li>
-      </ul>
-
-      <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/docs/cli">
-          <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">CLI Commands</span>
-        </a>
-        <a class="docs-pager-next" href="/docs">
-          <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Back to Overview</span>
-        </a>
-      </nav>
-    </article>
-
-    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
-      <div class="docs-toc-label">On this page</div>
-    </aside>
+    <main class="docs-content" id="docs-content">
+      <article class="docs-article">
+        <h1 id="troubleshooting">Troubleshooting</h1>
+        <p>Common issues and solutions for Arcana.</p>
+        <h2 id="installation">Installation Issues</h2>
+        <h3 id="npx-fails"><code>npx arcana-ai</code> fails</h3>
+        <p>Ensure you have Node.js 18+ installed:</p>
+        <pre><code>node --version  # Should be 18+
+npm install -g arcana-ai</code></pre>
+        <h2 id="provider">Provider Key Issues</h2>
+        <h3 id="invalid-key">"Invalid API key" error</h3>
+        <p>Verify your key is correct and has the right permissions:</p>
+        <pre><code>arcana key list
+arcana key add openai sk-your-key</code></pre>
+        <h2 id="memory">Memory Issues</h2>
+        <h3 id="search-empty">Memory search returns empty</h3>
+        <p>Ensure memory is enabled and facts have been extracted:</p>
+        <pre><code>arcana config get memory.enabled
+arcana memory facts</code></pre>
+        <h2 id="get-help">Get Help</h2>
+        <ul>
+          <li><a href="/status">Check system status</a></li>
+          <li><a href="mailto:lejzerv@gmail.com?subject=Arcana%20Support">Contact support</a></li>
+        </ul>
+        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+      </article>
+    </main>
+    <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>
   </div>
-
-  <footer class="docs-footer" role="contentinfo">
-    <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
-      <div class="docs-footer-links">
-        <a href="/">Home</a>
-        <a href="/docs">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a href="/auth">Sign in</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/js/docs.js" defer></script>
+  <footer class="docs-footer"><div class="docs-footer-inner"><div class="docs-footer-mono">arcana · docs · v0.3.18</div><div class="docs-footer-links"><a href="/">Home</a><a href="/changelog">Changelog</a><a href="/status">Status</a></div></div></footer>
+  <script src="/js/docs.js"></script>
 </body>
 </html>

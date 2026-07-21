@@ -1,94 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Docs · Arcana</title>
-  <meta name="description" content="Install Arcana, sign in, use the CLI, and call the public proxy API. Full user reference for arcana-ai.">
-  <meta name="theme-color" content="#0c0a10">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://arcana.otnelhq.com/docs">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ARCANA">
-  <meta property="og:title" content="Docs · Arcana">
-  <meta property="og:description" content="Install Arcana, sign in, use the CLI, and call the public proxy API.">
-  <meta property="og:url" content="https://arcana.otnelhq.com/docs">
-
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Docs — ARCANA</title>
+  <meta name="description" content="Documentation for Arcana — the terminal interface for AI keys. Install, configure, and use Arcana with any model provider.">
+  <meta name="theme-color" content="#08070B">
+  <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
-
-  <!-- Structured Data — TechArticle + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "name": "Arcana User Guide",
-    "description": "Install Arcana, sign in, use the CLI, and call the public proxy API. Full user reference for arcana-ai.",
+    "name": "ARCANA Documentation",
+    "description": "Documentation for Arcana — the terminal interface for AI keys.",
     "url": "https://arcana.otnelhq.com/docs",
-    "dateModified": "2026-07-20",
-    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "ARCANA",
-      "url": "https://arcana.otnelhq.com"
-    },
+    "dateModified": "2026-07-21",
+    "author": {"@type": "Organization", "name": "OTNEL"},
+    "publisher": {"@type": "Organization", "name": "OTNEL"},
+    "isPartOf": {"@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com"},
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" }
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com"},
+        {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs"}
       ]
     }
   }
   </script>
 </head>
 <body>
-  <header class="docs-header" role="banner">
+  <header class="docs-header">
     <div class="docs-header-inner">
-      <a href="/" class="docs-brand" aria-label="Arcana home">
-        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
-        <span>ARCANA</span>
-      </a>
-      <form class="docs-search" role="search" aria-label="Search docs">
-        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
-        <kbd class="docs-search-kbd">/</kbd>
-        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
-      </form>
-      <nav class="docs-nav" aria-label="Primary">
-        <a href="/docs" class="is-active">Docs</a>
+      <a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a>
+      <div class="docs-search" id="docs-search">
+        <input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off">
+        <span class="docs-search-kbd">⌘K</span>
+        <div class="docs-search-results" id="docs-search-results"></div>
+      </div>
+      <div class="docs-header-links">
+        <a href="/docs">Docs</a>
         <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
         <a href="/status">Status</a>
-        <a class="docs-nav-cta" href="/auth">Sign in</a>
-      </nav>
+        <a class="docs-header-signin" href="/auth">Sign In</a>
+      </div>
     </div>
   </header>
 
   <div class="docs-layout">
-    <!-- LEFT: documentation map (chapters) — not a duplicate of the right TOC -->
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
-      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>Documentation</span>
-      </button>
-      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <nav>
         <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Guide</div>
-          <a class="docs-sidebar-link" href="#overview"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="#quickstart"><span>Quick start</span></a>
-          <a class="docs-sidebar-link" href="#first-login"><span>Console login</span></a>
-          <a class="docs-sidebar-link" href="#provider-keys"><span>Provider keys</span></a>
-          <a class="docs-sidebar-link" href="#workspace-trust"><span>Workspace trust</span></a>
+          <div class="docs-sidebar-label">Getting Started</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
         </div>
-
         <div class="docs-sidebar-section">
           <div class="docs-sidebar-label">Features</div>
           <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
@@ -96,276 +62,99 @@
           <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
           <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
           <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
-          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP & Tools</span></a>
           <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
         </div>
-
         <div class="docs-sidebar-section">
           <div class="docs-sidebar-label">Reference</div>
           <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
           <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
-          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI Commands</span></a>
           <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
         </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="#device-overview"><span>How pairing works</span></a>
-          <a class="docs-sidebar-link" href="#device-errors"><span>Error codes</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Site</div>
-          <a class="docs-sidebar-link" href="#site-surfaces"><span>Public surfaces</span></a>
-        </div>
-
-        <div class="docs-sidebar-footer">
-          <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/docs/cli">CLI Reference</a>
-          <a href="/changelog">Changelog</a>
-          <a href="/credits">Pricing</a>
-          <a href="/status">Status</a>
-          <a href="/workspace">Workspace</a>
-          <a href="/auth">Sign in</a>
-        </div>
       </nav>
+      <div class="docs-sidebar-footer">
+        <a href="/changelog">v0.3.18</a>
+      </div>
     </aside>
 
-    <article class="docs-content">
-      <header class="docs-content-header">
-        <div class="docs-kicker">Documentation</div>
-        <h1 class="docs-h1">Arcana user guide</h1>
-        <p class="docs-lead">Install the CLI, pair your account, trust a workspace, and use the hosted OpenAI-compatible proxy. The left menu is the guide; the right rail tracks where you are on this page.</p>
-        <div class="docs-meta">
-          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
-          <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.15</a>
-          <span class="docs-meta-sep">·</span>
-          <span>Public API only</span>
-        </div>
-      </header>
+    <main class="docs-content" id="docs-content">
+      <article class="docs-article">
+        <h1 id="overview">ARCANA Documentation</h1>
+        <p>Welcome to the official documentation for <strong>ARCANA</strong> — the terminal interface for AI keys. This guide covers installation, configuration, and advanced features.</p>
 
-      <!-- ========== GUIDE ========== -->
-      <h2 id="overview">Overview</h2>
-      <p>Arcana is a terminal AI agent (<code>arcana</code>) with an optional hosted console and proxy:</p>
-      <ul>
-        <li><strong>CLI</strong> — TUI sessions, tools, skills, memory, local server.</li>
-        <li><strong>Console</strong> — <code>arcana.otnelhq.com</code> sign-in, workspace UI, billing.</li>
-        <li><strong>Proxy</strong> — <code>proxy.arcana.otnelhq.com</code> OpenAI-compatible HTTP API billed against your license.</li>
-      </ul>
-      <p>You can use the CLI with your own provider keys only (BYOK), or pair with the console for a proxy license.</p>
+        <h2 id="quick-start">Quick Start</h2>
+        <p>Install Arcana from npm and start using your AI provider keys immediately:</p>
+        <pre><code class="language-bash"># Install and run
+npx arcana-ai@latest
 
-      <h2 id="install">Install</h2>
-      <p>The published package is <code>arcana-ai</code>. The binary name is always <code>arcana</code>.</p>
-<pre data-lang="bash"><code># Quick start
-npx arcana-ai
-
-# Global install
+# Or install globally
 npm install -g arcana-ai
-# pnpm add -g arcana-ai
-# bun add -g arcana-ai
+arcana</code></pre>
 
-# From source
-git clone https://github.com/Lento47/arcana &amp;&amp; cd arcana
-bun install &amp;&amp; bun link   # from packages/arcana/</code></pre>
-<pre data-lang="bash"><code>arcana --version
-# 0.3.15</code></pre>
-      <p>Data lives under <code>~/.arcana/</code> (override with <code>ARCANA_HOME</code>): accounts, workspace trust, sessions, local DB.</p>
+        <h2 id="what-is-arcana">What is Arcana?</h2>
+        <p>Arcana is a <strong>terminal-native AI workbench</strong> that lets you use multiple AI model providers (OpenAI, Anthropic, DeepSeek, OpenRouter, Cerebras, Ollama, and more) from a single interface. It adds memory, tools, and scheduled runs on top of your existing API keys.</p>
 
-      <h2 id="quickstart">Quick start</h2>
-<pre data-lang="bash"><code># 1) Provider key (BYOK)
-export OPENAI_API_KEY=sk-...
-# or ANTHROPIC_API_KEY / GEMINI_API_KEY / …
+        <h2 id="features">Features</h2>
+        <ul>
+          <li><strong>Multi-provider support</strong> — Use any model key from one terminal</li>
+          <li><strong>Wiki-style memory</strong> — FTS5-powered session memory with extracted facts</li>
+          <li><strong>Scoped tools</strong> — Shell, filesystem, git, and skill tools with explicit permissions</li>
+          <li><strong>Skills on demand</strong> — Load specialized instructions when needed</li>
+          <li><strong>Cron jobs</strong> — Schedule recurring prompts and reports</li>
+          <li><strong>Chat gateways</strong> — Route sessions to Telegram, Discord, Slack, or WhatsApp</li>
+          <li><strong>Themes</strong> — 7 arcane themes with custom backgrounds</li>
+          <li><strong>Cloud sync</strong> — Push local facts to the cloud and share across machines</li>
+        </ul>
 
-# 2) Optional: console + proxy license
-arcana console login
+        <h2 id="architecture">Architecture</h2>
+        <p>Arcana sits one layer above your model provider. It provides a session layer with:</p>
+        <ul>
+          <li><strong>Key management</strong> — Add provider keys once, switch models by task</li>
+          <li><strong>Tool profiles</strong> — Explicit permissions for shell, filesystem, and gateway access</li>
+          <li><strong>Memory system</strong> — Extracted facts, full-text search, and optional cloud sync</li>
+          <li><strong>Job scheduler</strong> — Recurring prompts, reviews, and checks from the same runtime</li>
+        </ul>
 
-# 3) Optional: trust this repo for project plugins/tools/MCP
-arcana trust
-
-# 4) Run
-arcana doctor
-arcana run "explain this codebase"
-# or open the TUI: arcana</code></pre>
-
-      <h2 id="first-login">Console login</h2>
-      <p>Device flow pairs this machine with your Arcana account. No password is typed into the CLI.</p>
-<pre data-lang="bash"><code>arcana console login
-# default server https://arcana.otnelhq.com
-arcana console login https://arcana.otnelhq.com
-
-arcana console orgs
-arcana console switch
-arcana console logout [email]
-arcana console open</code></pre>
-      <ol>
-        <li>CLI prints a seal code (e.g. <code>3D8C-CVQA</code>) and opens the browser.</li>
-        <li>Sign in on the site (password, GitHub, or Google).</li>
-        <li>Page completes pairing; CLI stores the license bearer and account.</li>
-        <li>Close the browser when the terminal shows success.</li>
-      </ol>
-      <div class="docs-callout docs-callout-info">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Treat the license like a private key</strong>
-          <p>Anyone with access to your Arcana data directory can use your proxy quota. Never commit credentials; use <code>arcana console logout</code> on shared machines.</p>
+        <h2 id="next-steps">Next Steps</h2>
+        <div class="docs-next-steps">
+          <a href="/docs/configuration" class="docs-next-step">
+            <span class="docs-next-label">Configuration</span>
+            <span class="docs-next-desc">Set up your provider keys and preferences</span>
+          </a>
+          <a href="/docs/gateway" class="docs-next-step">
+            <span class="docs-next-label">Gateway</span>
+            <span class="docs-next-desc">Route sessions to chat platforms</span>
+          </a>
+          <a href="/docs/cli" class="docs-next-step">
+            <span class="docs-next-label">CLI Commands</span>
+            <span class="docs-next-desc">Full command reference</span>
+          </a>
         </div>
-      </div>
 
-      <h2 id="provider-keys">Provider keys</h2>
-      <p>BYOK keys stay local. Prefer environment variables for CI and shells.</p>
-<pre data-lang="bash"><code>export OPENAI_API_KEY=sk-...
-export ANTHROPIC_API_KEY=sk-ant-...
-export GEMINI_API_KEY=...
+        <div class="docs-meta">
+          <span>Last updated: Jul 20, 2026</span>
+        </div>
+      </article>
+    </main>
 
-arcana providers          # interactive provider management
-arcana models             # list available models
-arcana license status     # machine / license activation (separate from console)
-arcana license activate &lt;key&gt;</code></pre>
-      <p>Console login does not replace provider keys: proxy models use the Arcana license; direct models use your vendor keys.</p>
-
-      <h2 id="workspace-trust">Workspace trust</h2>
-      <p>By default, project plugins, custom tools, agents on disk, and local MCP from the repo are not loaded until you trust the workspace.</p>
-<pre data-lang="bash"><code>arcana trust              # trust current directory
-arcana trust status
-arcana trust list
-arcana trust revoke
-
-# Dev / CI only — loads project executable config without a trust record
-export ARCANA_DISABLE_WORKSPACE_TRUST=1</code></pre>
-      <p>Trust is stored in <code>~/.arcana/workspace-trust.json</code> and is invalidated when executable project config changes.</p>
-
-      <!-- ========== CLI (summary — full reference at /docs/cli) ========== -->
-      <h2 id="cli-overview">CLI commands</h2>
-      <p>Arcana provides a comprehensive CLI for managing sessions, tools, providers, memory, and integrations. Core commands include:</p>
-      <ul>
-        <li><code>arcana run</code> — Start interactive or one-shot agent sessions</li>
-        <li><code>arcana console</code> — Login, logout, manage orgs</li>
-        <li><code>arcana models</code> — List available models</li>
-        <li><code>arcana providers</code> — Manage provider credentials</li>
-        <li><code>arcana session</code> — List and delete sessions</li>
-        <li><code>arcana memory</code> — Manage local and cloud memory</li>
-        <li><code>arcana mcp</code> — Configure MCP servers</li>
-        <li><code>arcana plugin</code> — Manage plugins</li>
-        <li><code>arcana serve</code> — Start headless local server</li>
-        <li><code>arcana trust</code> — Manage workspace trust</li>
-        <li><code>arcana license</code> — Activate and manage license</li>
-      </ul>
-      <p>Run <code>arcana --help</code> or <code>arcana &lt;command&gt; --help</code> for flags on your installed version.</p>
-      <p><a href="/docs/cli" class="docs-cta-link">Read the full CLI reference →</a></p>
-
-      <!-- ========== PROXY (summary — full reference at /docs/proxy) ========== -->
-      <h2 id="proxy-overview">Proxy API</h2>
-      <p><strong>Base URL:</strong> <code>https://proxy-arcana.otnelhq.com</code></p>
-      <p>OpenAI-compatible HTTP API for chat completions, embeddings, models, balance, and account helpers. Authenticate with your Arcana license key after <code>arcana console login</code>.</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Method</th><th>Path</th><th>Purpose</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>POST</td><td><code>/v1/chat/completions</code></td><td>Chat completions (streaming SSE)</td></tr>
-            <tr><td>POST</td><td><code>/v1/embeddings</code></td><td>Embeddings</td></tr>
-            <tr><td>GET</td><td><code>/v1/models</code></td><td>List available models</td></tr>
-            <tr><td>GET</td><td><code>/v1/balance</code></td><td>Credit balance</td></tr>
-            <tr><td>GET</td><td><code>/v1/usage</code></td><td>Daily usage meters</td></tr>
-            <tr><td>GET</td><td><code>/v1/health</code></td><td>Health check + identity</td></tr>
-          </tbody>
-        </table>
-      </div>
-<pre data-lang="bash"><code>export ARCANA_LICENSE='ARCANA-PRO-…'
-curl -H "Authorization: Bearer $ARCANA_LICENSE" \
-  https://proxy-arcana.otnelhq.com/v1/balance</code></pre>
-      <p><a href="/docs/proxy" class="docs-cta-link">Read the full Proxy API reference →</a></p>
-
-      <!-- ========== DEVICE ========== -->
-      <h2 id="device-overview">How device pairing works</h2>
-      <ol>
-        <li><strong>Code.</strong> CLI → <code>POST /auth/device/code</code> with <code>{ client_id: "arcana-cli" }</code> → <code>device_code</code>, <code>user_code</code>, <code>interval</code>, <code>expires_in</code>.</li>
-        <li><strong>Browser.</strong> Opens <code>/auth/device?code=XXXX-XXXX</code> for sign-in.</li>
-        <li><strong>Poll.</strong> CLI → <code>POST /auth/device/token</code> until approved or expired.</li>
-        <li><strong>Complete.</strong> Browser page finishes pairing with the site; site mints a license privately and stores it for this device session.</li>
-        <li><strong>Token.</strong> Poll returns <code>access_token</code> (license). CLI loads <code>/api/user</code> and <code>/api/orgs</code>, then persists the account.</li>
-      </ol>
-      <h3 id="device-user-code">user_code format</h3>
-      <ul>
-        <li>Shape: <code>XXXX-XXXX</code> (confusable-free alphabet, no 0/O/1/I/L).</li>
-        <li>~10 minute TTL; rate limits on issue and complete.</li>
-      </ul>
-<pre data-lang="javascript"><code>/^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/</code></pre>
-
-      <h2 id="device-errors">Device error codes</h2>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Error</th><th>HTTP</th><th>Meaning</th><th>What to do</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>authorization_pending</code></td><td>400</td><td>Not approved yet</td><td>Keep polling</td></tr>
-            <tr><td><code>slow_down</code></td><td>400</td><td>Polling too fast</td><td>Increase interval</td></tr>
-            <tr><td><code>expired_token</code></td><td>400</td><td>Code expired</td><td>Run login again</td></tr>
-            <tr><td><code>access_denied</code></td><td>400</td><td>User refused</td><td>Exit / retry later</td></tr>
-            <tr><td><code>rate_limited</code></td><td>429</td><td>Too many attempts</td><td>Wait / Retry-After</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- ========== SITE ========== -->
-      <h2 id="site-surfaces">Public site surfaces</h2>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Path</th><th>What it is</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>/</code></td><td>Marketing home</td></tr>
-            <tr><td><code>/docs</code></td><td>This guide</td></tr>
-            <tr><td><code>/changelog</code></td><td>Release notes</td></tr>
-            <tr><td><code>/credits</code></td><td>Pricing / credits</td></tr>
-            <tr><td><code>/status</code></td><td>Service status</td></tr>
-            <tr><td><code>/auth</code></td><td>Sign in</td></tr>
-            <tr><td><code>/auth/device</code></td><td>Device pairing page</td></tr>
-            <tr><td><code>/workspace</code></td><td>Account workspace (signed in)</td></tr>
-            <tr><td><code>/api/user</code></td><td>JSON identity for CLI after login</td></tr>
-            <tr><td><code>/api/orgs</code></td><td>JSON orgs for CLI after login</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/">
-          <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">Home</span>
-        </a>
-        <a class="docs-pager-next" href="/docs/gateway">
-          <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Gateway</span>
-        </a>
-      </nav>
-    </article>
-
-    <!-- RIGHT: on-this-page only (auto-built from h2/h3) -->
-    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+    <aside class="docs-toc" id="docs-toc">
       <div class="docs-toc-label">On this page</div>
+      <nav id="docs-toc-nav"></nav>
     </aside>
   </div>
 
-  <footer class="docs-footer" role="contentinfo">
+  <footer class="docs-footer">
     <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
+      <div class="docs-footer-mono">arcana · docs · v0.3.18</div>
       <div class="docs-footer-links">
         <a href="/">Home</a>
-        <a href="/docs">Docs</a>
         <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
         <a href="/status">Status</a>
-        <a href="/auth">Sign in</a>
       </div>
     </div>
   </footer>
 
-  <script src="/js/docs.js" defer></script>
+  <script src="/js/docs.js"></script>
 </body>
 </html>

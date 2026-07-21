@@ -1,320 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cron (Scheduled Jobs) · Arcana</title>
-  <meta name="description" content="Run Arcana agent tasks on a schedule. Full reference for cron jobs, scheduling syntax, and daemon mode.">
-  <meta name="theme-color" content="#0c0a10">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://arcana.otnelhq.com/docs/cron">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ARCANA">
-  <meta property="og:title" content="Cron (Scheduled Jobs) · Arcana">
-  <meta property="og:description" content="Run Arcana agent tasks on a schedule.">
-  <meta property="og:url" content="https://arcana.otnelhq.com/docs/cron">
-
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cron — ARCANA</title>
+  <meta name="description" content="Schedule recurring prompts, reports, and checks with Arcana cron jobs.">
+  <meta name="theme-color" content="#08070B">
+  <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
-
-  <!-- Structured Data — TechArticle + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "name": "Cron (Scheduled Jobs)",
-    "description": "Run Arcana agent tasks on a schedule. Full reference for cron jobs, scheduling syntax, and daemon mode.",
+    "name": "Cron",
+    "description": "Schedule recurring prompts, reports, and checks with Arcana cron jobs.",
     "url": "https://arcana.otnelhq.com/docs/cron",
-    "dateModified": "2026-07-20",
-    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "isPartOf": { "@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com" },
-    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" },
-      { "@type": "ListItem", "position": 3, "name": "Cron", "item": "https://arcana.otnelhq.com/docs/cron" }
-    ]}
+    "dateModified": "2026-07-21",
+    "author": {"@type": "Organization", "name": "OTNEL"},
+    "publisher": {"@type": "Organization", "name": "OTNEL"},
+    "isPartOf": {"@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com"},
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com"},
+        {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs"},
+        {"@type": "ListItem", "position": 3, "name": "Cron", "item": "https://arcana.otnelhq.com/docs/cron"}
+      ]
+    }
   }
   </script>
 </head>
 <body>
-  <header class="docs-header" role="banner">
-    <div class="docs-header-inner">
-      <a href="/" class="docs-brand" aria-label="Arcana home">
-        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
-        <span>ARCANA</span>
-      </a>
-      <form class="docs-search" role="search" aria-label="Search docs">
-        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
-        <kbd class="docs-search-kbd">/</kbd>
-        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
-      </form>
-      <nav class="docs-nav" aria-label="Primary">
-        <a href="/docs" class="is-active">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a class="docs-nav-cta" href="/auth">Sign in</a>
-      </nav>
-    </div>
-  </header>
-
+  <header class="docs-header"><div class="docs-header-inner"><a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a><div class="docs-search" id="docs-search"><input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off"><span class="docs-search-kbd">⌘K</span><div class="docs-search-results" id="docs-search-results"></div></div><div class="docs-header-links"><a href="/docs">Docs</a><a href="/changelog">Changelog</a><a href="/status">Status</a><a class="docs-header-signin" href="/auth">Sign In</a></div></div></header>
   <div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
-      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>Documentation</span>
-      </button>
-      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Guide</div>
-          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
-          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
-          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
-          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Features</div>
-          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
-          <a class="docs-sidebar-link is-active" href="/docs/cron"><span>Cron</span></a>
-          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
-          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
-          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
-          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
-          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Reference</div>
-          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
-          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
-          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
-          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
-          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
-        </div>
-
-        <div class="docs-sidebar-footer">
-          <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/docs/cli">CLI Reference</a>
-          <a href="/changelog">Changelog</a>
-          <a href="/credits">Pricing</a>
-          <a href="/status">Status</a>
-          <a href="/workspace">Workspace</a>
-          <a href="/auth">Sign in</a>
-        </div>
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <nav>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Getting Started</div><a class="docs-sidebar-link" href="/docs"><span>Overview</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Features</div><a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a><a class="docs-sidebar-link is-active" href="/docs/cron"><span>Cron</span></a><a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a><a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a><a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a><a class="docs-sidebar-link" href="/docs/mcp"><span>MCP & Tools</span></a><a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Reference</div><a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a><a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a><a class="docs-sidebar-link" href="/docs/cli"><span>CLI Commands</span></a><a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a></div>
       </nav>
+      <div class="docs-sidebar-footer"><a href="/changelog">v0.3.18</a></div>
     </aside>
+    <main class="docs-content" id="docs-content">
+      <article class="docs-article">
+        <h1 id="cron">Cron Jobs</h1>
+        <p>Schedule recurring prompts, reports, reviews, and checks from the same Arcana runtime.</p>
+        <h2 id="create">Create a Job</h2>
+        <pre><code># Daily standup report
+arcana cron add --schedule "0 9 * * *" --prompt "Summarize yesterday's commits"
 
-    <article class="docs-content">
-      <header class="docs-content-header">
-        <div class="docs-kicker">Features</div>
-        <h1 class="docs-h1">Cron (Scheduled Jobs)</h1>
-        <p class="docs-lead">Run agent tasks on a schedule. Each job sends a prompt to the agent at the configured interval, with optional skill activation and timezone support.</p>
-        <div class="docs-meta">
-          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
-          <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.15</a>
-        </div>
-      </header>
+# Weekly code review
+arcana cron add --schedule "0 17 * * 5" --prompt "Review open PRs"</code></pre>
+        <h2 id="manage">Manage Jobs</h2>
+        <pre><code># List all jobs
+arcana cron list
 
-      <h2 id="quickstart">Quick start</h2>
-<pre data-lang="bash"><code># Every 4 hours: run code review
-arcana cron add --name "review PRs" --schedule "0 */4 * * *" --prompt "review open PRs for bugs"
+# Run a job immediately
+arcana cron run &lt;job-id&gt;
 
-# Daily summary at 9 AM
-arcana cron add --name "daily digest" --schedule "0 9 * * *" --prompt "summarize today's changes"
-
-# Run the daemon (blocks, evaluates jobs every 60s)
-arcana cron start</code></pre>
-
-      <h2 id="commands">Commands</h2>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Command</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>arcana cron add</code></td><td>Create a new scheduled job</td></tr>
-            <tr><td><code>arcana cron list</code></td><td>List all jobs with status and last run</td></tr>
-            <tr><td><code>arcana cron remove --id &lt;id&gt;</code></td><td>Delete a job</td></tr>
-            <tr><td><code>arcana cron pause --id &lt;id&gt;</code></td><td>Disable a job without deleting it</td></tr>
-            <tr><td><code>arcana cron resume --id &lt;id&gt;</code></td><td>Re-enable a paused job</td></tr>
-            <tr><td><code>arcana cron run --id &lt;id&gt;</code></td><td>Run a job immediately (manual trigger)</td></tr>
-            <tr><td><code>arcana cron start</code></td><td>Start the scheduler daemon</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 id="adding-a-job">Adding a job</h2>
-<pre data-lang="bash"><code>arcana cron add \
-  --name "daily review" \
-  --schedule "0 9 * * *" \
-  --prompt "review today's git commits and summarize changes" \
-  --skill "git" \
-  --tz "America/New_York"</code></pre>
-
-      <h3 id="job-options">Options</h3>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Flag</th><th>Required</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>--schedule</code>, <code>-s</code></td><td>Yes</td><td>Cron expression or alias (see below)</td></tr>
-            <tr><td><code>--prompt</code>, <code>-p</code></td><td>Yes</td><td>The prompt sent to the agent</td></tr>
-            <tr><td><code>--name</code>, <code>-n</code></td><td>No</td><td>Human-readable job name</td></tr>
-            <tr><td><code>--skill</code></td><td>No</td><td>Activate a specific skill for this job</td></tr>
-            <tr><td><code>--timezone</code>, <code>--tz</code></td><td>No</td><td>Timezone for the schedule (default: <code>UTC</code>)</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 id="schedule-syntax">Schedule syntax</h2>
-      <p>Standard 5-field cron expressions are supported:</p>
-<pre data-lang="text"><code>┌───────────── minute (0–59)
-│ ┌───────────── hour (0–23)
-│ │ ┌───────────── day of month (1–31)
-│ │ │ ┌───────────── month (1–12)
-│ │ │ │ ┌───────────── day of week (0–7, 0 and 7 = Sunday)
-│ │ │ │ │
-* * * * *</code></pre>
-
-      <h3 id="examples">Examples</h3>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Schedule</th><th>Meaning</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>0 9 * * *</code></td><td>Every day at 9:00 AM</td></tr>
-            <tr><td><code>0 */4 * * *</code></td><td>Every 4 hours</td></tr>
-            <tr><td><code>30 8 * * 1-5</code></td><td>Weekdays at 8:30 AM</td></tr>
-            <tr><td><code>0 0 1 * *</code></td><td>First of every month</td></tr>
-            <tr><td><code>*/15 * * * *</code></td><td>Every 15 minutes</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 id="aliases">Aliases</h3>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Alias</th><th>Expands to</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>@hourly</code></td><td><code>0 * * * *</code></td></tr>
-            <tr><td><code>@daily</code></td><td><code>0 0 * * *</code></td></tr>
-            <tr><td><code>@weekly</code></td><td><code>0 0 * * 0</code></td></tr>
-            <tr><td><code>@monthly</code></td><td><code>0 0 1 * *</code></td></tr>
-            <tr><td><code>@yearly</code></td><td><code>0 0 1 1 *</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 id="listing-jobs">Listing jobs</h2>
-<pre data-lang="bash"><code>arcana cron list</code></pre>
-<pre data-lang="text"><code>ID         NAME/PROMPT                       SCHEDULE          STATUS   RUNS   LAST RUN
-────────────────────────────────────────────────────────────────────────────────────────
-a1b2c3d4…  daily review                      0 9 * * *         enabled  12     2026-07-20 09:00
-e5f6g7h8…  review PRs                        0 */4 * * *       paused   48     2026-07-20 08:00</code></pre>
-
-      <h2 id="running-manually">Running a job manually</h2>
-<pre data-lang="bash"><code>arcana cron run --id a1b2c3d4</code></pre>
-      <p>This runs the job immediately and prints the agent's output.</p>
-
-      <h2 id="daemon">Starting the daemon</h2>
-<pre data-lang="bash"><code>arcana cron start</code></pre>
-      <p>The scheduler evaluates all enabled jobs every 60 seconds (configurable). Press <code>Ctrl+C</code> to stop.</p>
-<pre data-lang="text"><code># Output
-Cron scheduler running (interval: 60s). Ctrl+C to stop.
-[2026-07-20T09:00:00.000Z] Running job: daily review
-[output] Today's changes include 3 commits to packages/engine...</code></pre>
-
-      <h2 id="config">Configuration</h2>
-      <p>Cron settings live in <code>~/.arcana/config.json</code>:</p>
-<pre data-lang="json"><code>{
-  "cron": {
-    "enabled": true,
-    "intervalSeconds": 60
-  }
-}</code></pre>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Key</th><th>Default</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>cron.enabled</code></td><td><code>true</code></td><td>Enable or disable the cron system</td></tr>
-            <tr><td><code>cron.intervalSeconds</code></td><td><code>60</code></td><td>How often the scheduler checks for due jobs</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>See <a href="/docs/configuration">Configuration</a> for the full reference.</p>
-
-      <h2 id="how-it-works">How it works</h2>
-      <ul>
-        <li>Jobs are stored in <code>~/.arcana/data/cron-jobs.json</code>.</li>
-        <li>Each job gets its own agent session with conversation history and memory integration.</li>
-        <li>Destructive shell commands are blocked by default (safe mode) unless the job prompt explicitly requires them.</li>
-        <li>Jobs integrate with the memory system — the agent can read and write facts across runs.</li>
-        <li>If a job specifies a <code>--skill</code>, that skill's instructions are injected into the agent's system prompt.</li>
-      </ul>
-
-      <div class="docs-callout docs-callout-info">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>License requirement</strong>
-          <p>Cron jobs require a valid API key (<code>ARCANA_API_KEY</code> or provider-specific keys). The agent runs unattended with your configured provider and model.</p>
-        </div>
-      </div>
-
-      <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/docs/gateway">
-          <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">Gateway</span>
-        </a>
-        <a class="docs-pager-next" href="/docs/skills">
-          <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Skills</span>
-        </a>
-      </nav>
-    </article>
-
-    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
-      <div class="docs-toc-label">On this page</div>
-    </aside>
+# Remove a job
+arcana cron remove &lt;job-id&gt;</code></pre>
+        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+      </article>
+    </main>
+    <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>
   </div>
-
-  <footer class="docs-footer" role="contentinfo">
-    <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
-      <div class="docs-footer-links">
-        <a href="/">Home</a>
-        <a href="/docs">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a href="/auth">Sign in</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/js/docs.js" defer></script>
+  <footer class="docs-footer"><div class="docs-footer-inner"><div class="docs-footer-mono">arcana · docs · v0.3.18</div><div class="docs-footer-links"><a href="/">Home</a><a href="/changelog">Changelog</a><a href="/status">Status</a></div></div></footer>
+  <script src="/js/docs.js"></script>
 </body>
 </html>

@@ -392,6 +392,14 @@
     }, { passive: true })
   }
 
+  // --- 8. Platform-aware shortcut badge ---
+  function setupShortcutBadge() {
+    const kbd = $(".docs-search-kbd")
+    if (!kbd) return
+    const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+    kbd.textContent = isMac ? "\u2318K" : "Ctrl K"
+  }
+
   const init = () => {
     attachCopyButtons()
     injectAnchors()
@@ -400,6 +408,7 @@
     buildToc()
     setupLinkClose()
     setupSearch()
+    setupShortcutBadge()
   }
 
   if (document.readyState === "loading") {

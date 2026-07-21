@@ -1,561 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plugins · Arcana</title>
-  <meta name="description" content="Extend Arcana with plugins. Add custom tools, auth providers, hooks, and behaviors. Create, configure, and manage plugins for your workflow.">
-  <meta name="theme-color" content="#0c0a10">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://arcana.otnelhq.com/docs/plugins">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="ARCANA">
-  <meta property="og:title" content="Plugins · Arcana">
-  <meta property="og:description" content="Extend Arcana with plugins. Custom tools, auth providers, hooks, and behaviors.">
-  <meta property="og:url" content="https://arcana.otnelhq.com/docs/plugins">
-
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Plugins — ARCANA</title>
+  <meta name="description" content="Install, manage, and create plugins for Arcana — the terminal interface for AI keys.">
+  <meta name="theme-color" content="#08070B">
+  <link rel="icon" type="image/png" sizes="32x32" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
   <link rel="stylesheet" href="/css/docs.css" media="all">
-
-  <!-- Structured Data — TechArticle + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "name": "Plugins",
-    "description": "Extend Arcana with plugins. Add custom tools, auth providers, hooks, and behaviors.",
+    "description": "Install, manage, and create plugins for Arcana.",
     "url": "https://arcana.otnelhq.com/docs/plugins",
-    "dateModified": "2026-07-20",
-    "author": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "publisher": { "@type": "Organization", "name": "OTNEL", "url": "https://otnelhq.com" },
-    "isPartOf": { "@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com" },
-    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs" },
-      { "@type": "ListItem", "position": 3, "name": "Plugins", "item": "https://arcana.otnelhq.com/docs/plugins" }
-    ]}
+    "dateModified": "2026-07-21",
+    "author": {"@type": "Organization", "name": "OTNEL"},
+    "publisher": {"@type": "Organization", "name": "OTNEL"},
+    "isPartOf": {"@type": "WebSite", "name": "ARCANA", "url": "https://arcana.otnelhq.com"},
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arcana.otnelhq.com"},
+        {"@type": "ListItem", "position": 2, "name": "Docs", "item": "https://arcana.otnelhq.com/docs"},
+        {"@type": "ListItem", "position": 3, "name": "Plugins", "item": "https://arcana.otnelhq.com/docs/plugins"}
+      ]
+    }
   }
   </script>
 </head>
 <body>
-  <header class="docs-header" role="banner">
-    <div class="docs-header-inner">
-      <a href="/" class="docs-brand" aria-label="Arcana home">
-        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
-        <span>ARCANA</span>
-      </a>
-      <form class="docs-search" role="search" aria-label="Search docs">
-        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
-        <kbd class="docs-search-kbd">/</kbd>
-        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
-      </form>
-      <nav class="docs-nav" aria-label="Primary">
-        <a href="/docs" class="is-active">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a class="docs-nav-cta" href="/auth">Sign in</a>
-      </nav>
-    </div>
-  </header>
-
+  <header class="docs-header"><div class="docs-header-inner"><a class="docs-brand" href="/"><img src="/arcanalogo-transparent.png" alt="" width="24" height="24"> ARCANA</a><div class="docs-search" id="docs-search"><input type="text" placeholder="Search docs…" id="docs-search-input" autocomplete="off"><span class="docs-search-kbd">⌘K</span><div class="docs-search-results" id="docs-search-results"></div></div><div class="docs-header-links"><a href="/docs">Docs</a><a href="/changelog">Changelog</a><a href="/status">Status</a><a class="docs-header-signin" href="/auth">Sign In</a></div></div></header>
   <div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
-      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
-        <span>Documentation</span>
-      </button>
-      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Guide</div>
-          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
-          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
-          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
-          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
-          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Features</div>
-          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
-          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
-          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
-          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
-          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
-          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
-          <a class="docs-sidebar-link is-active" href="/docs/plugins"><span>Plugins</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Reference</div>
-          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
-          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
-          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
-          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
-        </div>
-
-        <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Device flow</div>
-          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
-          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
-        </div>
-
-        <div class="docs-sidebar-footer">
-          <div class="docs-sidebar-footer-label">Resources</div>
-          <a href="/docs/cli">CLI Reference</a>
-          <a href="/changelog">Changelog</a>
-          <a href="/credits">Pricing</a>
-          <a href="/status">Status</a>
-          <a href="/workspace">Workspace</a>
-          <a href="/auth">Sign in</a>
-        </div>
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <nav>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Getting Started</div><a class="docs-sidebar-link" href="/docs"><span>Overview</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Features</div><a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a><a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a><a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a><a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a><a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a><a class="docs-sidebar-link" href="/docs/mcp"><span>MCP & Tools</span></a><a class="docs-sidebar-link is-active" href="/docs/plugins"><span>Plugins</span></a></div>
+        <div class="docs-sidebar-section"><div class="docs-sidebar-label">Reference</div><a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a><a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a><a class="docs-sidebar-link" href="/docs/cli"><span>CLI Commands</span></a><a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a></div>
       </nav>
+      <div class="docs-sidebar-footer"><a href="/changelog">v0.3.18</a></div>
     </aside>
+    <main class="docs-content" id="docs-content">
+      <article class="docs-article">
+        <h1 id="plugins">Plugins</h1>
+        <p>Extend Arcana's functionality with plugins. Plugins can add new tools, modify behavior, or integrate with external services.</p>
+        <h2 id="install">Install a Plugin</h2>
+        <pre><code># Install from registry
+arcana plugin install @arcana/git-tools
 
-    <article class="docs-content">
-      <header class="docs-content-header">
-        <div class="docs-kicker">Features</div>
-        <h1 class="docs-h1">Plugins</h1>
-        <p class="docs-lead">Extend Arcana without forking core. Add custom tools, auth providers, provider hooks, and event listeners. Plugins let teams adapt Arcana to their specific workflows and policies.</p>
-        <div class="docs-meta">
-          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
-          <span class="docs-meta-sep">·</span>
-          <a href="/changelog">v0.3.15</a>
-        </div>
-      </header>
+# Install from URL
+arcana plugin install https://github.com/user/plugin</code></pre>
+        <h2 id="manage">Manage Plugins</h2>
+        <pre><code># List installed plugins
+arcana plugin list
 
-      <!-- ========== OVERVIEW ========== -->
-      <h2 id="overview">Overview</h2>
-      <p>Plugins are the advanced extension layer for Arcana. They let users and teams add custom behavior around tools, auth, providers, chat messages, permissions, and shell environment — all without modifying Arcana core.</p>
-      <p>Arcana must be useful without plugins. Plugins exist for custom cases:</p>
-      <ul>
-        <li>Custom provider authentication (OAuth, API keys)</li>
-        <li>Additional tools and tool modifiers</li>
-        <li>Chat message interception and transformation</li>
-        <li>Permission overrides and policy enforcement</li>
-        <li>Shell environment customization</li>
-        <li>Provider model overrides</li>
-      </ul>
+# Update plugins
+arcana plugin update --all
 
-      <!-- ========== COMMANDS ========== -->
-      <h2 id="commands">Commands</h2>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Command</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>arcana plugin --help</code></td><td>Show plugin management options</td></tr>
-            <tr><td><code>arcana plugin-store --help</code></td><td>Browse and install plugins from the store</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- ========== STRUCTURE ========== -->
-      <h2 id="structure">Plugin structure</h2>
-      <p>A plugin is a JavaScript/TypeScript module that exports a default function. The function receives context and returns hooks.</p>
-
-      <h3 id="minimal-plugin">Minimal plugin</h3>
-<pre data-lang="javascript"><code>// my-plugin/index.ts
-export default async function myPlugin(input, options) {
-  return {
-    // Hook: called when a new message is received
-    async "chat.message"(msgInput, output) {
-      console.log("New message in session:", msgInput.sessionID);
-    },
-  };
-}</code></pre>
-
-      <h3 id="plugin-module">Plugin module format</h3>
-<pre data-lang="typescript"><code>export type PluginModule = {
-  id?: string;        // Optional plugin identifier
-  server: Plugin;     // The plugin function (required)
-  tui?: never;        // Reserved for future TUI plugins
-};
-
-export type Plugin = (
-  input: PluginInput,
-  options?: PluginOptions
-) => Promise&lt;Hooks&gt;;</code></pre>
-
-      <h3 id="plugin-input">Plugin input</h3>
-      <p>When Arcana loads your plugin, it provides:</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>client</code></td><td>SDK client</td><td>HTTP client for the Arcana server API</td></tr>
-            <tr><td><code>project</code></td><td><code>Project</code></td><td>Current project info (VCS, path, etc.)</td></tr>
-            <tr><td><code>directory</code></td><td><code>string</code></td><td>Current working directory</td></tr>
-            <tr><td><code>worktree</code></td><td><code>string</code></td><td>Active worktree path</td></tr>
-            <tr><td><code>serverUrl</code></td><td><code>URL</code></td><td>Local server URL</td></tr>
-            <tr><td><code>$</code></td><td><code>BunShell</code></td><td>Shell helper for running commands</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- ========== HOOKS ========== -->
-      <h2 id="hooks">Available hooks</h2>
-      <p>Plugins return an object with hook functions. Each hook is called at a specific point in Arcana's lifecycle.</p>
-
-      <h3 id="hook-chat-message">chat.message</h3>
-      <p>Called when a new user message is received. Use this to intercept, annotate, or transform messages.</p>
-<pre data-lang="typescript"><code>async "chat.message"(input, output) {
-  // input: { sessionID, agent?, model?, messageID?, variant? }
-  // output: { message, parts }
-  // Modify output.message or output.parts to transform the message
-}</code></pre>
-
-      <h3 id="hook-chat-params">chat.params</h3>
-      <p>Modify parameters sent to the LLM (temperature, topP, topK, maxOutputTokens).</p>
-<pre data-lang="typescript"><code>async "chat.params"(input, output) {
-  // output: { temperature, topP, topK, maxOutputTokens, options }
-  output.temperature = 0.7;
-}</code></pre>
-
-      <h3 id="hook-chat-headers">chat.headers</h3>
-      <p>Add custom HTTP headers to LLM API requests.</p>
-<pre data-lang="typescript"><code>async "chat.headers"(input, output) {
-  // output: { headers }
-  output.headers["X-Custom-Header"] = "value";
-}</code></pre>
-
-      <h3 id="hook-tool-before">tool.execute.before</h3>
-      <p>Intercept tool calls before execution. Modify arguments or block the call.</p>
-<pre data-lang="typescript"><code>async "tool.execute.before"(input, output) {
-  // input: { tool, sessionID, callID }
-  // output: { args }
-  if (input.tool === "shell" &amp;&amp; output.args.command?.includes("rm -rf")) {
-    throw new Error("Blocked: dangerous command");
-  }
-}</code></pre>
-
-      <h3 id="hook-tool-after">tool.execute.after</h3>
-      <p>Process tool results after execution.</p>
-<pre data-lang="typescript"><code>async "tool.execute.after"(input, output) {
-  // input: { tool, sessionID, callID, args }
-  // output: { title, output, metadata }
-  if (input.tool === "shell") {
-    output.metadata = { ...output.metadata, logged: true };
-  }
-}</code></pre>
-
-      <h3 id="hook-tool-definition">tool.definition</h3>
-      <p>Modify tool descriptions and parameters sent to the LLM.</p>
-<pre data-lang="typescript"><code>async "tool.definition"(input, output) {
-  // input: { toolID }
-  // output: { description, parameters }
-  if (input.toolID === "shell") {
-    output.description = "Run shell commands (restricted)";
-  }
-}</code></pre>
-
-      <h3 id="hook-permission">permission.ask</h3>
-      <p>Override permission decisions for tool calls.</p>
-<pre data-lang="typescript"><code>async "permission.ask"(input, output) {
-  // input: Permission object
-  // output: { status: "ask" | "deny" | "allow" }
-  if (input.type === "shell" &amp;&amp; input.command?.startsWith("git")) {
-    output.status = "allow"; // Auto-allow git commands
-  }
-}</code></pre>
-
-      <h3 id="hook-shell-env">shell.env</h3>
-      <p>Inject environment variables into the shell for tool execution.</p>
-<pre data-lang="typescript"><code>async "shell.env"(input, output) {
-  // input: { cwd, sessionID?, callID? }
-  // output: { env }
-  output.env.NODE_ENV = "test";
-  output.env.CUSTOM_VAR = "value";
-}</code></pre>
-
-      <h3 id="hook-command-before">command.execute.before</h3>
-      <p>Intercept slash commands before execution.</p>
-<pre data-lang="typescript"><code>async "command.execute.before"(input, output) {
-  // input: { command, sessionID, arguments }
-  // output: { parts }
-  if (input.command === "/mycommand") {
-    output.parts = [{ type: "text", text: "Custom response" }];
-  }
-}</code></pre>
-
-      <h3 id="hook-event">event</h3>
-      <p>Listen to all Arcana events (session, config, provider changes).</p>
-<pre data-lang="typescript"><code>async event({ event }) {
-  if (event.type === "session.created") {
-    console.log("New session:", event.properties);
-  }
-}</code></pre>
-
-      <h3 id="hook-config">config</h3>
-      <p>Modify the configuration after it's loaded.</p>
-<pre data-lang="typescript"><code>async config(config) {
-  // Modify config before Arcana uses it
-  config.model = "anthropic/claude-sonnet-4";
-}</code></pre>
-
-      <h3 id="hook-dispose">dispose</h3>
-      <p>Clean up resources when the plugin is unloaded.</p>
-<pre data-lang="typescript"><code>async dispose() {
-  await this.client.close();
-}</code></pre>
-
-      <!-- ========== AUTH HOOKS ========== -->
-      <h2 id="auth-hooks">Auth provider hooks</h2>
-      <p>Plugins can register custom authentication methods for providers. This is how Arcana supports providers like GitHub Copilot, Google Vertex, and enterprise SSO.</p>
-
-      <h3 id="auth-oauth">OAuth authentication</h3>
-<pre data-lang="typescript"><code>export default async function myPlugin(input) {
-  return {
-    auth: {
-      provider: "my-provider",
-      methods: [
-        {
-          type: "oauth",
-          label: "Sign in with MyProvider",
-          async authorize(inputs) {
-            // Start OAuth flow
-            return {
-              url: "https://auth.example.com/authorize?...",
-              instructions: "Complete sign-in in your browser",
-              method: "auto",
-              async callback() {
-                // Exchange tokens
-                return {
-                  type: "success",
-                  access: "access_token",
-                  refresh: "refresh_token",
-                  expires: Date.now() / 1000 + 3600,
-                };
-              },
-            };
-          },
-        },
-      ],
-    },
-  };
-}</code></pre>
-
-      <h3 id="auth-api">API key authentication</h3>
-<pre data-lang="typescript"><code>export default async function myPlugin(input) {
-  return {
-    auth: {
-      provider: "my-provider",
-      methods: [
-        {
-          type: "api",
-          label: "Enter API key",
-          prompts: [
-            {
-              type: "text",
-              key: "apiKey",
-              message: "Enter your API key",
-              validate: (v) => (v.length > 0 ? undefined : "Required"),
-            },
-          ],
-          async authorize(inputs) {
-            // Validate the key
-            return { type: "success", key: inputs.apiKey };
-          },
-        },
-      ],
-    },
-  };
-}</code></pre>
-
-      <!-- ========== PROVIDER HOOKS ========== -->
-      <h2 id="provider-hooks">Provider hooks</h2>
-      <p>Plugins can register custom providers or override model lists for existing providers.</p>
-<pre data-lang="typescript"><code>export default async function myPlugin(input) {
-  return {
-    provider: {
-      id: "my-custom-provider",
-      async models(provider, ctx) {
-        return {
-          "my-model-1": { name: "My Model 1", contextWindow: 128000 },
-          "my-model-2": { name: "My Model 2", contextWindow: 32000 },
-        };
-      },
-    },
-  };
-}</code></pre>
-
-      <!-- ========== TOOL HOOKS ========== -->
-      <h2 id="tool-hooks">Custom tools</h2>
-      <p>Plugins can register new tools that the agent can call during sessions.</p>
-<pre data-lang="typescript"><code>import { defineTool } from "@arcana/plugin";
-
-const myTool = defineTool({
-  name: "my-custom-tool",
-  description: "Does something useful",
-  parameters: {
-    type: "object",
-    properties: {
-      input: { type: "string", description: "Input text" },
-    },
-    required: ["input"],
-  },
-  async execute(args, ctx) {
-    return { result: `Processed: ${args.input}` };
-  },
-});
-
-export default async function myPlugin() {
-  return {
-    tool: {
-      "my-custom-tool": myTool,
-    },
-  };
-}</code></pre>
-
-      <!-- ========== CONFIGURATION ========== -->
-      <h2 id="configuration">Configuration</h2>
-      <p>Plugins are configured in <code>~/.arcana/config.json</code> or <code>arcana.json</code>:</p>
-
-      <h3 id="config-plain">Plain plugin (no options)</h3>
-<pre data-lang="json"><code>{
-  "plugin": [
-    "my-plugin"
-  ]
-}</code></pre>
-
-      <h3 id="config-options">Plugin with options</h3>
-<pre data-lang="json"><code>{
-  "plugin": [
-    ["my-plugin", { "verbose": true, "apiKey": "..." }]
-  ]
-}</code></pre>
-
-      <h3 id="config-local">Local plugin (from file)</h3>
-<pre data-lang="json"><code>{
-  "plugin": [
-    "./path/to/my-plugin/index.ts"
-  ]
-}</code></pre>
-
-      <!-- ========== TRUST ========== -->
-      <h2 id="trust">Workspace trust</h2>
-      <p>Project-local plugins require workspace trust before they are loaded. This prevents untrusted code from executing automatically.</p>
-<pre data-lang="bash"><code># Trust the current workspace
-arcana trust
-
-# Check trust status
-arcana trust status</code></pre>
-      <p>See <a href="/docs/mcp#workspace-trust">MCP &amp; Tools: Workspace trust</a> for full details.</p>
-
-      <!-- ========== EXAMPLES ========== -->
-      <h2 id="examples">Examples</h2>
-
-      <h3 id="example-rate-limiter">Rate limiter plugin</h3>
-<pre data-lang="typescript"><code>export default async function rateLimiter() {
-  const counts = new Map&lt;string, number&gt;();
-
-  return {
-    async "tool.execute.before"(input, output) {
-      const key = input.tool;
-      const count = (counts.get(key) ?? 0) + 1;
-      counts.set(key, count);
-      if (count > 10) {
-        throw new Error(`Rate limit exceeded for tool: ${key}`);
-      }
-    },
-  };
-}</code></pre>
-
-      <h3 id="example-logger">Audit logger plugin</h3>
-<pre data-lang="typescript"><code>import { appendFile } from "fs/promises";
-
-export default async function auditLogger() {
-  const logFile = "/tmp/arcana-audit.log";
-
-  return {
-    async "tool.execute.after"(input, output) {
-      const entry = JSON.stringify({
-        timestamp: new Date().toISOString(),
-        tool: input.tool,
-        session: input.sessionID,
-        args: input.args,
-      });
-      await appendFile(logFile, entry + "\n");
-    },
-  };
-}</code></pre>
-
-      <h2 id="safety">Safety model</h2>
-      <p>Plugins operate within Arcana's permission and mode system:</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Plugin output</th><th>Observe</th><th>Advise</th><th>Ask</th><th>Enforce</th><th>Locked</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Annotation</td><td>Record</td><td>Show</td><td>Show</td><td>Show</td><td>Show if approved</td></tr>
-            <tr><td>Warning</td><td>Record</td><td>Show</td><td>Show</td><td>Show</td><td>Show if approved</td></tr>
-            <tr><td>Block recommendation</td><td>Record</td><td>Warn</td><td>Ask</td><td>Block if policy matches</td><td>Block unless allowlisted</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="docs-callout docs-callout-warn">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Plugins must not silently</strong>
-          <p>access secrets, send network requests, modify source files, approve their own blocked actions, change the active mode, or hide decisions from the capsule.</p>
-        </div>
-      </div>
-
-      <h2 id="how-plugins-work">How plugins work</h2>
-      <ul>
-        <li>Plugins are loaded at session start from the config <code>plugin</code> array.</li>
-        <li>Each plugin receives context (client, project, directory) and returns hooks.</li>
-        <li>Hooks are called at specific lifecycle points (message, tool, permission, etc.).</li>
-        <li>Plugins can modify behavior but cannot override Arcana's core safety model.</li>
-        <li>Project-local plugins require workspace trust; global plugins are always available.</li>
-        <li>Multiple plugins can be active simultaneously — hooks are called in order.</li>
-      </ul>
-
-      <nav class="docs-pager" aria-label="Page navigation">
-        <a class="docs-pager-prev" href="/docs/mcp">
-          <span class="docs-pager-dir">← Previous</span>
-          <span class="docs-pager-title">MCP &amp; Tools</span>
-        </a>
-        <a class="docs-pager-next" href="/docs/configuration">
-          <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Configuration</span>
-        </a>
-      </nav>
-    </article>
-
-    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
-      <div class="docs-toc-label">On this page</div>
-    </aside>
+# Remove a plugin
+arcana plugin remove @arcana/git-tools</code></pre>
+        <h2 id="create">Create a Plugin</h2>
+        <p>Plugins follow a standard interface. See the <a href="/docs/plugins#sdk">Plugin SDK</a> for details.</p>
+        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+      </article>
+    </main>
+    <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>
   </div>
-
-  <footer class="docs-footer" role="contentinfo">
-    <div class="docs-footer-inner">
-      <div class="docs-footer-mono">arcana · docs · v0.3.15</div>
-      <div class="docs-footer-links">
-        <a href="/">Home</a>
-        <a href="/docs">Docs</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/credits">Pricing</a>
-        <a href="/status">Status</a>
-        <a href="/auth">Sign in</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/js/docs.js" defer></script>
+  <footer class="docs-footer"><div class="docs-footer-inner"><div class="docs-footer-mono">arcana · docs · v0.3.18</div><div class="docs-footer-links"><a href="/">Home</a><a href="/changelog">Changelog</a><a href="/status">Status</a></div></div></footer>
+  <script src="/js/docs.js"></script>
 </body>
 </html>

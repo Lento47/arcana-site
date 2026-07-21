@@ -25,6 +25,20 @@
 
   <meta name="theme-color" content="#08070B">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/arcanalogo-transparent.png">
+  <link rel="apple-touch-icon" href="/arcanalogo-transparent.png">
+
+  <!-- Open Graph Image -->
+  <meta property="og:image" content="https://arcana.otnelhq.com/arcana-marketing.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ARCANA — Terminal Interface For AI Keys">
+
+  <!-- Twitter Card Image -->
+  <meta name="twitter:image" content="https://arcana.otnelhq.com/arcana-marketing.jpg">
+  <meta name="twitter:image:alt" content="ARCANA — Terminal Interface For AI Keys">
+
   <link rel="stylesheet" href="/css/main.css" media="all">
 
   <!-- Structured Data — SoftwareApplication -->
@@ -64,7 +78,7 @@
   </script>
   <header>
     <div class="wrap nav">
-      <a class="brand" href="/"><img class="mark" src="/arcana.png" alt="" width="30" height="30"> ARCANA</a>
+      <a class="brand" href="/"><img class="mark" src="/arcanalogo-transparent.png" alt="" width="30" height="30"> ARCANA</a>
       <nav>
         <a href="#models">Models</a>
         <a href="#system">System</a>
@@ -75,11 +89,34 @@
         <a class="status" href="/status">Status</a>
         <a class="signin" href="/auth">Sign In</a>
       </nav>
+      <!-- Mobile hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="hamburger-lines">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
     </div>
   </header>
 
+  <!-- Mobile menu overlay -->
+  <div class="mobile-overlay" id="mobile-overlay" aria-hidden="true"></div>
+
+  <!-- Mobile menu panel -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
+    <a href="#models">Models</a>
+    <a href="#system">System</a>
+    <a href="#start">Install</a>
+    <a href="#pricing">Pricing</a>
+    <a href="/docs">Docs</a>
+    <a href="/changelog">Changelog</a>
+    <a href="/status">Status</a>
+    <a class="mobile-cta" href="/auth">Sign In</a>
+  </div>
+
   <main>
-    <section class="hero wrap">
+    <section class="hero wrap reveal">
       <div class="slash">/</div>
       <h1>The Terminal Interface For AI Keys</h1>
       <p class="lead">Use <b>OpenAI, Claude, OpenRouter, DeepSeek, Cerebras, and local models</b> from one terminal. Arcana adds memory, tools, and scheduled runs on top of your existing keys — no new provider, no vendor lock-in.</p>
@@ -87,21 +124,30 @@
         <div class="cmd"><span>$</span>npx arcana-ai@latest</div>
         <a class="btn primary" href="#start">Install Arcana</a>
         <a class="btn" href="/docs">Read the docs</a>
-        <span class="version-tag">v0.3.15</span>
+      </div>
+      <div class="hero-meta">
+        <span class="version-tag">v0.3.18</span>
       </div>
     </section>
 
-    <div class="wrap">
-      <div class="stats" aria-label="Arcana product stats">
-        <div class="stat"><strong>174</strong><span>Skills</span></div>
-        <div class="stat"><strong>32</strong><span>Providers</span></div>
-        <div class="stat"><strong>17</strong><span>Tools</span></div>
-        <div class="stat"><strong>4</strong><span>Gateways</span></div>
-        <div class="stat"><strong>11</strong><span>Docs</span></div>
+    <div class="wrap reveal showcase">
+      <div class="showcase-grid">
+        <img class="showcase-img" src="/arcana-marketing.jpg" alt="ARCANA terminal interface showing AI model keys and tools" width="600" height="400" loading="lazy">
+        <img class="showcase-img" src="/arcana-marketing2.jpg" alt="ARCANA workspace with memory, gateway, and cron features" width="600" height="400" loading="lazy">
       </div>
     </div>
 
-    <section class="wrap" id="models">
+    <div class="wrap reveal">
+      <div class="stats" aria-label="Arcana product stats">
+        <div class="stat"><strong data-count="174">0</strong><span>Skills</span></div>
+        <div class="stat"><strong data-count="32">0</strong><span>Providers</span></div>
+        <div class="stat"><strong data-count="17">0</strong><span>Tools</span></div>
+        <div class="stat"><strong data-count="4">0</strong><span>Gateways</span></div>
+        <div class="stat"><strong data-count="11">0</strong><span>Docs</span></div>
+      </div>
+    </div>
+
+    <section class="wrap reveal" id="models">
       <div class="section-head">
         <div>
           <div class="kicker">// Models</div>
@@ -121,7 +167,7 @@
       </div>
     </section>
 
-    <section class="wrap" id="system">
+    <section class="wrap reveal" id="system">
       <div class="section-head">
         <div>
           <div class="kicker">// System</div>
@@ -130,18 +176,18 @@
         <p>OpenRouter unifies model access. Arcana sits one layer above — the terminal where keys, tools, memory, jobs, and gateways work together.</p>
       </div>
       <div class="cards">
-        <article class="card"><div class="num">01</div><h3>Any model key</h3><p>Add provider keys once and switch models by task, not by app.</p></article>
-        <article class="card"><div class="num">02</div><h3>Wiki-style memory</h3><p>FTS5-powered session memory with extracted facts, full-text search, and optional cloud sync across machines.</p></article>
-        <article class="card"><div class="num">03</div><h3>Scoped tools</h3><p>Run shell, filesystem, git, gateway, and skill tools through explicit profiles with visible permissions.</p></article>
-        <article class="card"><div class="num">04</div><h3>Skills on demand</h3><p>Load specialized instructions only when needed to keep the base session clean.</p></article>
-        <article class="card"><div class="num">05</div><h3>Cron jobs</h3><p>Schedule recurring prompts, reports, reviews, and checks from the same runtime.</p></article>
-        <article class="card"><div class="num">06</div><h3>Chat gateways</h3><p>Route sessions to Telegram, Discord, Slack, or WhatsApp when the terminal is not the right surface.</p></article>
-        <article class="card"><div class="num">07</div><h3>Themes &amp; backgrounds</h3><p>7 arcane themes with custom background images for supported truecolor terminals.</p></article>
-        <article class="card"><div class="num">08</div><h3>Cloud memory sync</h3><p>Push local facts to the cloud, pull on other machines, and share knowledge across your workspace.</p></article>
+        <article class="card reveal reveal-delay-1"><div class="num">01</div><h3>Any model key</h3><p>Add provider keys once and switch models by task, not by app.</p></article>
+        <article class="card reveal reveal-delay-2"><div class="num">02</div><h3>Wiki-style memory</h3><p>FTS5-powered session memory with extracted facts, full-text search, and optional cloud sync across machines.</p></article>
+        <article class="card reveal reveal-delay-3"><div class="num">03</div><h3>Scoped tools</h3><p>Run shell, filesystem, git, gateway, and skill tools through explicit profiles with visible permissions.</p></article>
+        <article class="card reveal reveal-delay-4"><div class="num">04</div><h3>Skills on demand</h3><p>Load specialized instructions only when needed to keep the base session clean.</p></article>
+        <article class="card reveal reveal-delay-5"><div class="num">05</div><h3>Cron jobs</h3><p>Schedule recurring prompts, reports, reviews, and checks from the same runtime.</p></article>
+        <article class="card reveal reveal-delay-6"><div class="num">06</div><h3>Chat gateways</h3><p>Route sessions to Telegram, Discord, Slack, or WhatsApp when the terminal is not the right surface.</p></article>
+        <article class="card reveal reveal-delay-7"><div class="num">07</div><h3>Themes &amp; backgrounds</h3><p>7 arcane themes with custom background images for supported truecolor terminals.</p></article>
+        <article class="card reveal reveal-delay-8"><div class="num">08</div><h3>Cloud memory sync</h3><p>Push local facts to the cloud, pull on other machines, and share knowledge across your workspace.</p></article>
       </div>
     </section>
 
-    <section class="wrap" id="start">
+    <section class="wrap reveal" id="start">
       <div class="section-head">
         <div>
           <div class="kicker">// Start</div>
@@ -150,13 +196,13 @@
         <p>No account is required for local use. Arcana should feel like a developer tool from the first run.</p>
       </div>
       <div class="steps">
-        <article class="step"><div class="idx">1</div><h3>Install Arcana</h3><p>Run Arcana locally from npm.</p><code class="code">npx arcana-ai@latest</code></article>
-        <article class="step"><div class="idx">2</div><h3>Activate your license</h3><p>Add your Pro license when you need advanced features.</p><code class="code">arcana license activate &lt;key&gt;</code></article>
-        <article class="step"><div class="idx">3</div><h3>Start a session</h3><p>Chat, run tools, save memory, or schedule a job.</p><code class="code">arcana</code></article>
+        <article class="step reveal reveal-delay-1"><div class="idx">1</div><h3>Install Arcana</h3><p>Run Arcana locally from npm.</p><code class="code">npx arcana-ai@latest</code></article>
+        <article class="step reveal reveal-delay-2"><div class="idx">2</div><h3>Activate your license</h3><p>Add your Pro license when you need advanced features.</p><code class="code">arcana license activate &lt;key&gt;</code></article>
+        <article class="step reveal reveal-delay-3"><div class="idx">3</div><h3>Start a session</h3><p>Chat, run tools, save memory, or schedule a job.</p><code class="code">arcana</code></article>
       </div>
     </section>
 
-    <section class="wrap" id="pricing">
+    <section class="wrap reveal" id="pricing">
       <div class="section-head">
         <div>
           <div class="kicker">// Pricing</div>
@@ -165,7 +211,7 @@
         <p>Model costs stay with your provider. Arcana charges for the terminal layer, memory services, sync, relay, and team surfaces.</p>
       </div>
       <div class="pricing">
-        <article class="plan">
+        <article class="plan reveal reveal-delay-1">
           <h3>Community</h3>
           <div class="price">$0</div>
           <div class="annual">local use</div>
@@ -178,7 +224,7 @@
           </ul>
           <a class="btn" href="#start">Install free</a>
         </article>
-        <article class="plan featured">
+        <article class="plan featured reveal reveal-delay-2">
           <h3>Pro</h3>
           <div class="price">$19<small> /mo</small></div>
           <div class="annual">per month</div>
@@ -191,7 +237,7 @@
           </ul>
           <a class="btn primary" href="#" id="subscribe-pro">Get Pro</a>
         </article>
-        <article class="plan">
+        <article class="plan reveal reveal-delay-3">
           <h3>Enterprise</h3>
           <div class="price">Custom</div>
           <div class="annual">per-seat pricing</div>
@@ -215,7 +261,7 @@
 
   <footer>
     <div class="wrap footer">
-      <div><img src="/arcana.png" alt="" width="16" height="16" style="vertical-align:text-bottom;margin-right:4px"> ARCANA · Terminal Interface For AI Keys</div>
+      <div><img src="/arcanalogo-transparent.png" alt="" width="16" height="16" style="vertical-align:text-bottom;margin-right:4px"> ARCANA · Terminal Interface For AI Keys</div>
       <div class="links">
         <a href="/changelog">Changelog</a>
         <a href="/auth">Sign In</a>
@@ -225,6 +271,15 @@
       </div>
     </div>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Back to Top -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase.js"></script>
