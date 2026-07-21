@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxy API · Arcana</title>
+  <meta name="description" content="OpenAI-compatible proxy API reference for Arcana. Chat completions, embeddings, models, memory, sessions, billing, and more.">
+  <meta name="theme-color" content="#0c0a10">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://arcana.otnelhq.com/docs/proxy">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ARCANA">
+  <meta property="og:title" content="Proxy API · Arcana">
+  <meta property="og:description" content="OpenAI-compatible proxy API reference. Chat, embeddings, models, memory, sessions, and billing.">
+  <meta property="og:url" content="https://arcana.otnelhq.com/docs/proxy">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/docs.css" media="all">
+</head>
+<body>
+  <header class="docs-header" role="banner">
+    <div class="docs-header-inner">
+      <a href="/" class="docs-brand" aria-label="Arcana home">
+        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
+        <span>ARCANA</span>
+      </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
+      <nav class="docs-nav" aria-label="Primary">
+        <a href="/docs" class="is-active">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
+      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
+        <span>Documentation</span>
+      </button>
+      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
+          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
+          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link is-active" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Device flow</div>
+          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
+          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-footer">
+          <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="docs-content">
+      <header class="docs-content-header">
+        <div class="docs-kicker">Reference</div>
+        <h1 class="docs-h1">Proxy API</h1>
+        <p class="docs-lead">OpenAI-compatible HTTP API for chat, embeddings, models, memory, sessions, and billing. Route requests through your Arcana license or use your own provider keys directly.</p>
+        <div class="docs-meta">
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
+          <span class="docs-meta-sep">·</span>
+          <a href="/changelog">v0.3.5</a>
+          <span class="docs-meta-sep">·</span>
+          <span>Requires license</span>
+        </div>
+      </header>
+
+      <h2 id="base-url">Base URL</h2>
+<pre data-lang="text"><code>https://proxy.arcana.otnelhq.com</code></pre>
+      <p>All endpoints are under <code>/v1/</code>. The proxy is OpenAI-compatible — drop-in replacements work with any OpenAI SDK or HTTP client.</p>
+
+      <h2 id="authentication">Authentication</h2>
+      <p>Every request (except public endpoints) requires a license key as a Bearer token:</p>
+<pre data-lang="bash"><code>Authorization: Bearer &lt;license_key&gt;</code></pre>
+      <p>License keys look like <code>ARCANA-PRO-…</code> and come from <code>arcana console login</code>. Do <strong>not</strong> send vendor API keys (<code>sk-…</code>) as the proxy bearer.</p>
+<pre data-lang="bash"><code>export ARCANA_LICENSE='ARCANA-PRO-…'
+
+# Quick test
+curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/health</code></pre>
+
+      <div class="docs-callout docs-callout-warn">
+        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <div class="docs-callout-body">
+          <strong>Treat the license like a private key</strong>
+          <p>Anyone with access to your Arcana data directory can use your proxy quota. Never commit credentials; use <code>arcana console logout</code> on shared machines.</p>
+        </div>
+      </div>
+
+      <!-- ========== CHAT ========== -->
+      <h2 id="chat-completions">POST /v1/chat/completions</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
+          <span class="docs-endpoint-path">/v1/chat/completions</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>OpenAI Chat Completions compatible. Supports streaming SSE, tool calls, and all standard parameters.</p>
+
+          <h4>Request body</h4>
+          <div class="docs-table-wrap">
+            <table class="docs-table">
+              <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>model</code></td><td><code>string</code></td><td>Yes</td><td>Model ID (e.g. <code>anthropic/claude-sonnet-4</code>, <code>openai/gpt-4o</code>)</td></tr>
+                <tr><td><code>messages</code></td><td><code>array</code></td><td>Yes</td><td>Array of message objects with <code>role</code> and <code>content</code></td></tr>
+                <tr><td><code>stream</code></td><td><code>boolean</code></td><td>No</td><td>Enable streaming SSE (default: <code>false</code>)</td></tr>
+                <tr><td><code>temperature</code></td><td><code>number</code></td><td>No</td><td>Sampling temperature (0–2)</td></tr>
+                <tr><td><code>max_tokens</code></td><td><code>number</code></td><td>No</td><td>Maximum tokens to generate</td></tr>
+                <tr><td><code>tools</code></td><td><code>array</code></td><td>No</td><td>Tool definitions for function calling</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <h3 id="chat-example-curl">curl example</h3>
+<pre data-lang="bash"><code>curl -N -X POST https://proxy.arcana.otnelhq.com/v1/chat/completions \
+  -H "Authorization: Bearer $ARCANA_LICENSE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "anthropic/claude-sonnet-4",
+    "messages": [
+      { "role": "system", "content": "You are a helpful assistant." },
+      { "role": "user", "content": "What is Arcana?" }
+    ],
+    "stream": true
+  }'</code></pre>
+
+      <h3 id="chat-example-js">JavaScript example</h3>
+<pre data-lang="javascript"><code>const response = await fetch("https://proxy.arcana.otnelhq.com/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.ARCANA_LICENSE}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "anthropic/claude-sonnet-4",
+    messages: [{ role: "user", content: "Hello!" }],
+    stream: true,
+  }),
+});
+
+// Stream the response
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  const chunk = decoder.decode(value);
+  console.log(chunk);
+}</code></pre>
+
+      <h3 id="chat-example-python">Python example</h3>
+<pre data-lang="python"><code>import os, requests
+
+resp = requests.post(
+    "https://proxy.arcana.otnelhq.com/v1/chat/completions",
+    headers={"Authorization": f"Bearer {os.environ['ARCANA_LICENSE']}"},
+    json={
+        "model": "anthropic/claude-sonnet-4",
+        "messages": [{"role": "user", "content": "Hello!"}],
+        "stream": True,
+    },
+    stream=True,
+)
+
+for line in resp.iter_lines():
+    if line:
+        print(line.decode())</code></pre>
+
+      <!-- ========== EMBEDDINGS ========== -->
+      <h2 id="embeddings">POST /v1/embeddings</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
+          <span class="docs-endpoint-path">/v1/embeddings</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>OpenAI-compatible embeddings endpoint. Returns vector representations of input text.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -X POST https://proxy.arcana.otnelhq.com/v1/embeddings \
+  -H "Authorization: Bearer $ARCANA_LICENSE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/text-embedding-3-small",
+    "input": "The quick brown fox"
+  }'</code></pre>
+<pre data-lang="json"><code>{
+  "object": "list",
+  "data": [
+    {
+      "object": "embedding",
+      "embedding": [0.0023, -0.0091, 0.0156, ...],
+      "index": 0
+    }
+  ],
+  "model": "openai/text-embedding-3-small",
+  "usage": { "prompt_tokens": 8, "total_tokens": 8 }
+}</code></pre>
+
+      <!-- ========== MODELS ========== -->
+      <h2 id="models">GET /v1/models</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/models</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>List all models available through your license. Returns an OpenAI-compatible model list.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/models</code></pre>
+<pre data-lang="json"><code>{
+  "object": "list",
+  "data": [
+    { "id": "openai/gpt-4o", "object": "model", "owned_by": "openai" },
+    { "id": "anthropic/claude-sonnet-4", "object": "model", "owned_by": "anthropic" },
+    { "id": "google/gemini-2.5-pro", "object": "model", "owned_by": "google" }
+  ]
+}</code></pre>
+
+      <!-- ========== HEALTH ========== -->
+      <h2 id="health">GET /v1/health</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/health</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>Returns identity and liveness information for the authenticated user.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/health</code></pre>
+<pre data-lang="json"><code>{
+  "status": "ok",
+  "service": "arcana-proxy",
+  "user": "you@domain.com",
+  "tier": "pro"
+}</code></pre>
+
+      <!-- ========== BALANCE ========== -->
+      <h2 id="balance">GET /v1/balance</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/balance</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>Returns your current credit balance. Credits are integer units where 100 credits = $1.00.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/balance</code></pre>
+<pre data-lang="json"><code>{
+  "userId": "you@domain.com",
+  "credits": 842,
+  "dollars": "8.42"
+}</code></pre>
+
+      <!-- ========== USAGE ========== -->
+      <h2 id="usage">GET /v1/usage</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/usage</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>Daily request counters for the authenticated subject. Shows token usage and costs per day.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/usage</code></pre>
+
+      <!-- ========== FREE USAGE ========== -->
+      <h2 id="free-usage">GET /v1/free-usage/sessions/current</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/free-usage/sessions/current</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>Free-tier session snapshot showing turns used, weekly tokens, and remaining quota. Only relevant when on the free plan.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/free-usage/sessions/current</code></pre>
+
+      <!-- ========== SESSIONS ========== -->
+      <h2 id="sessions">GET /v1/sessions</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/sessions</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>List recent proxy-recorded sessions with model, tokens, cost, and optional message preview. These are proxy usage records, not full local TUI transcripts.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code># List sessions
+curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/sessions
+
+# Get session detail
+curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/sessions/ses_abc123</code></pre>
+
+      <!-- ========== MEMORY ========== -->
+      <h2 id="memory">GET / PUT / DELETE /v1/memory</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-method docs-endpoint-method-put">PUT</span>
+          <span class="docs-endpoint-method docs-endpoint-method-delete">DELETE</span>
+          <span class="docs-endpoint-path">/v1/memory</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>Personal cloud memory facts for the workspace Memory page and <code>arcana memory push|pull|sync</code>. Facts are key-value pairs with confidence scores.</p>
+        </div>
+      </div>
+
+      <h3 id="memory-list">List facts</h3>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/memory</code></pre>
+<pre data-lang="json"><code>{
+  "facts": [
+    { "key": "user.theme", "value": "dark", "confidence": 1, "updatedAt": "2026-07-20T10:00:00Z" },
+    { "key": "project.runtime", "value": "bun", "confidence": 0.9, "updatedAt": "2026-07-19T14:30:00Z" }
+  ]
+}</code></pre>
+
+      <h3 id="memory-upsert">Upsert facts</h3>
+      <p>Upserts use last-write-wins semantics by <code>updatedAt</code> timestamp.</p>
+<pre data-lang="bash"><code>curl -X PUT -H "Authorization: Bearer $ARCANA_LICENSE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "facts": [
+      { "key": "user.theme", "value": "dark", "confidence": 1 },
+      { "key": "deploy.target", "value": "cloudflare-workers", "confidence": 0.8 }
+    ]
+  }' \
+  https://proxy.arcana.otnelhq.com/v1/memory</code></pre>
+
+      <h3 id="memory-delete">Delete a fact</h3>
+<pre data-lang="bash"><code>curl -X DELETE -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/memory/user.theme</code></pre>
+
+      <!-- ========== PROFILE ========== -->
+      <h2 id="profile">GET / PUT /v1/profile</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-method docs-endpoint-method-put">PUT</span>
+          <span class="docs-endpoint-path">/v1/profile</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>User profile preferences used by the workspace UI.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code># Get profile
+curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/profile
+
+# Update profile
+curl -X PUT -H "Authorization: Bearer $ARCANA_LICENSE" \
+  -H "Content-Type: application/json" \
+  -d '{"displayName": "Alice", "preferences": {"theme": "dark"}}' \
+  https://proxy.arcana.otnelhq.com/v1/profile</code></pre>
+
+      <!-- ========== PURCHASES ========== -->
+      <h2 id="purchases">GET /v1/purchases</h2>
+      <div class="docs-endpoint">
+        <div class="docs-endpoint-head">
+          <span class="docs-endpoint-method docs-endpoint-method-get">GET</span>
+          <span class="docs-endpoint-path">/v1/purchases</span>
+          <span class="docs-endpoint-auth">License</span>
+        </div>
+        <div class="docs-endpoint-body">
+          <p>Purchase history for the authenticated account.</p>
+        </div>
+      </div>
+<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
+  https://proxy.arcana.otnelhq.com/v1/purchases</code></pre>
+
+      <!-- ========== PUBLIC ENDPOINTS ========== -->
+      <h2 id="public-endpoints">Public endpoints</h2>
+      <p>These endpoints do not require authentication:</p>
+
+      <h3 id="validate-email">GET /v1/identity/validate-email</h3>
+      <p>Check if an email address has an associated Arcana account.</p>
+<pre data-lang="bash"><code>curl "https://proxy.arcana.otnelhq.com/v1/identity/validate-email?email=you@domain.com"</code></pre>
+
+      <h3 id="trial-start">POST /v1/trial/start</h3>
+      <p>Start a trial token (if enabled for your account).</p>
+<pre data-lang="bash"><code>curl -X POST -H "Content-Type: application/json" \
+  -d '{"email": "you@domain.com"}' \
+  https://proxy.arcana.otnelhq.com/v1/trial/start</code></pre>
+
+      <!-- ========== ERROR HANDLING ========== -->
+      <h2 id="errors">Error handling</h2>
+      <p>The proxy returns standard HTTP status codes and OpenAI-compatible error objects:</p>
+<pre data-lang="json"><code>{
+  "error": {
+    "message": "Invalid license key",
+    "type": "invalid_request_error",
+    "code": "invalid_license"
+  }
+}</code></pre>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>HTTP</th><th>Meaning</th><th>What to do</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>200</code></td><td>Success</td><td>—</td></tr>
+            <tr><td><code>400</code></td><td>Bad request</td><td>Check request body and parameters</td></tr>
+            <tr><td><code>401</code></td><td>Unauthorized</td><td>Check your license key</td></tr>
+            <tr><td><code>403</code></td><td>Forbidden</td><td>License may be expired or tier too low</td></tr>
+            <tr><td><code>429</code></td><td>Rate limited</td><td>Wait and retry; check <code>Retry-After</code> header</td></tr>
+            <tr><td><code>500</code></td><td>Server error</td><td>Retry or check status page</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ========== SDK ========== -->
+      <h2 id="sdk-usage">Using with SDKs</h2>
+      <p>The proxy is OpenAI-compatible, so any OpenAI SDK works as a drop-in:</p>
+
+      <h3 id="sdk-openai-js">OpenAI Node.js SDK</h3>
+<pre data-lang="javascript"><code>import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.ARCANA_LICENSE,
+  baseURL: "https://proxy.arcana.otnelhq.com/v1",
+});
+
+const res = await client.chat.completions.create({
+  model: "anthropic/claude-sonnet-4",
+  messages: [{ role: "user", content: "Hello!" }],
+});
+
+console.log(res.choices[0].message.content);</code></pre>
+
+      <h3 id="sdk-openai-python">OpenAI Python SDK</h3>
+<pre data-lang="python"><code>from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.environ["ARCANA_LICENSE"],
+    base_url="https://proxy.arcana.otnelhq.com/v1",
+)
+
+res = client.chat.completions.create(
+    model="anthropic/claude-sonnet-4",
+    messages=[{"role": "user", "content": "Hello!"}],
+)
+
+print(res.choices[0].message.content)</code></pre>
+
+      <!-- ========== RATE LIMITS ========== -->
+      <h2 id="rate-limits">Rate limits</h2>
+      <p>Rate limits depend on your license tier:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tier</th><th>Requests/min</th><th>Tokens/day</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Free</td><td>10</td><td>Limited</td><td>Weekly token cap</td></tr>
+            <tr><td>Pro</td><td>60</td><td>Unlimited</td><td>Per-provider limits may apply</td></tr>
+            <tr><td>Enterprise</td><td>Custom</td><td>Unlimited</td><td>Contact sales</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>When rate limited, the response includes a <code>Retry-After</code> header with the number of seconds to wait.</p>
+
+      <!-- ========== COMPARISON ========== -->
+      <h2 id="proxy-vs-byok">Proxy vs BYOK</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Feature</th><th>Proxy (license)</th><th>BYOK (your keys)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Billing</td><td>Arcana credits</td><td>Direct to provider</td></tr>
+            <tr><td>Memory sync</td><td>Yes (cloud)</td><td>Local only</td></tr>
+            <tr><td>Session tracking</td><td>Yes (workspace)</td><td>Local only</td></tr>
+            <tr><td>Cost ledger</td><td>Yes</td><td>No</td></tr>
+            <tr><td>Model catalog</td><td>All licensed models</td><td>Provider-specific</td></tr>
+            <tr><td>Offline use</td><td>No</td><td>Yes (with local models)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="docs-pager" aria-label="Page navigation">
+        <a class="docs-pager-prev" href="/docs/configuration">
+          <span class="docs-pager-dir">← Previous</span>
+          <span class="docs-pager-title">Configuration</span>
+        </a>
+        <a class="docs-pager-next" href="/docs/cli">
+          <span class="docs-pager-dir">Next →</span>
+          <span class="docs-pager-title">CLI Commands</span>
+        </a>
+      </nav>
+    </article>
+
+    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+      <div class="docs-toc-label">On this page</div>
+    </aside>
+  </div>
+
+  <footer class="docs-footer" role="contentinfo">
+    <div class="docs-footer-inner">
+      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-links">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/docs.js" defer></script>
+</body>
+</html>

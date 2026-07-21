@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Themes · Arcana</title>
+  <meta name="description" content="Customize Arcana's terminal UI with 7 arcane themes, background images, and color schemes. Make the terminal yours.">
+  <meta name="theme-color" content="#0c0a10">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://arcana.otnelhq.com/docs/themes">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ARCANA">
+  <meta property="og:title" content="Themes · Arcana">
+  <meta property="og:description" content="7 arcane themes, background images, and TUI customization.">
+  <meta property="og:url" content="https://arcana.otnelhq.com/docs/themes">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/docs.css" media="all">
+</head>
+<body>
+  <header class="docs-header" role="banner">
+    <div class="docs-header-inner">
+      <a href="/" class="docs-brand" aria-label="Arcana home">
+        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
+        <span>ARCANA</span>
+      </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
+      <nav class="docs-nav" aria-label="Primary">
+        <a href="/docs" class="is-active">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
+      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
+        <span>Documentation</span>
+      </button>
+      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
+          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
+          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link is-active" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Device flow</div>
+          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
+          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-footer">
+          <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="docs-content">
+      <header class="docs-content-header">
+        <div class="docs-kicker">Features</div>
+        <h1 class="docs-h1">Themes</h1>
+        <p class="docs-lead">Customize Arcana's terminal UI with 7 arcane themes and optional background images. Make the terminal feel like yours.</p>
+        <div class="docs-meta">
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
+          <span class="docs-meta-sep">·</span>
+          <a href="/changelog">v0.3.5</a>
+        </div>
+      </header>
+
+      <h2 id="available-themes">Available themes</h2>
+      <p>Arcana ships with 7 built-in themes. Switch themes at any time from the TUI or config file.</p>
+
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Theme</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>arcana</code></td><td>Default — deep plum with lavender accents</td></tr>
+            <tr><td><code>bloodmoon</code></td><td>Dark crimson palette with warm highlights</td></tr>
+            <tr><td><code>coven</code></td><td>Deep violet and purple tones</td></tr>
+            <tr><td><code>crypt</code></td><td>Stone gray and muted greens</td></tr>
+            <tr><td><code>dragon</code></td><td>Fiery orange and gold accents</td></tr>
+            <tr><td><code>lich</code></td><td>Ethereal blue-green phosphorescence</td></tr>
+            <tr><td><code>wraith</code></td><td>Spectral white and silver on dark</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="switching-themes">Switching themes</h2>
+      <h3 id="in-the-tui">In the TUI</h3>
+      <p>Press <code>⛧ themes</code> in the TUI to open the theme picker and preview each theme live.</p>
+
+      <h3 id="via-config">Via config file</h3>
+      <p>Set the theme in your TUI config at <code>~/.config/arcana/tui.json</code>:</p>
+<pre data-lang="json"><code>{
+  "theme": "dragon"
+}</code></pre>
+      <p>Valid values: <code>arcana</code>, <code>bloodmoon</code>, <code>coven</code>, <code>crypt</code>, <code>dragon</code>, <code>lich</code>, <code>wraith</code>.</p>
+
+      <h2 id="background-images">Background images</h2>
+      <p>Set a custom full-screen background image for supported truecolor terminals (Kitty, iTerm2, WezTerm, Windows Terminal).</p>
+
+      <h3 id="bg-config">Configuration</h3>
+<pre data-lang="json"><code>{
+  "theme": "dragon",
+  "background": {
+    "enabled": true,
+    "image": "~/wallpapers/space.png",
+    "opacity": 0.4,
+    "fit": "cover"
+  }
+}</code></pre>
+
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>background.enabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Enable background image</td></tr>
+            <tr><td><code>background.image</code></td><td><code>string</code></td><td>—</td><td>Path to PNG or JPEG image (supports <code>~</code> expansion)</td></tr>
+            <tr><td><code>background.opacity</code></td><td><code>number</code></td><td><code>0.4</code></td><td>Image opacity (0–1), dims the image so text stays readable</td></tr>
+            <tr><td><code>background.fit</code></td><td><code>string</code></td><td><code>"cover"</code></td><td>Image fit mode (<code>cover</code>, <code>contain</code>, <code>stretch</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="bg-terminals">Terminal support</h3>
+      <p>Background images require a terminal that supports the Kitty graphics protocol or inline images:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Terminal</th><th>Protocol</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Kitty</td><td>Kitty graphics</td><td>Full support</td></tr>
+            <tr><td>iTerm2</td><td>Inline images</td><td>Full support</td></tr>
+            <tr><td>WezTerm</td><td>Kitty graphics</td><td>Full support</td></tr>
+            <tr><td>Windows Terminal</td><td>VT sequences</td><td>Partial support</td></tr>
+            <tr><td>Alacritty</td><td>—</td><td>Not supported</td></tr>
+            <tr><td>tmux</td><td>—</td><td>Requires passthrough config</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="docs-callout docs-callout-info">
+        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <div class="docs-callout-body">
+          <strong>Fallback behavior</strong>
+          <p>If your terminal does not support background images, Arcana falls back to the theme's solid color background. The image shows on the home screen and empty areas; text remains readable everywhere.</p>
+        </div>
+      </div>
+
+      <h2 id="theme-structure">Theme structure</h2>
+      <p>Each theme defines a set of semantic color tokens that control the entire TUI — text, borders, highlights, syntax highlighting, and status indicators. Themes are self-contained and can be previewed without restart.</p>
+<pre data-lang="text"><code>~/.config/arcana/
+  tui.json          # Theme selection + background config</code></pre>
+
+      <h2 id="tips">Tips</h2>
+      <ul>
+        <li>Use <strong>opacity 0.3–0.5</strong> for best readability with background images.</li>
+        <li>PNG images with transparency work well — the alpha channel blends with the theme color.</li>
+        <li>Press <code>⛧ themes</code> in the TUI to cycle through themes without editing config.</li>
+        <li>Themes affect the TUI only — the web dashboard and docs site use their own styling.</li>
+      </ul>
+
+      <nav class="docs-pager" aria-label="Page navigation">
+        <a class="docs-pager-prev" href="/docs/memory">
+          <span class="docs-pager-dir">← Previous</span>
+          <span class="docs-pager-title">Memory</span>
+        </a>
+        <a class="docs-pager-next" href="/docs/mcp">
+          <span class="docs-pager-dir">Next →</span>
+          <span class="docs-pager-title">MCP &amp; Tools</span>
+        </a>
+      </nav>
+    </article>
+
+    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+      <div class="docs-toc-label">On this page</div>
+    </aside>
+  </div>
+
+  <footer class="docs-footer" role="contentinfo">
+    <div class="docs-footer-inner">
+      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-links">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/docs.js" defer></script>
+</body>
+</html>

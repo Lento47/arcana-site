@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLI Commands · Arcana</title>
+  <meta name="description" content="Complete CLI command reference for Arcana. All commands, flags, and examples for the arcana terminal AI agent.">
+  <meta name="theme-color" content="#0c0a10">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://arcana.otnelhq.com/docs/cli">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ARCANA">
+  <meta property="og:title" content="CLI Commands · Arcana">
+  <meta property="og:description" content="Complete CLI command reference for all arcana commands.">
+  <meta property="og:url" content="https://arcana.otnelhq.com/docs/cli">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/docs.css" media="all">
+</head>
+<body>
+  <header class="docs-header" role="banner">
+    <div class="docs-header-inner">
+      <a href="/" class="docs-brand" aria-label="Arcana home">
+        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
+        <span>ARCANA</span>
+      </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
+      <nav class="docs-nav" aria-label="Primary">
+        <a href="/docs" class="is-active">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
+      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
+        <span>Documentation</span>
+      </button>
+      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
+          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
+          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link is-active" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Device flow</div>
+          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
+          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-footer">
+          <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="docs-content">
+      <header class="docs-content-header">
+        <div class="docs-kicker">Reference</div>
+        <h1 class="docs-h1">CLI Commands</h1>
+        <p class="docs-lead">Complete reference for every <code>arcana</code> command. Run <code>arcana --help</code> or <code>arcana &lt;command&gt; --help</code> for flags on your installed version.</p>
+        <div class="docs-meta">
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
+          <span class="docs-meta-sep">·</span>
+          <a href="/changelog">v0.3.5</a>
+        </div>
+      </header>
+
+      <!-- ========== CORE ========== -->
+      <h2 id="core">Core</h2>
+
+      <h3 id="cmd-run">arcana run</h3>
+      <p>Start an interactive or one-shot agent session in the current project.</p>
+<pre data-lang="bash"><code># Interactive TUI session
+arcana run
+
+# One-shot query
+arcana run "explain this codebase"
+
+# Specify a model
+arcana run --model openai/gpt-4o "summarize the auth flow"
+
+# With autonomy mode
+arcana run "fix auth tests" --mode advise
+arcana run "audit auth module" --mode ask</code></pre>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Flag</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--model</code>, <code>-m</code></td><td>Model ID (e.g. <code>openai/gpt-4o</code>)</td></tr>
+            <tr><td><code>--mode</code></td><td>Autonomy mode: <code>observe</code>, <code>advise</code>, <code>ask</code>, <code>enforce</code>, <code>locked</code></td></tr>
+            <tr><td><code>--local-first</code></td><td>Prefer local-only analysis before external routing</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="cmd-doctor">arcana doctor</h3>
+      <p>Check system health — config, API keys, cache files, and runtime environment.</p>
+<pre data-lang="bash"><code>arcana doctor
+
+# Check web app health
+arcana doctor --web</code></pre>
+
+      <h3 id="cmd-models">arcana models</h3>
+      <p>List all available models from detected providers and the models.dev catalog.</p>
+<pre data-lang="bash"><code>arcana models</code></pre>
+
+      <h3 id="cmd-providers">arcana providers</h3>
+      <p>Interactive provider credential management.</p>
+<pre data-lang="bash"><code>arcana providers</code></pre>
+
+      <!-- ========== ACCOUNT ========== -->
+      <h2 id="account">Account &amp; license</h2>
+
+      <h3 id="cmd-console">arcana console</h3>
+      <p>Device-flow login, org management, and logout.</p>
+<pre data-lang="bash"><code># Login (default server)
+arcana console login
+
+# Login to a custom server
+arcana console login https://arcana.otnelhq.com
+
+# List organizations
+arcana console orgs
+
+# Switch active org
+arcana console switch
+
+# Logout
+arcana console logout [email]
+
+# Open console in browser
+arcana console open</code></pre>
+
+      <h3 id="cmd-license">arcana license</h3>
+      <p>Activate, check, or deactivate a Pro/Enterprise license key.</p>
+<pre data-lang="bash"><code># Activate a license
+arcana license activate &lt;key&gt;
+
+# Check status
+arcana license status
+
+# Deactivate
+arcana license deactivate</code></pre>
+
+      <h3 id="cmd-trust">arcana trust</h3>
+      <p>Manage workspace trust for project plugins, tools, and local MCP.</p>
+<pre data-lang="bash"><code># Trust current workspace
+arcana trust
+
+# Check trust status
+arcana trust status [path]
+
+# List all trusted workspaces
+arcana trust list
+
+# Revoke trust
+arcana trust revoke [path]
+
+# Grant trust to a specific path
+arcana trust grant [path]</code></pre>
+
+      <div class="docs-callout docs-callout-info">
+        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <div class="docs-callout-body">
+          <strong>Trust is invalidated on change</strong>
+          <p>Trust is stored in <code>~/.arcana/workspace-trust.json</code> and is invalidated when executable project config changes. Re-run <code>arcana trust</code> after updating project plugins.</p>
+        </div>
+      </div>
+
+      <!-- ========== SESSIONS ========== -->
+      <h2 id="sessions">Sessions &amp; data</h2>
+
+      <h3 id="cmd-session">arcana session</h3>
+      <p>List and delete past sessions.</p>
+<pre data-lang="bash"><code># List sessions
+arcana session list
+
+# Delete a session
+arcana session delete &lt;sessionID&gt;</code></pre>
+
+      <h3 id="cmd-history">arcana history</h3>
+      <p>Browse and resume past sessions.</p>
+<pre data-lang="bash"><code># List past sessions
+arcana history list
+
+# Show session detail
+arcana history show --id &lt;session-id&gt;
+
+# Resume a session
+arcana history resume --id &lt;session-id&gt;</code></pre>
+
+      <h3 id="cmd-memory">arcana memory</h3>
+      <p>Manage FTS5-powered session memory, facts, and cloud sync.</p>
+<pre data-lang="bash"><code># List extracted facts
+arcana memory facts
+
+# Full-text search
+arcana memory search --query &lt;q&gt;
+
+# Show statistics
+arcana memory stats
+
+# Cloud sync
+arcana memory push     # local facts → cloud
+arcana memory pull     # cloud facts → local
+arcana memory sync     # push then pull</code></pre>
+
+      <h3 id="cmd-export">arcana export / import</h3>
+      <p>Export and import session data.</p>
+<pre data-lang="bash"><code>arcana export
+arcana import</code></pre>
+
+      <h3 id="cmd-stats">arcana stats</h3>
+      <p>Show usage statistics.</p>
+<pre data-lang="bash"><code>arcana stats</code></pre>
+
+      <h3 id="cmd-learn">arcana learn</h3>
+      <p>View accumulated knowledge from the self-improving knowledge pipeline.</p>
+<pre data-lang="bash"><code># List learned entries
+arcana learn list
+
+# Show a specific entry
+arcana learn show --slug &lt;slug&gt;
+
+# Show map of consciousness
+arcana learn moc</code></pre>
+
+      <h3 id="cmd-db">arcana db</h3>
+      <p>Local database utilities (inspect / path). Prefer higher-level commands unless debugging.</p>
+<pre data-lang="bash"><code>arcana db --help</code></pre>
+
+      <!-- ========== TOOLS ========== -->
+      <h2 id="tools">MCP, plugins, agents</h2>
+
+      <h3 id="cmd-mcp">arcana mcp</h3>
+      <p>Manage MCP (Model Context Protocol) servers.</p>
+<pre data-lang="bash"><code># List MCP servers
+arcana mcp list
+
+# Add an MCP server
+arcana mcp add [name]
+
+# Authenticate an MCP server
+arcana mcp auth [name]
+
+# Logout from an MCP server
+arcana mcp logout [name]
+
+# Debug an MCP server
+arcana mcp debug &lt;name&gt;</code></pre>
+
+      <h3 id="cmd-plugin">arcana plugin</h3>
+      <p>Plugin management.</p>
+<pre data-lang="bash"><code>arcana plugin --help</code></pre>
+
+      <h3 id="cmd-plugin-store">arcana plugin-store</h3>
+      <p>Browse and install plugins from the store.</p>
+<pre data-lang="bash"><code>arcana plugin-store --help</code></pre>
+
+      <h3 id="cmd-agent">arcana agent</h3>
+      <p>Agent configuration helpers.</p>
+<pre data-lang="bash"><code>arcana agent --help</code></pre>
+
+      <!-- ========== SERVER ========== -->
+      <h2 id="server">Server &amp; integrations</h2>
+
+      <h3 id="cmd-serve">arcana serve</h3>
+      <p>Headless control plane server. Defaults to loopback. Non-loopback binds require <code>ARCANA_SERVER_PASSWORD</code>.</p>
+<pre data-lang="bash"><code># Start on loopback
+arcana serve
+
+# Bind to specific address
+arcana serve --hostname 127.0.0.1 --port 4096
+
+# Non-loopback (requires password)
+ARCANA_SERVER_PASSWORD=secret arcana serve --hostname 0.0.0.0 --port 4096</code></pre>
+
+      <h3 id="cmd-attach">arcana attach</h3>
+      <p>Attach to a running server.</p>
+<pre data-lang="bash"><code>arcana attach --help</code></pre>
+
+      <h3 id="cmd-web">arcana web</h3>
+      <p>Optional SolidJS web dashboard.</p>
+<pre data-lang="bash"><code># Start web app
+arcana web
+
+# Build for production
+arcana web --build
+
+# Custom host/port
+arcana web --host 127.0.0.1 --port 3000 --open</code></pre>
+
+      <h3 id="cmd-github">arcana github / pr</h3>
+      <p>GitHub and pull request helpers.</p>
+<pre data-lang="bash"><code>arcana github --help
+arcana pr --help</code></pre>
+
+      <!-- ========== LIFECYCLE ========== -->
+      <h2 id="lifecycle">Lifecycle &amp; maintenance</h2>
+
+      <h3 id="cmd-upgrade">arcana upgrade</h3>
+      <p>Upgrade Arcana to the latest version.</p>
+<pre data-lang="bash"><code>arcana upgrade</code></pre>
+
+      <h3 id="cmd-uninstall">arcana uninstall</h3>
+      <p>Uninstall Arcana.</p>
+<pre data-lang="bash"><code>arcana uninstall</code></pre>
+
+      <h3 id="cmd-audit">arcana audit</h3>
+      <p>Audit helpers.</p>
+<pre data-lang="bash"><code>arcana audit --help</code></pre>
+
+      <!-- ========== ADVANCED ========== -->
+      <h2 id="advanced">Advanced</h2>
+
+      <h3 id="cmd-proxy">arcana proxy</h3>
+      <p>Proxy connection helpers — check health, list models, and view usage.</p>
+<pre data-lang="bash"><code># Check proxy health
+arcana proxy status
+
+# List available models
+arcana proxy models
+
+# View usage
+arcana proxy usage</code></pre>
+
+      <h3 id="cmd-gateway">arcana gateway</h3>
+      <p>Start chat platform adapters (Telegram, Discord, Slack, WhatsApp).</p>
+<pre data-lang="bash"><code># Start with config
+arcana gateway
+
+# Pass tokens directly
+arcana gateway --telegram-token "111:xxx"
+arcana gateway --discord-token "xxx"</code></pre>
+      <p>See <a href="/docs/gateway">Gateway</a> for full setup instructions.</p>
+
+      <h3 id="cmd-cron">arcana cron</h3>
+      <p>Schedule and manage recurring agent jobs.</p>
+<pre data-lang="bash"><code># Add a job
+arcana cron add --name "review" --schedule "0 */4 * * *" --prompt "review open PRs"
+
+# List jobs
+arcana cron list
+
+# Run a job now
+arcana cron run --id &lt;id&gt;
+
+# Start the scheduler daemon
+arcana cron start</code></pre>
+      <p>See <a href="/docs/cron">Cron</a> for the full scheduled jobs reference.</p>
+
+      <h3 id="cmd-skills">arcana skills</h3>
+      <p>Browse, search, and manage skills.</p>
+<pre data-lang="bash"><code># List all skills
+arcana skills list
+
+# Search by keyword
+arcana skills list --query "python testing"
+
+# Show skill details
+arcana skills info --skill "python-testing"
+
+# Skills ranked by usage
+arcana skills ranked</code></pre>
+      <p>See <a href="/docs/skills">Skills</a> for the full skills reference.</p>
+
+      <h3 id="cmd-team">arcana team</h3>
+      <p>Team collaboration helpers.</p>
+<pre data-lang="bash"><code>arcana team --help</code></pre>
+
+      <h3 id="cmd-generate">arcana generate</h3>
+      <p>Generation utilities.</p>
+<pre data-lang="bash"><code>arcana generate --help</code></pre>
+
+      <h3 id="cmd-acp">arcana acp</h3>
+      <p>ACP (Agent Communication Protocol) mode.</p>
+<pre data-lang="bash"><code>arcana acp --help</code></pre>
+
+      <h3 id="cmd-debug">arcana debug</h3>
+      <p>Debug tools for troubleshooting.</p>
+<pre data-lang="bash"><code>arcana debug --help</code></pre>
+
+      <!-- ========== ENV VARS ========== -->
+      <h2 id="env-vars">Environment variables</h2>
+      <p>Common environment variables that affect CLI behavior:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Variable</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>ARCANA_HOME</code></td><td>Root directory (default: <code>~/.arcana</code>)</td></tr>
+            <tr><td><code>ARCANA_PROVIDER</code></td><td>LLM provider override</td></tr>
+            <tr><td><code>ARCANA_MODEL</code></td><td>Model ID override</td></tr>
+            <tr><td><code>ARCANA_API_KEY</code></td><td>Provider API key</td></tr>
+            <tr><td><code>ARCANA_PROXY_KEY</code></td><td>Proxy license key (auto-loaded from <code>~/.arcana/proxy_key</code>)</td></tr>
+            <tr><td><code>ARCANA_SERVER_PASSWORD</code></td><td>Required for non-loopback <code>arcana serve</code></td></tr>
+            <tr><td><code>ARCANA_DISABLE_WORKSPACE_TRUST</code></td><td>Skip trust checks (dev only)</td></tr>
+            <tr><td><code>ARCANA_TRUST_WORKSPACE</code></td><td>Force-trust for CI</td></tr>
+            <tr><td><code>ARCANA_GATEWAY_OPEN</code></td><td>Allow empty gateway allowlists (dev only)</td></tr>
+            <tr><td><code>ARCANA_ML_RUNTIME</code></td><td>Enable ML quality gate (<code>1</code> to enable)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="global-flags">Global flags</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Flag</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--help</code>, <code>-h</code></td><td>Show help for a command</td></tr>
+            <tr><td><code>--version</code>, <code>-v</code></td><td>Show version number</td></tr>
+            <tr><td><code>--json</code></td><td>Output in JSON format (where supported)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="docs-pager" aria-label="Page navigation">
+        <a class="docs-pager-prev" href="/docs/proxy">
+          <span class="docs-pager-dir">← Previous</span>
+          <span class="docs-pager-title">Proxy API</span>
+        </a>
+        <a class="docs-pager-next" href="/docs/troubleshooting">
+          <span class="docs-pager-dir">Next →</span>
+          <span class="docs-pager-title">Troubleshooting</span>
+        </a>
+      </nav>
+    </article>
+
+    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+      <div class="docs-toc-label">On this page</div>
+    </aside>
+  </div>
+
+  <footer class="docs-footer" role="contentinfo">
+    <div class="docs-footer-inner">
+      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-links">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/docs.js" defer></script>
+</body>
+</html>

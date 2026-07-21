@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gateway · Arcana</title>
+  <meta name="description" content="Connect Arcana to Telegram, Discord, Slack, and WhatsApp as an AI assistant. Full setup guide for the chat gateway.">
+  <meta name="theme-color" content="#0c0a10">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://arcana.otnelhq.com/docs/gateway">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ARCANA">
+  <meta property="og:title" content="Gateway · Arcana">
+  <meta property="og:description" content="Connect Arcana to Telegram, Discord, Slack, and WhatsApp as an AI assistant.">
+  <meta property="og:url" content="https://arcana.otnelhq.com/docs/gateway">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/docs.css" media="all">
+</head>
+<body>
+  <header class="docs-header" role="banner">
+    <div class="docs-header-inner">
+      <a href="/" class="docs-brand" aria-label="Arcana home">
+        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
+        <span>ARCANA</span>
+      </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
+      <nav class="docs-nav" aria-label="Primary">
+        <a href="/docs" class="is-active">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
+      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
+        <span>Documentation</span>
+      </button>
+      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
+          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
+          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link is-active" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Device flow</div>
+          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
+          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-footer">
+          <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="docs-content">
+      <header class="docs-content-header">
+        <div class="docs-kicker">Features</div>
+        <h1 class="docs-h1">Gateway</h1>
+        <p class="docs-lead">Connect Arcana to Telegram, Discord, Slack, and WhatsApp. Each platform runs as a separate adapter — you can enable one or all simultaneously.</p>
+        <div class="docs-meta">
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
+          <span class="docs-meta-sep">·</span>
+          <a href="/changelog">v0.3.5</a>
+          <span class="docs-meta-sep">·</span>
+          <span>Pro / Enterprise license</span>
+        </div>
+      </header>
+
+      <h2 id="overview">Overview</h2>
+      <p>The gateway lets Arcana act as an AI assistant inside your existing chat platforms. Each chat ID gets its own agent session with conversation history and memory integration — the bot remembers context within each chat.</p>
+<pre data-lang="bash"><code>arcana gateway</code></pre>
+      <p>You can also pass tokens directly:</p>
+<pre data-lang="bash"><code>arcana gateway --telegram-token "111:xxx"
+arcana gateway --discord-token "xxx"</code></pre>
+
+      <div class="docs-callout docs-callout-info">
+        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <div class="docs-callout-body">
+          <strong>License required</strong>
+          <p>The gateway requires a <strong>Pro</strong> or <strong>Enterprise</strong> license. Set <code>ARCANA_LICENSE_KEY</code> or complete <code>arcana console login</code> before starting.</p>
+        </div>
+      </div>
+
+      <h2 id="configuration">Configuration</h2>
+      <p>Add a <code>gateway</code> block to <code>~/.arcana/config.json</code>:</p>
+<pre data-lang="json"><code>{
+  "provider": "openai",
+  "model": "gpt-4o",
+  "gateway": {
+    "telegram": { "token": "111:xxx", "allowedUsers": ["12345678"] },
+    "discord": { "token": "xxx", "allowedChannels": ["987654321"] },
+    "slack": { "botToken": "xoxb-xxx", "signingSecret": "xxx", "allowedChannels": ["C0123ABC"] },
+    "whatsapp": { "phoneNumberId": "123456", "accessToken": "xxx", "appSecret": "xxx", "allowedUsers": ["14155551234"] }
+  }
+}</code></pre>
+      <p>See <a href="/docs/configuration">Configuration</a> for the full reference.</p>
+
+      <h2 id="telegram">Telegram</h2>
+      <ol>
+        <li>Message <a href="https://t.me/BotFather">@BotFather</a> on Telegram and create a new bot.</li>
+        <li>Copy the bot token into your config.</li>
+        <li>Add your Telegram user ID to <code>allowedUsers</code>.</li>
+      </ol>
+      <p>To find your numeric user ID, forward a message from your bot to <a href="https://t.me/userinfobot">@userinfobot</a>, or call <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> and look for <code>from.id</code>.</p>
+      <p>The Telegram adapter uses polling mode (no public URL needed) and formats responses with Markdown.</p>
+
+      <h2 id="discord">Discord</h2>
+      <ol>
+        <li>Create a new application at <a href="https://discord.com/developers/applications">discord.com/developers</a>.</li>
+        <li>Go to <strong>Bot</strong> → copy the bot token.</li>
+        <li>Enable <strong>Message Content Intent</strong> under Privileged Gateway Intents.</li>
+        <li>Invite the bot to your server with the <code>bot</code> scope and <code>Send Messages</code> + <code>Read Message History</code> permissions.</li>
+        <li>Add the channel ID to <code>allowedChannels</code>.</li>
+      </ol>
+
+      <div class="docs-callout docs-callout-warn">
+        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <div class="docs-callout-body">
+          <strong>2000 character limit</strong>
+          <p>Discord replies are capped at 2000 characters. Longer responses are truncated automatically.</p>
+        </div>
+      </div>
+
+      <h2 id="slack">Slack</h2>
+      <ol>
+        <li>Create a new app at <a href="https://api.slack.com/apps">api.slack.com/apps</a>.</li>
+        <li>Under <strong>OAuth &amp; Permissions</strong>, add the <code>chat:write</code>, <code>channels:history</code>, and <code>im:history</code> scopes.</li>
+        <li>Install the app to your workspace and copy the <strong>Bot User OAuth Token</strong> (<code>xoxb-...</code>).</li>
+        <li>Under <strong>Basic Information</strong>, copy the <strong>Signing Secret</strong>.</li>
+        <li>Under <strong>Event Subscriptions</strong>, enable events and request the <code>message.channels</code> and <code>message.im</code> bot events.</li>
+        <li>Add the channel ID to <code>allowedChannels</code>.</li>
+      </ol>
+      <p>Check <a href="https://api.slack.com/authentication">Slack's API docs</a> for the latest required scopes, as they may change.</p>
+
+      <h2 id="whatsapp">WhatsApp</h2>
+      <p>WhatsApp uses the Meta Cloud API via webhooks. You need a Meta Business App with the WhatsApp product added.</p>
+      <ol>
+        <li>Create a Meta Business App at <a href="https://developers.facebook.com">developers.facebook.com</a>.</li>
+        <li>Add the WhatsApp product to your app.</li>
+        <li>Copy the <strong>Phone Number ID</strong> and <strong>Access Token</strong> into your config.</li>
+        <li>Set <code>appSecret</code> for webhook signature verification (required for production).</li>
+        <li>Expose your local webhook server (port 3100 by default) with a tool like <code>ngrok</code>:
+<pre data-lang="bash"><code>ngrok http 3100</code></pre>
+        </li>
+        <li>In the Meta dashboard, configure the webhook URL as <code>https://your-domain/webhook</code> and subscribe to <code>messages</code> events.</li>
+        <li>Set <code>verifyToken</code> to match what you configure in the Meta dashboard (or it defaults to a random UUID).</li>
+      </ol>
+
+      <div class="docs-callout docs-callout-warn">
+        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <div class="docs-callout-body">
+          <strong>4096 character limit</strong>
+          <p>WhatsApp messages are capped at 4096 characters. Longer responses are truncated automatically.</p>
+        </div>
+      </div>
+
+      <h2 id="security">Security</h2>
+      <h3 id="allowlists">Allowlists (required)</h3>
+      <p>Every platform requires an allowlist. The gateway refuses to start with an empty or missing allowlist unless <code>ARCANA_GATEWAY_OPEN=1</code> is set (local dev only).</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Platform</th><th>Allowlist field</th><th>What to put</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Telegram</td><td><code>allowedUsers</code></td><td>Telegram user IDs (numeric)</td></tr>
+            <tr><td>Discord</td><td><code>allowedChannels</code></td><td>Discord channel IDs</td></tr>
+            <tr><td>Slack</td><td><code>allowedChannels</code></td><td>Slack channel IDs (<code>C0...</code>)</td></tr>
+            <tr><td>WhatsApp</td><td><code>allowedUsers</code></td><td>Phone numbers with country code, no <code>+</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="webhook-signatures">WhatsApp webhook signatures</h3>
+      <p>The WhatsApp adapter verifies <code>x-hub-signature-256</code> on every incoming webhook request using your <code>appSecret</code>. This is <strong>required</strong> in production. Set <code>ARCANA_WHATSAPP_INSECURE=1</code> only for local development.</p>
+
+      <h3 id="dev-flags">Dev escape hatches</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Env / CLI</th><th>Effect</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>ARCANA_GATEWAY_OPEN=1</code></td><td>Allow empty platform allowlists (local dev only).</td></tr>
+            <tr><td><code>ARCANA_WHATSAPP_INSECURE=1</code></td><td>Skip WhatsApp webhook signature verification (dev only).</td></tr>
+            <tr><td><code>WHATSAPP_WEBHOOK_PORT</code></td><td>Override the WhatsApp webhook listen port (default: <code>3100</code>).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="how-it-works">How it works</h2>
+      <ul>
+        <li>Each chat platform adapter translates messages to and from Arcana.</li>
+        <li>Every chat ID gets its own agent session with conversation history and memory integration.</li>
+        <li>Destructive shell commands are blocked by default for safety.</li>
+        <li>The agent has a capped tool-call budget per turn to prevent runaway executions.</li>
+        <li>Provider keys and model selection come from your main <code>~/.arcana/config.json</code>.</li>
+      </ul>
+
+      <nav class="docs-pager" aria-label="Page navigation">
+        <a class="docs-pager-prev" href="/docs">
+          <span class="docs-pager-dir">← Previous</span>
+          <span class="docs-pager-title">Overview</span>
+        </a>
+        <a class="docs-pager-next" href="/docs/cron">
+          <span class="docs-pager-dir">Next →</span>
+          <span class="docs-pager-title">Cron (scheduled jobs)</span>
+        </a>
+      </nav>
+    </article>
+
+    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+      <div class="docs-toc-label">On this page</div>
+    </aside>
+  </div>
+
+  <footer class="docs-footer" role="contentinfo">
+    <div class="docs-footer-inner">
+      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-links">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/docs.js" defer></script>
+</body>
+</html>

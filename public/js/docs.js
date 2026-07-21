@@ -5,6 +5,7 @@
 //   3. Toggle the sidebar accordion on mobile (<960px).
 //   4. Build a right-rail TOC from h2/h3 in the content area.
 //   5. Pre-mark the sidebar link matching location.hash on first paint.
+//   6. Search bar with keyboard shortcut (/), arrow-key navigation, and scroll-close.
 
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel)
@@ -63,7 +64,6 @@
   }
 
   // --- 2. Left sidebar: highlight chapter for the heading in view ---
-  // Sidebar only lists chapters; map any h2/h3 id up to the nearest sidebar link.
   function setupSidebarObserver() {
     const headings = $$(".docs-content h2[id], .docs-content h3[id]")
     if (!headings.length) return
@@ -72,14 +72,14 @@
     const linkByHash = new Map()
     for (const a of $$(".docs-sidebar-link")) {
       const hash = a.getAttribute("href") || ""
-      if (!hash.startsWith("#")) continue
-      const id = hash.slice(1)
-      linkByHash.set(id, a)
-      chapterIds.push(id)
+      if (hash.startsWith("#")) {
+        const id = hash.slice(1)
+        linkByHash.set(id, a)
+        chapterIds.push(id)
+      }
     }
     if (!chapterIds.length) return
 
-    // For each heading, resolve which left-nav chapter it belongs to.
     const chapterForHeading = new Map()
     let currentChapter = chapterIds[0]
     for (const h of headings) {
@@ -145,7 +145,6 @@
   function buildToc() {
     const toc = $("#docs-toc")
     if (!toc) return
-    // Clear any static children except the label
     for (const child of Array.from(toc.children)) {
       if (!child.classList.contains("docs-toc-label")) child.remove()
     }
@@ -156,7 +155,6 @@
       const a = document.createElement("a")
       a.href = `#${h.id}`
       a.dataset.depth = h.tagName === "H3" ? "3" : "2"
-      // Don't include the "#" anchor we inject into headings
       a.textContent = (h.childNodes[0]?.textContent || h.textContent || "")
         .replace(/#$/, "")
         .trim()
@@ -212,6 +210,188 @@
     }
   }
 
+  // --- 7. Search functionality with keyboard navigation ---
+  function setupSearch() {
+    const form = $(".docs-search")
+    const input = $("#docs-search-input")
+    const resultsEl = $("#docs-search-results")
+    if (!form || !input || !resultsEl) return
+
+    // Prevent form submission (no inline onsubmit)
+    form.addEventListener("submit", (e) => e.preventDefault())
+
+    // Set ARIA attributes on results container
+    resultsEl.setAttribute("role", "listbox")
+    resultsEl.setAttribute("aria-label", "Search results")
+
+    // Build search index from sidebar links + content headings
+    const searchIndex = []
+
+    // Sidebar links (cross-page)
+    for (const a of $$(".docs-sidebar-link")) {
+      const href = a.getAttribute("href") || ""
+      const text = a.textContent.trim()
+      if (text && href) {
+        let section = ""
+        const sectionEl = a.closest(".docs-sidebar-section")
+        if (sectionEl) {
+          const label = sectionEl.querySelector(".docs-sidebar-label")
+          if (label) section = label.textContent.trim()
+        }
+        searchIndex.push({ title: text, href, section, type: "page" })
+      }
+    }
+
+    // Content headings (same-page)
+    for (const h of $$(".docs-content h2[id], .docs-content h3[id]")) {
+      const text = (h.childNodes[0]?.textContent || h.textContent || "").replace(/#$/, "").trim()
+      if (text) {
+        searchIndex.push({ title: text, href: `#${h.id}`, section: "This page", type: "heading" })
+      }
+    }
+
+    // Deduplicate by href
+    const seen = new Set()
+    const deduped = searchIndex.filter((item) => {
+      if (seen.has(item.href)) return false
+      seen.add(item.href)
+      return true
+    })
+
+    let activeIndex = -1
+
+    function highlightMatch(text, query) {
+      if (!query) return text
+      const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi")
+      return text.replace(regex, "<mark>$1</mark>")
+    }
+
+    function updateActiveResult(index) {
+      const results = $$(".docs-search-result", resultsEl)
+      // Remove previous active
+      results.forEach((r, i) => {
+        if (i === activeIndex) {
+          r.classList.remove("is-active")
+          r.removeAttribute("aria-selected")
+        }
+      })
+      // Set new active
+      activeIndex = index
+      if (index >= 0 && results[index]) {
+        results[index].classList.add("is-active")
+        results[index].setAttribute("aria-selected", "true")
+        results[index].scrollIntoView({ block: "nearest" })
+        // Update input aria-activedescendant
+        input.setAttribute("aria-activedescendant", results[index].id)
+      } else {
+        input.removeAttribute("aria-activedescendant")
+      }
+    }
+
+    let resultCounter = 0
+    function showResults(results, query) {
+      activeIndex = -1
+      resultCounter = 0
+      if (!results.length) {
+        resultsEl.innerHTML = `<div class="docs-search-empty" role="option">No results for "${query}"</div>`
+        resultsEl.classList.add("is-open")
+        input.setAttribute("aria-expanded", "true")
+        return
+      }
+      resultsEl.innerHTML = results
+        .map(
+          (r) =>
+            `<a class="docs-search-result" id="search-result-${resultCounter++}" href="${r.href}" role="option" aria-selected="false">
+              <span class="docs-search-result-title">${highlightMatch(r.title, query)}</span>
+              <span class="docs-search-result-section">${r.section || ""}</span>
+            </a>`
+        )
+        .join("")
+      resultsEl.classList.add("is-open")
+      input.setAttribute("aria-expanded", "true")
+    }
+
+    function closeResults() {
+      resultsEl.classList.remove("is-open")
+      input.removeAttribute("aria-expanded")
+      input.removeAttribute("aria-activedescendant")
+      activeIndex = -1
+    }
+
+    let debounceTimer
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(() => {
+        const query = input.value.trim().toLowerCase()
+        if (query.length < 2) {
+          closeResults()
+          return
+        }
+        const results = deduped.filter((r) =>
+          r.title.toLowerCase().includes(query)
+        )
+        showResults(results, query)
+      }, 150)
+    })
+
+    // Single keyboard handler — handles all keys
+    document.addEventListener("keydown", (e) => {
+      const isInput = e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA"
+      const isOpen = resultsEl.classList.contains("is-open")
+
+      // Escape: close search results
+      if (e.key === "Escape" && isOpen) {
+        e.preventDefault()
+        closeResults()
+        if (isInput) input.blur()
+        return
+      }
+
+      // Global shortcut: / or Cmd+K to open search
+      if (!isInput && (e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey)))) {
+        e.preventDefault()
+        input.focus()
+        return
+      }
+
+      // Arrow key + Enter navigation in search results
+      if (isInput && isOpen) {
+        const results = $$(".docs-search-result", resultsEl)
+        if (!results.length) return
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault()
+          updateActiveResult(Math.min(activeIndex + 1, results.length - 1))
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault()
+          updateActiveResult(Math.max(activeIndex - 1, 0))
+        } else if (e.key === "Enter" && activeIndex >= 0) {
+          e.preventDefault()
+          window.location.href = results[activeIndex].getAttribute("href")
+        }
+      }
+    })
+
+    // Close results on outside click
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".docs-search")) {
+        closeResults()
+      }
+    })
+
+    // Close results on scroll (throttled with RAF)
+    let scrollRaf
+    window.addEventListener("scroll", () => {
+      if (scrollRaf) return
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = null
+        if (resultsEl.classList.contains("is-open")) {
+          closeResults()
+        }
+      })
+    }, { passive: true })
+  }
+
   const init = () => {
     attachCopyButtons()
     injectAnchors()
@@ -219,6 +399,7 @@
     setupSidebarToggle()
     buildToc()
     setupLinkClose()
+    setupSearch()
   }
 
   if (document.readyState === "loading") {

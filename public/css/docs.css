@@ -1,5 +1,5 @@
 /* public/css/docs.css
- * Professional docs chrome with a warm “cake” aesthetic:
+ * Professional docs chrome with a warm "cake" aesthetic:
  * soft cream type, rose-lavender accents, plum night sky —
  * still Arcana, easier to read for longer.
  */
@@ -103,7 +103,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .docs-header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   height: var(--docs-header-h);
   border-bottom: 1px solid var(--docs-border);
   background: rgba(12, 10, 16, 0.82);
@@ -141,6 +141,120 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .docs-brand:hover .docs-brand-mark {
   filter: drop-shadow(0 0 8px rgba(212, 168, 255, 0.45));
+}
+
+/* — Search — */
+.docs-search {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+  z-index: 30;
+}
+.docs-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: var(--docs-text-faint);
+  pointer-events: none;
+  transition: color var(--docs-dur-fast) var(--docs-ease-out);
+}
+.docs-search-input {
+  width: 100%;
+  padding: 8px 42px 8px 36px;
+  border: 1px solid var(--docs-border);
+  border-radius: var(--docs-radius-pill);
+  background: var(--docs-surface);
+  color: var(--docs-text);
+  font: 400 13.5px/1.4 var(--docs-font-body);
+  outline: none;
+  transition: border-color var(--docs-dur-fast) var(--docs-ease-out),
+              background var(--docs-dur-fast) var(--docs-ease-out),
+              box-shadow var(--docs-dur-fast) var(--docs-ease-out);
+}
+.docs-search-input::placeholder {
+  color: var(--docs-text-faint);
+}
+.docs-search-input:focus {
+  border-color: var(--docs-border-accent);
+  background: var(--docs-surface-2);
+  box-shadow: 0 0 0 3px rgba(212, 168, 255, 0.1);
+}
+.docs-search-input:focus + .docs-search-kbd { display: none; }
+.docs-search-input:focus ~ .docs-search-icon { color: var(--docs-accent); }
+.docs-search-kbd {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border: 1px solid var(--docs-border);
+  border-radius: 5px;
+  background: var(--docs-surface-2);
+  font: 600 10px/1 var(--docs-font-mono);
+  color: var(--docs-text-faint);
+  pointer-events: none;
+}
+.docs-search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 380px;
+  overflow-y: auto;
+  border: 1px solid var(--docs-border-strong);
+  border-radius: var(--docs-radius-md);
+  background: var(--docs-bg-elev);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  scrollbar-width: thin;
+  scrollbar-color: var(--docs-border) transparent;
+}
+.docs-search-results.is-open { display: block; }
+.docs-search-result {
+  display: block;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--docs-border);
+  text-decoration: none;
+  transition: background var(--docs-dur-fast) var(--docs-ease-out);
+}
+.docs-search-result:last-child { border-bottom: 0; }
+.docs-search-result:hover,
+.docs-search-result.is-active {
+  background: var(--docs-accent-subtle);
+  text-decoration: none;
+}
+.docs-search-result-title {
+  display: block;
+  font: 600 13px/1.3 var(--docs-font-body);
+  color: var(--docs-text);
+}
+.docs-search-result-section {
+  display: block;
+  font: 500 11px/1.2 var(--docs-font-mono);
+  letter-spacing: 0.04em;
+  color: var(--docs-text-faint);
+  margin-top: 2px;
+}
+.docs-search-result mark {
+  background: rgba(212, 168, 255, 0.3);
+  color: var(--docs-cream);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.docs-search-empty {
+  padding: 20px 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--docs-text-faint);
 }
 
 .docs-nav {
@@ -206,6 +320,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 @media (max-width: 960px) {
   .docs-layout { grid-template-columns: 1fr; gap: 0; padding: 16px 16px 72px; }
+  .docs-search { max-width: 100%; }
 }
 
 /* — Sidebar — */
@@ -817,6 +932,40 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* CTA links — "Read the full reference →" style */
+.docs-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1px solid rgba(212, 168, 255, 0.35);
+  border-radius: var(--docs-radius-sm);
+  background: linear-gradient(135deg, rgba(212, 168, 255, 0.12), rgba(240, 168, 192, 0.08));
+  font: 600 13.5px/1 var(--docs-font-body);
+  color: var(--docs-cream);
+  text-decoration: none;
+  transition: all var(--docs-dur-fast) var(--docs-ease-out);
+  margin-top: 12px;
+}
+.docs-cta-link:hover {
+  background: linear-gradient(135deg, rgba(212, 168, 255, 0.22), rgba(240, 168, 192, 0.16));
+  border-color: rgba(212, 168, 255, 0.55);
+  box-shadow: 0 0 20px rgba(212, 168, 255, 0.15);
+  color: #fff;
+  text-decoration: none;
+}
+.docs-cta-link::after {
+  content: "→";
+  transition: transform var(--docs-dur-fast) var(--docs-ease-out);
+}
+.docs-cta-link:hover::after {
+  transform: translateX(3px);
+}
+.docs-cta-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--docs-accent);
 }
 
 @media (max-width: 720px) {

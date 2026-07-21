@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills · Arcana</title>
+  <meta name="description" content="Give the agent domain-specific expertise with skills. Browse, activate, and create custom SKILL.md files for Arcana.">
+  <meta name="theme-color" content="#0c0a10">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://arcana.otnelhq.com/docs/skills">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ARCANA">
+  <meta property="og:title" content="Skills · Arcana">
+  <meta property="og:description" content="Give the agent domain-specific expertise with skills.">
+  <meta property="og:url" content="https://arcana.otnelhq.com/docs/skills">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/docs.css" media="all">
+</head>
+<body>
+  <header class="docs-header" role="banner">
+    <div class="docs-header-inner">
+      <a href="/" class="docs-brand" aria-label="Arcana home">
+        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
+        <span>ARCANA</span>
+      </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
+      <nav class="docs-nav" aria-label="Primary">
+        <a href="/docs" class="is-active">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
+      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
+        <span>Documentation</span>
+      </button>
+      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
+          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
+          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link is-active" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Device flow</div>
+          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
+          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-footer">
+          <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="docs-content">
+      <header class="docs-content-header">
+        <div class="docs-kicker">Features</div>
+        <h1 class="docs-h1">Skills</h1>
+        <p class="docs-lead">Give the agent domain-specific expertise. Each skill is a <code>SKILL.md</code> file that teaches the agent how to perform a specific task — from writing Python tests to deploying to Kubernetes.</p>
+        <div class="docs-meta">
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
+          <span class="docs-meta-sep">·</span>
+          <a href="/changelog">v0.3.5</a>
+        </div>
+      </header>
+
+      <h2 id="quickstart">Quick start</h2>
+<pre data-lang="bash"><code># List all available skills
+arcana skills list
+
+# Search for a skill by name or description
+arcana skills list --query "python testing"
+
+# Get detailed info on a skill
+arcana skills info --skill "python-testing"
+
+# Activate a skill in a session (in the TUI)
+/skills</code></pre>
+
+      <h2 id="commands">Commands</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Command</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>arcana skills list</code></td><td>List all skills grouped by category</td></tr>
+            <tr><td><code>arcana skills list --query &lt;q&gt;</code></td><td>Search skills by name or description</td></tr>
+            <tr><td><code>arcana skills info --skill &lt;id&gt;</code></td><td>Show full skill details and body</td></tr>
+            <tr><td><code>arcana skills ranked</code></td><td>Show skills ranked by recent usage</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="command-options">Options</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Flag</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--query</code>, <code>-q</code></td><td>Filter skills by name or description</td></tr>
+            <tr><td><code>--skill</code>, <code>-s</code></td><td>Skill ID or name (for <code>info</code>)</td></tr>
+            <tr><td><code>--category</code>, <code>-c</code></td><td>Filter by category (for <code>list</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="categories">Categories</h2>
+      <p>Skills are organized into categories based on their folder structure:</p>
+<pre data-lang="text"><code>skills/
+  software-development/
+    python-testing/
+      SKILL.md
+    code-review/
+      SKILL.md
+  devops/
+    docker/
+      SKILL.md
+  security/
+    web-pentest/
+      SKILL.md</code></pre>
+      <p>The category name is derived from the first subdirectory under the skill folder. New categories can be added by simply creating a new folder.</p>
+
+      <h2 id="using-skills">Using skills</h2>
+      <h3 id="in-a-session">In a session</h3>
+      <p>When you start a session, the agent automatically loads relevant skills based on your prompt. You can also explicitly activate a skill:</p>
+<pre data-lang="bash"><code># In the TUI, type:
+/skills
+
+# Or use a slash command:
+/skill python-testing</code></pre>
+
+      <h3 id="with-cron">With cron jobs</h3>
+<pre data-lang="bash"><code>arcana cron add \
+  --name "daily review" \
+  --schedule "0 9 * * *" \
+  --prompt "review today's commits" \
+  --skill "git"</code></pre>
+
+      <h3 id="usage-tracking">Skill usage tracking</h3>
+      <p>The memory system tracks which skills you use most often:</p>
+<pre data-lang="bash"><code>arcana skills ranked</code></pre>
+<pre data-lang="text"><code>12 ranked skills (by recent usage):
+
+  python-testing               8 recent  Write and run Python tests
+  code-review                  5 recent  Review code for bugs and style
+  docker                       3 recent  Build and deploy Docker containers</code></pre>
+
+      <h2 id="custom-skills">Custom skills</h2>
+      <h3 id="creating-a-skill">Creating a skill</h3>
+      <p>Skills live in <code>skills/</code> (in-repo) or <code>~/.arcana/skills/</code> (user-local). Each skill is a folder containing a <code>SKILL.md</code> file with YAML frontmatter:</p>
+<pre data-lang="markdown"><code>---
+name: My Custom Skill
+description: Does something specific for my project
+---
+
+# My Custom Skill
+
+## Purpose
+
+This skill helps with [specific task].
+
+## Instructions
+
+1. Step one
+2. Step two
+3. Step three
+
+## Rules
+
+- Always do X before Y
+- Never do Z</code></pre>
+
+      <h3 id="folder-structure">Skill folder structure</h3>
+<pre data-lang="text"><code>~/.arcana/skills/
+  my-skill/
+    SKILL.md           # Required — skill definition
+    references/        # Optional — additional docs loaded by the agent
+      guide.md
+      examples.md
+    scripts/           # Optional — helper scripts
+      setup.sh</code></pre>
+
+      <h3 id="frontmatter">Frontmatter fields</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>name</code></td><td>Yes</td><td>Human-readable skill name (used to generate the skill ID)</td></tr>
+            <tr><td><code>description</code></td><td>No</td><td>Brief description shown in skill lists</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The skill ID is generated automatically from the name: lowercase, special characters replaced with hyphens (e.g., "Python Testing" becomes <code>python-testing</code>). The category is derived from the parent folder.</p>
+
+      <h3 id="loading-custom">Loading custom skills</h3>
+      <p>Arcana automatically discovers skills from:</p>
+      <ol>
+        <li><strong>In-repo:</strong> <code>skills/</code> directory in the project root</li>
+        <li><strong>User-local:</strong> <code>~/.arcana/skills/</code> directory</li>
+        <li><strong>Environment override:</strong> <code>ARCANA_SKILLS_DIRS</code> env var (separated by <code>;</code>)</li>
+      </ol>
+<pre data-lang="bash"><code># Override skill directories
+export ARCANA_SKILLS_DIRS="/path/to/skills;/another/path"</code></pre>
+
+      <h3 id="caching">Skill caching</h3>
+      <p>Skills are cached in <code>~/.cache/arcana/skills-cache.json</code> for fast startup. The cache rebuilds automatically when skill directories change.</p>
+
+      <h2 id="how-skills-work">How skills work</h2>
+      <ul>
+        <li>When you start a session, the agent loads all available skills into its system prompt.</li>
+        <li>The agent selects relevant skills based on your prompt content.</li>
+        <li>Skills can include instructions, rules, examples, and references.</li>
+        <li>Skills integrate with the memory system — the agent learns which skills are most useful over time.</li>
+        <li>Skills are safe by default — they cannot execute destructive commands unless explicitly allowed.</li>
+      </ul>
+
+      <nav class="docs-pager" aria-label="Page navigation">
+        <a class="docs-pager-prev" href="/docs/cron">
+          <span class="docs-pager-dir">← Previous</span>
+          <span class="docs-pager-title">Cron (Scheduled Jobs)</span>
+        </a>
+        <a class="docs-pager-next" href="/docs/memory">
+          <span class="docs-pager-dir">Next →</span>
+          <span class="docs-pager-title">Memory</span>
+        </a>
+      </nav>
+    </article>
+
+    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+      <div class="docs-toc-label">On this page</div>
+    </aside>
+  </div>
+
+  <footer class="docs-footer" role="contentinfo">
+    <div class="docs-footer-inner">
+      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-links">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/docs.js" defer></script>
+</body>
+</html>

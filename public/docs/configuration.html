@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration Reference · Arcana</title>
+  <meta name="description" content="Full configuration reference for Arcana. All config.json options, environment variables, data directories, and trust settings.">
+  <meta name="theme-color" content="#0c0a10">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://arcana.otnelhq.com/docs/configuration">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ARCANA">
+  <meta property="og:title" content="Configuration Reference · Arcana">
+  <meta property="og:description" content="Full configuration reference for Arcana.">
+  <meta property="og:url" content="https://arcana.otnelhq.com/docs/configuration">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/docs.css" media="all">
+</head>
+<body>
+  <header class="docs-header" role="banner">
+    <div class="docs-header-inner">
+      <a href="/" class="docs-brand" aria-label="Arcana home">
+        <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
+        <span>ARCANA</span>
+      </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
+      <nav class="docs-nav" aria-label="Primary">
+        <a href="/docs" class="is-active">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a class="docs-nav-cta" href="/auth">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation">
+      <button class="docs-sidebar-toggle" type="button" aria-controls="docs-sidebar-nav" aria-expanded="false">
+        <span>Documentation</span>
+      </button>
+      <nav class="docs-sidebar-nav" id="docs-sidebar-nav">
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Guide</div>
+          <a class="docs-sidebar-link" href="/docs"><span>Overview</span></a>
+          <a class="docs-sidebar-link" href="/docs#install"><span>Install</span></a>
+          <a class="docs-sidebar-link" href="/docs#quickstart"><span>Quick start</span></a>
+          <a class="docs-sidebar-link" href="/docs#first-login"><span>Console login</span></a>
+          <a class="docs-sidebar-link" href="/docs#provider-keys"><span>Provider keys</span></a>
+          <a class="docs-sidebar-link" href="/docs#workspace-trust"><span>Workspace trust</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link is-active" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Device flow</div>
+          <a class="docs-sidebar-link" href="/docs#device-overview"><span>How pairing works</span></a>
+          <a class="docs-sidebar-link" href="/docs#device-errors"><span>Error codes</span></a>
+        </div>
+
+        <div class="docs-sidebar-footer">
+          <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/credits">Pricing</a>
+          <a href="/status">Status</a>
+          <a href="/workspace">Workspace</a>
+          <a href="/auth">Sign in</a>
+        </div>
+      </nav>
+    </aside>
+
+    <article class="docs-content">
+      <header class="docs-content-header">
+        <div class="docs-kicker">Reference</div>
+        <h1 class="docs-h1">Configuration</h1>
+        <p class="docs-lead">Arcana is configured through <code>~/.arcana/config.json</code>. Most settings have sensible defaults and can be overridden with environment variables.</p>
+        <div class="docs-meta">
+          <span>Updated <time datetime="2026-07-20">20 Jul 2026</time></span>
+          <span class="docs-meta-sep">·</span>
+          <a href="/changelog">v0.3.5</a>
+        </div>
+      </header>
+
+      <h2 id="config-file">Config file location</h2>
+<pre data-lang="text"><code>~/.arcana/config.json</code></pre>
+      <p>Override with <code>ARCANA_HOME</code>:</p>
+<pre data-lang="bash"><code>export ARCANA_HOME=/custom/path
+# Config loaded from /custom/path/config.json</code></pre>
+
+      <h2 id="full-reference">Full config reference</h2>
+<pre data-lang="json"><code>{
+  "$schema": "https://arcana.otnelhq.com/schema/config.json",
+  "provider": "openai",
+  "model": "gpt-4o",
+  "utilityModel": "gpt-4o-mini",
+  "apiKey": "sk-...",
+  "dataDir": "~/.arcana/data",
+  "skillsDirs": ["~/.arcana/skills"],
+  "memory": {
+    "enabled": true,
+    "maxSessions": 1000
+  },
+  "cron": {
+    "enabled": true,
+    "intervalSeconds": 60
+  },
+  "gateway": {
+    "telegram": { "token": "...", "allowedUsers": ["12345678"] },
+    "discord": { "token": "...", "allowedChannels": ["987654321"] },
+    "slack": { "botToken": "xoxb-...", "signingSecret": "...", "allowedChannels": ["C0123"] },
+    "whatsapp": { "phoneNumberId": "...", "accessToken": "...", "appSecret": "...", "allowedUsers": ["14155551234"] }
+  }
+}</code></pre>
+
+      <h2 id="core">Core settings</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>provider</code></td><td><code>string</code></td><td>auto-detected</td><td>LLM provider (<code>openai</code>, <code>anthropic</code>, <code>gemini</code>, etc.)</td></tr>
+            <tr><td><code>model</code></td><td><code>string</code></td><td>auto-detected</td><td>Model ID (<code>gpt-4o</code>, <code>claude-sonnet-4</code>, etc.)</td></tr>
+            <tr><td><code>utilityModel</code></td><td><code>string</code></td><td>main model</td><td>Cheap model for extraction and compaction tasks</td></tr>
+            <tr><td><code>apiKey</code></td><td><code>string</code></td><td>—</td><td>Provider API key (prefer env vars instead)</td></tr>
+            <tr><td><code>dataDir</code></td><td><code>string</code></td><td><code>~/.arcana/data</code></td><td>Directory for sessions, memory, and local DB</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="provider-detection">Provider auto-detection</h3>
+      <p>If neither <code>provider</code> nor <code>model</code> is set in the config or environment, Arcana auto-detects from available API keys using the models.dev catalog (200+ models across 33 providers).</p>
+<pre data-lang="bash"><code># Set a provider key — Arcana detects it automatically
+export OPENAI_API_KEY=sk-...
+arcana run "hello"  # Uses OpenAI automatically</code></pre>
+
+      <h2 id="memory">Memory settings</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>memory.enabled</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enable conversation memory and fact extraction</td></tr>
+            <tr><td><code>memory.maxSessions</code></td><td><code>number</code></td><td><code>1000</code></td><td>Maximum sessions to retain in local DB</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Memory stores conversation history, extracted facts, and skill usage stats in SQLite under <code>~/.arcana/data/</code>.</p>
+
+      <h2 id="cron">Cron settings</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>cron.enabled</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enable the cron scheduler</td></tr>
+            <tr><td><code>cron.intervalSeconds</code></td><td><code>number</code></td><td><code>60</code></td><td>How often the scheduler checks for due jobs</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>See <a href="/docs/cron">Cron</a> for the full scheduled jobs reference.</p>
+
+      <h2 id="skills">Skills settings</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>skillsDirs</code></td><td><code>string[]</code></td><td><code>["~/.arcana/skills", "&lt;repo&gt;/skills"]</code></td><td>Directories to scan for SKILL.md files</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>See <a href="/docs/skills">Skills</a> for the full skills reference.</p>
+
+      <h2 id="gateway">Gateway settings</h2>
+      <p>Configure chat platform adapters. See <a href="/docs/gateway">Gateway</a> for full setup instructions.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>gateway.telegram.token</code></td><td><code>string</code></td><td>Telegram bot token</td></tr>
+            <tr><td><code>gateway.telegram.allowedUsers</code></td><td><code>string[]</code></td><td>Allowed Telegram user IDs</td></tr>
+            <tr><td><code>gateway.discord.token</code></td><td><code>string</code></td><td>Discord bot token</td></tr>
+            <tr><td><code>gateway.discord.allowedChannels</code></td><td><code>string[]</code></td><td>Allowed Discord channel IDs</td></tr>
+            <tr><td><code>gateway.slack.botToken</code></td><td><code>string</code></td><td>Slack bot token (<code>xoxb-...</code>)</td></tr>
+            <tr><td><code>gateway.slack.signingSecret</code></td><td><code>string</code></td><td>Slack signing secret</td></tr>
+            <tr><td><code>gateway.slack.allowedChannels</code></td><td><code>string[]</code></td><td>Allowed Slack channel IDs</td></tr>
+            <tr><td><code>gateway.whatsapp.phoneNumberId</code></td><td><code>string</code></td><td>Meta phone number ID</td></tr>
+            <tr><td><code>gateway.whatsapp.accessToken</code></td><td><code>string</code></td><td>Meta access token</td></tr>
+            <tr><td><code>gateway.whatsapp.appSecret</code></td><td><code>string</code></td><td>Meta app secret (required for production)</td></tr>
+            <tr><td><code>gateway.whatsapp.allowedUsers</code></td><td><code>string[]</code></td><td>Allowed phone numbers (with country code)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="env-vars">Environment variables</h2>
+      <p>All config file settings can be overridden with environment variables:</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Env var</th><th>Overrides</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>ARCANA_HOME</code></td><td>config path</td><td>Root directory (default: <code>~/.arcana</code>)</td></tr>
+            <tr><td><code>ARCANA_PROVIDER</code></td><td><code>provider</code></td><td>LLM provider</td></tr>
+            <tr><td><code>ARCANA_MODEL</code></td><td><code>model</code></td><td>Model ID</td></tr>
+            <tr><td><code>ARCANA_API_KEY</code></td><td><code>apiKey</code></td><td>Provider API key</td></tr>
+            <tr><td><code>OPENAI_API_KEY</code></td><td><code>apiKey</code></td><td>Fallback when provider is <code>openai</code></td></tr>
+            <tr><td><code>ARCANA_SKILLS_DIRS</code></td><td><code>skillsDirs</code></td><td>Skill directories (separated by <code>;</code>)</td></tr>
+            <tr><td><code>ARCANA_PROXY_KEY</code></td><td>—</td><td>Proxy license key (auto-loaded from <code>~/.arcana/proxy_key</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="provider-env">Provider-specific env vars</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Env var</th><th>Provider</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic</td></tr>
+            <tr><td><code>GEMINI_API_KEY</code></td><td>Google Gemini</td></tr>
+            <tr><td><code>AWS_ACCESS_KEY_ID</code> + <code>AWS_SECRET_ACCESS_KEY</code></td><td>Amazon Bedrock</td></tr>
+            <tr><td><code>CLOUDFLARE_ACCOUNT_ID</code> + <code>CLOUDFLARE_API_TOKEN</code></td><td>Cloudflare Workers AI</td></tr>
+            <tr><td><code>XAI_API_KEY</code></td><td>xAI (Grok)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Use <code>arcana doctor</code> to confirm which keys are detected.</p>
+
+      <h2 id="data-dir">Data directory</h2>
+      <p>Default: <code>~/.arcana/data/</code></p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Path</th><th>Contents</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>sessions/</code></td><td>Session transcripts</td></tr>
+            <tr><td><code>memory.db</code></td><td>SQLite DB with facts, skill stats</td></tr>
+            <tr><td><code>cron-jobs.json</code></td><td>Scheduled job definitions</td></tr>
+            <tr><td><code>workspace-trust.json</code></td><td>Trusted workspace fingerprints</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="trust">Trust and security settings</h2>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr><th>Setting</th><th>Location</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>arcana trust</code></td><td>CLI command</td><td>Trust current workspace for project plugins/tools</td></tr>
+            <tr><td><code>ARCANA_DISABLE_WORKSPACE_TRUST=1</code></td><td>Env var</td><td>Skip trust checks (dev only)</td></tr>
+            <tr><td><code>ARCANA_TRUST_WORKSPACE=1</code></td><td>Env var</td><td>Force-trust for CI</td></tr>
+            <tr><td><code>ARCANA_SERVER_PASSWORD</code></td><td>Env var</td><td>Required for non-loopback <code>arcana serve</code></td></tr>
+            <tr><td><code>ARCANA_GATEWAY_OPEN=1</code></td><td>Env var</td><td>Allow empty gateway allowlists (dev only)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="docs-pager" aria-label="Page navigation">
+        <a class="docs-pager-prev" href="/docs/plugins">
+          <span class="docs-pager-dir">← Previous</span>
+          <span class="docs-pager-title">Plugins</span>
+        </a>
+        <a class="docs-pager-next" href="/docs/proxy">
+          <span class="docs-pager-dir">Next →</span>
+          <span class="docs-pager-title">Proxy API</span>
+        </a>
+      </nav>
+    </article>
+
+    <aside class="docs-toc" id="docs-toc" aria-label="On this page">
+      <div class="docs-toc-label">On this page</div>
+    </aside>
+  </div>
+
+  <footer class="docs-footer" role="contentinfo">
+    <div class="docs-footer-inner">
+      <div class="docs-footer-mono">arcana · docs · v0.3.5</div>
+      <div class="docs-footer-links">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/credits">Pricing</a>
+        <a href="/status">Status</a>
+        <a href="/auth">Sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/docs.js" defer></script>
+</body>
+</html>

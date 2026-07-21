@@ -28,6 +28,14 @@
         <img class="docs-brand-mark" src="/arcana.png" alt="" width="26" height="26">
         <span>ARCANA</span>
       </a>
+      <form class="docs-search" role="search" aria-label="Search docs">
+        <svg class="docs-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="docs-search-input" type="search" placeholder="Search docs…" aria-label="Search documentation" id="docs-search-input" autocomplete="off" aria-expanded="false" aria-controls="docs-search-results">
+        <kbd class="docs-search-kbd">/</kbd>
+        <div class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results"></div>
+      </form>
       <nav class="docs-nav" aria-label="Primary">
         <a href="/docs" class="is-active">Docs</a>
         <a href="/changelog">Changelog</a>
@@ -56,23 +64,22 @@
         </div>
 
         <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">CLI</div>
-          <a class="docs-sidebar-link" href="#cli-overview"><span>Command map</span></a>
-          <a class="docs-sidebar-link" href="#cli-core"><span>Core</span></a>
-          <a class="docs-sidebar-link" href="#cli-account"><span>Account &amp; license</span></a>
-          <a class="docs-sidebar-link" href="#cli-session"><span>Sessions &amp; data</span></a>
-          <a class="docs-sidebar-link" href="#cli-tools"><span>MCP, plugins, agents</span></a>
-          <a class="docs-sidebar-link" href="#cli-server"><span>Server &amp; integrations</span></a>
+          <div class="docs-sidebar-label">Features</div>
+          <a class="docs-sidebar-link" href="/docs/gateway"><span>Gateway</span></a>
+          <a class="docs-sidebar-link" href="/docs/cron"><span>Cron</span></a>
+          <a class="docs-sidebar-link" href="/docs/skills"><span>Skills</span></a>
+          <a class="docs-sidebar-link" href="/docs/memory"><span>Memory</span></a>
+          <a class="docs-sidebar-link" href="/docs/themes"><span>Themes</span></a>
+          <a class="docs-sidebar-link" href="/docs/mcp"><span>MCP &amp; Tools</span></a>
+          <a class="docs-sidebar-link" href="/docs/plugins"><span>Plugins</span></a>
         </div>
 
         <div class="docs-sidebar-section">
-          <div class="docs-sidebar-label">Proxy API</div>
-          <a class="docs-sidebar-link" href="#proxy-overview"><span>Overview</span></a>
-          <a class="docs-sidebar-link" href="#api-auth"><span>Authentication</span></a>
-          <a class="docs-sidebar-link" href="#api-chat"><span>Chat &amp; embeddings</span></a>
-          <a class="docs-sidebar-link" href="#api-models"><span>Models</span></a>
-          <a class="docs-sidebar-link" href="#api-billing"><span>Balance &amp; usage</span></a>
-          <a class="docs-sidebar-link" href="#api-account"><span>Health &amp; profile</span></a>
+          <div class="docs-sidebar-label">Reference</div>
+          <a class="docs-sidebar-link" href="/docs/configuration"><span>Configuration</span></a>
+          <a class="docs-sidebar-link" href="/docs/proxy"><span>Proxy API</span></a>
+          <a class="docs-sidebar-link" href="/docs/cli"><span>CLI commands</span></a>
+          <a class="docs-sidebar-link" href="/docs/troubleshooting"><span>Troubleshooting</span></a>
         </div>
 
         <div class="docs-sidebar-section">
@@ -88,6 +95,7 @@
 
         <div class="docs-sidebar-footer">
           <div class="docs-sidebar-footer-label">Resources</div>
+          <a href="/docs/cli">CLI Reference</a>
           <a href="/changelog">Changelog</a>
           <a href="/credits">Pricing</a>
           <a href="/status">Status</a>
@@ -132,8 +140,8 @@ npm install -g arcana-ai
 # bun add -g arcana-ai
 
 # From source
-git clone https://github.com/Lento47/arcana && cd arcana
-bun install && bun link   # from packages/arcana/</code></pre>
+git clone https://github.com/Lento47/arcana &amp;&amp; cd arcana
+bun install &amp;&amp; bun link   # from packages/arcana/</code></pre>
 <pre data-lang="bash"><code>arcana --version
 # 0.3.5</code></pre>
       <p>Data lives under <code>~/.arcana/</code> (override with <code>ARCANA_HOME</code>): accounts, workspace trust, sessions, local DB.</p>
@@ -203,275 +211,48 @@ arcana trust revoke
 export ARCANA_DISABLE_WORKSPACE_TRUST=1</code></pre>
       <p>Trust is stored in <code>~/.arcana/workspace-trust.json</code> and is invalidated when executable project config changes.</p>
 
-      <!-- ========== CLI ========== -->
-      <h2 id="cli-overview">CLI command map</h2>
-      <p>Top-level commands registered by the engine (public user surface):</p>
-      <div class="docs-table-wrap">
-        <table class="docs-table">
-          <thead>
-            <tr><th>Command</th><th>Purpose</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>arcana run</code></td><td>TUI / agent session</td></tr>
-            <tr><td><code>arcana console …</code></td><td>Login, orgs, logout, open console</td></tr>
-            <tr><td><code>arcana models</code></td><td>List models</td></tr>
-            <tr><td><code>arcana providers</code></td><td>Provider credentials</td></tr>
-            <tr><td><code>arcana session …</code></td><td>List / delete sessions</td></tr>
-            <tr><td><code>arcana export</code> / <code>import</code></td><td>Session export / import</td></tr>
-            <tr><td><code>arcana stats</code></td><td>Usage stats</td></tr>
-            <tr><td><code>arcana serve</code></td><td>Headless local server</td></tr>
-            <tr><td><code>arcana attach</code></td><td>Attach to a running server</td></tr>
-            <tr><td><code>arcana trust …</code></td><td>Workspace trust</td></tr>
-            <tr><td><code>arcana license …</code></td><td>Activate / status / deactivate</td></tr>
-            <tr><td><code>arcana mcp …</code></td><td>MCP servers</td></tr>
-            <tr><td><code>arcana agent …</code></td><td>Agent config helpers</td></tr>
-            <tr><td><code>arcana plugin …</code></td><td>Plugins</td></tr>
-            <tr><td><code>arcana plugin-store …</code></td><td>Plugin store</td></tr>
-            <tr><td><code>arcana github …</code> / <code>pr …</code></td><td>GitHub helpers</td></tr>
-            <tr><td><code>arcana web</code></td><td>Optional web app</td></tr>
-            <tr><td><code>arcana upgrade</code> / <code>uninstall</code></td><td>Lifecycle</td></tr>
-            <tr><td><code>arcana audit</code></td><td>Audit helpers</td></tr>
-            <tr><td><code>arcana db …</code></td><td>Local DB utilities</td></tr>
-            <tr><td><code>arcana proxy …</code></td><td>Proxy helpers</td></tr>
-            <tr><td><code>arcana team …</code></td><td>Team helpers</td></tr>
-            <tr><td><code>arcana generate</code></td><td>Generation utilities</td></tr>
-            <tr><td><code>arcana acp</code></td><td>ACP mode</td></tr>
-            <tr><td><code>arcana debug …</code></td><td>Debug tools</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- ========== CLI (summary — full reference at /docs/cli) ========== -->
+      <h2 id="cli-overview">CLI commands</h2>
+      <p>Arcana provides a comprehensive CLI for managing sessions, tools, providers, memory, and integrations. Core commands include:</p>
+      <ul>
+        <li><code>arcana run</code> — Start interactive or one-shot agent sessions</li>
+        <li><code>arcana console</code> — Login, logout, manage orgs</li>
+        <li><code>arcana models</code> — List available models</li>
+        <li><code>arcana providers</code> — Manage provider credentials</li>
+        <li><code>arcana session</code> — List and delete sessions</li>
+        <li><code>arcana memory</code> — Manage local and cloud memory</li>
+        <li><code>arcana mcp</code> — Configure MCP servers</li>
+        <li><code>arcana plugin</code> — Manage plugins</li>
+        <li><code>arcana serve</code> — Start headless local server</li>
+        <li><code>arcana trust</code> — Manage workspace trust</li>
+        <li><code>arcana license</code> — Activate and manage license</li>
+      </ul>
       <p>Run <code>arcana --help</code> or <code>arcana &lt;command&gt; --help</code> for flags on your installed version.</p>
+      <p><a href="/docs/cli" class="docs-cta-link">Read the full CLI reference →</a></p>
 
-      <h2 id="cli-core">Core</h2>
-      <h3 id="cmd-run">arcana run</h3>
-      <p>Start an interactive or one-shot agent session in the current project.</p>
-<pre data-lang="bash"><code>arcana run
-arcana run "summarize the auth flow"
-arcana run --model &lt;provider/model&gt;</code></pre>
-
-      <h3 id="cmd-models">arcana models</h3>
-<pre data-lang="bash"><code>arcana models</code></pre>
-
-      <h3 id="cmd-providers">arcana providers</h3>
-<pre data-lang="bash"><code>arcana providers</code></pre>
-
-      <h2 id="cli-account">Account &amp; license</h2>
-      <h3 id="cmd-console">arcana console</h3>
-<pre data-lang="bash"><code>arcana console login [url]
-arcana console logout [email]
-arcana console orgs
-arcana console switch
-arcana console open</code></pre>
-
-      <h3 id="cmd-license">arcana license</h3>
-<pre data-lang="bash"><code>arcana license activate &lt;key&gt;
-arcana license status
-arcana license deactivate</code></pre>
-
-      <h3 id="cmd-trust">arcana trust</h3>
-<pre data-lang="bash"><code>arcana trust
-arcana trust status [path]
-arcana trust list
-arcana trust revoke [path]
-arcana trust grant [path]</code></pre>
-
-      <h2 id="cli-session">Sessions &amp; data</h2>
-      <h3 id="cmd-session">arcana session</h3>
-<pre data-lang="bash"><code>arcana session list
-arcana session delete &lt;sessionID&gt;</code></pre>
-
-      <h3 id="cmd-memory">arcana memory</h3>
-      <p>Local memory lives under <code>~/.arcana/data/</code>. Cloud facts (visible on the workspace Memory page) sync via the proxy when you are logged in.</p>
-<pre data-lang="bash"><code>arcana memory facts
-arcana memory search --query &lt;q&gt;
-arcana memory stats
-arcana memory push    # local facts → cloud
-arcana memory pull    # cloud facts → local
-arcana memory sync    # push then pull</code></pre>
-
-      <h3 id="cmd-export-import">export / import</h3>
-<pre data-lang="bash"><code>arcana export
-arcana import</code></pre>
-
-      <h3 id="cmd-stats">arcana stats</h3>
-<pre data-lang="bash"><code>arcana stats</code></pre>
-
-      <h3 id="cmd-db">arcana db</h3>
-      <p>Local database utilities for the Arcana data store (inspect / path). Prefer higher-level session commands unless you are debugging.</p>
-<pre data-lang="bash"><code>arcana db --help</code></pre>
-
-      <h2 id="cli-tools">MCP, plugins, agents</h2>
-      <h3 id="cmd-mcp">arcana mcp</h3>
-<pre data-lang="bash"><code>arcana mcp list
-arcana mcp add [name]
-arcana mcp auth [name]
-arcana mcp logout [name]
-arcana mcp debug &lt;name&gt;</code></pre>
-      <p>Local MCP from a project directory requires workspace trust.</p>
-
-      <h3 id="cmd-plugin">arcana plugin / plugin-store</h3>
-<pre data-lang="bash"><code>arcana plugin --help
-arcana plugin-store --help</code></pre>
-
-      <h3 id="cmd-agent">arcana agent</h3>
-<pre data-lang="bash"><code>arcana agent --help</code></pre>
-
-      <h2 id="cli-server">Server &amp; integrations</h2>
-      <h3 id="cmd-serve">arcana serve</h3>
-      <p>Headless control plane. Defaults to loopback. Non-loopback binds require <code>ARCANA_SERVER_PASSWORD</code>.</p>
-<pre data-lang="bash"><code>arcana serve
-arcana serve --hostname 127.0.0.1 --port 4096</code></pre>
-
-      <h3 id="cmd-attach">arcana attach</h3>
-<pre data-lang="bash"><code>arcana attach --help</code></pre>
-
-      <h3 id="cmd-web">arcana web</h3>
-<pre data-lang="bash"><code>arcana web
-arcana web --build</code></pre>
-
-      <h3 id="cmd-github">github / pr</h3>
-<pre data-lang="bash"><code>arcana github --help
-arcana pr --help</code></pre>
-
-      <h3 id="cmd-lifecycle">upgrade / uninstall / audit</h3>
-<pre data-lang="bash"><code>arcana upgrade
-arcana uninstall
-arcana audit --help</code></pre>
-
-      <!-- ========== PROXY ========== -->
-      <h2 id="proxy-overview">Proxy overview</h2>
+      <!-- ========== PROXY (summary — full reference at /docs/proxy) ========== -->
+      <h2 id="proxy-overview">Proxy API</h2>
       <p><strong>Base URL:</strong> <code>https://proxy-arcana.otnelhq.com</code></p>
-      <p>OpenAI-compatible surface for chat, embeddings, models, balance, and account-style helpers. Use after <code>arcana console login</code> (or another valid license bearer).</p>
+      <p>OpenAI-compatible HTTP API for chat completions, embeddings, models, balance, and account helpers. Authenticate with your Arcana license key after <code>arcana console login</code>.</p>
       <div class="docs-table-wrap">
         <table class="docs-table">
           <thead>
-            <tr><th>Method</th><th>Path</th><th>Auth</th><th>Notes</th></tr>
+            <tr><th>Method</th><th>Path</th><th>Purpose</th></tr>
           </thead>
           <tbody>
-            <tr><td>POST</td><td><code>/v1/chat/completions</code></td><td>License</td><td>Streaming SSE</td></tr>
-            <tr><td>POST</td><td><code>/v1/embeddings</code></td><td>License</td><td>Embeddings</td></tr>
-            <tr><td>GET</td><td><code>/v1/models</code></td><td>License</td><td>Model list</td></tr>
-            <tr><td>GET</td><td><code>/v1/balance</code></td><td>License</td><td>Credits</td></tr>
-            <tr><td>GET</td><td><code>/v1/usage</code></td><td>License</td><td>Daily meters</td></tr>
-            <tr><td>GET</td><td><code>/v1/free-usage/sessions/current</code></td><td>License</td><td>Free tier snapshot</td></tr>
-            <tr><td>GET</td><td><code>/v1/health</code></td><td>License</td><td>Identity + liveness</td></tr>
-            <tr><td>GET</td><td><code>/v1/sessions</code></td><td>License</td><td>Session list</td></tr>
-            <tr><td>GET</td><td><code>/v1/sessions/:id</code></td><td>License</td><td>Session detail</td></tr>
-            <tr><td>GET / PUT</td><td><code>/v1/memory</code></td><td>License</td><td>Cloud memory facts</td></tr>
-            <tr><td>DELETE</td><td><code>/v1/memory/:key</code></td><td>License</td><td>Delete one fact</td></tr>
-            <tr><td>GET</td><td><code>/v1/purchases</code></td><td>License</td><td>Purchase history</td></tr>
-            <tr><td>GET / PUT</td><td><code>/v1/profile</code></td><td>License</td><td>Profile</td></tr>
-            <tr><td>POST</td><td><code>/v1/send-receipt</code></td><td>License</td><td>Test receipt email</td></tr>
-            <tr><td>GET</td><td><code>/v1/auth/resolve-email</code></td><td>License</td><td>Email resolution</td></tr>
-            <tr><td>GET</td><td><code>/v1/identity/validate-email</code></td><td>Public</td><td>Email has account?</td></tr>
-            <tr><td>POST</td><td><code>/v1/trial/start</code></td><td>Public</td><td>Trial token (if enabled)</td></tr>
-            <tr><td>*</td><td><code>/v1/pay/*</code></td><td>Mixed</td><td>Billing / PayPal (site flows)</td></tr>
+            <tr><td>POST</td><td><code>/v1/chat/completions</code></td><td>Chat completions (streaming SSE)</td></tr>
+            <tr><td>POST</td><td><code>/v1/embeddings</code></td><td>Embeddings</td></tr>
+            <tr><td>GET</td><td><code>/v1/models</code></td><td>List available models</td></tr>
+            <tr><td>GET</td><td><code>/v1/balance</code></td><td>Credit balance</td></tr>
+            <tr><td>GET</td><td><code>/v1/usage</code></td><td>Daily usage meters</td></tr>
+            <tr><td>GET</td><td><code>/v1/health</code></td><td>Health check + identity</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="docs-callout docs-callout-warn">
-        <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <div class="docs-callout-body">
-          <strong>Infrastructure routes are not public</strong>
-          <p>Operator-only admin APIs exist for Arcana’s own systems. They are not documented here and are not for application use.</p>
-        </div>
-      </div>
-
-      <h2 id="api-auth">Authentication</h2>
-<pre data-lang="bash"><code>Authorization: Bearer &lt;license_key&gt;</code></pre>
-      <p>License keys look like <code>ARCANA-PRO-…</code> and come from console login. Do <strong>not</strong> send vendor API keys (<code>sk-…</code>) as the proxy bearer.</p>
 <pre data-lang="bash"><code>export ARCANA_LICENSE='ARCANA-PRO-…'
 curl -H "Authorization: Bearer $ARCANA_LICENSE" \
   https://proxy-arcana.otnelhq.com/v1/balance</code></pre>
-
-      <h2 id="api-chat">Chat &amp; embeddings</h2>
-      <h3 id="api-chat-completions">POST /v1/chat/completions</h3>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
-          <span class="docs-endpoint-path">/v1/chat/completions</span>
-          <span class="docs-endpoint-auth">License</span>
-        </div>
-        <div class="docs-endpoint-body">
-          <p>OpenAI Chat Completions compatible. Supports streaming SSE.</p>
-<pre data-lang="bash"><code>curl -N -X POST https://proxy-arcana.otnelhq.com/v1/chat/completions \
-  -H "Authorization: Bearer $ARCANA_LICENSE" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "anthropic/claude-sonnet-4",
-    "messages": [{ "role": "user", "content": "hello" }],
-    "stream": true
-  }'</code></pre>
-        </div>
-      </div>
-
-      <h3 id="api-embeddings">POST /v1/embeddings</h3>
-      <div class="docs-endpoint">
-        <div class="docs-endpoint-head">
-          <span class="docs-endpoint-method docs-endpoint-method-post">POST</span>
-          <span class="docs-endpoint-path">/v1/embeddings</span>
-          <span class="docs-endpoint-auth">License</span>
-        </div>
-        <div class="docs-endpoint-body">
-          <p>OpenAI-compatible embeddings request body.</p>
-        </div>
-      </div>
-
-      <h2 id="api-models">Models</h2>
-      <h3 id="api-models-get">GET /v1/models</h3>
-<pre data-lang="bash"><code>curl -H "Authorization: Bearer $ARCANA_LICENSE" \
-  https://proxy-arcana.otnelhq.com/v1/models</code></pre>
-
-      <h2 id="api-billing">Balance &amp; usage</h2>
-      <h3 id="api-balance">GET /v1/balance</h3>
-<pre data-lang="json"><code>{
-  "userId": "you@domain.com",
-  "credits": 842,
-  "dollars": "8.42"
-}</code></pre>
-      <p><code>credits</code> are integer units (100 = $1.00).</p>
-
-      <h3 id="api-usage">GET /v1/usage</h3>
-      <p>Daily request counters for the authenticated subject.</p>
-
-      <h3 id="api-free-usage">GET /v1/free-usage/sessions/current</h3>
-      <p>Free-tier session snapshot (turns, weekly tokens) when on free plan.</p>
-
-      <h2 id="api-account">Health, sessions, profile</h2>
-      <h3 id="api-health">GET /v1/health</h3>
-<pre data-lang="json"><code>{
-  "status": "ok",
-  "service": "arcana-proxy",
-  "user": "you@domain.com",
-  "tier": "pro"
-}</code></pre>
-
-      <h3 id="api-sessions">GET /v1/sessions</h3>
-      <p>List recent proxy-recorded sessions (model, tokens, cost, optional message preview). Detail: <code>GET /v1/sessions/:id</code>. These are proxy usage records, not full local TUI transcripts.</p>
-
-      <h3 id="api-memory">GET / PUT /v1/memory</h3>
-      <p>Personal cloud memory facts for the workspace Memory page and <code>arcana memory push|pull|sync</code>.</p>
-<pre data-lang="bash"><code># List
-curl -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  https://proxy-arcana.otnelhq.com/v1/memory
-
-# Upsert facts (last-write-wins by updatedAt)
-curl -X PUT -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"facts":[{"key":"user.theme","value":"dark","confidence":1}]}' \
-  https://proxy-arcana.otnelhq.com/v1/memory
-
-# Delete one fact
-curl -X DELETE -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
-  https://proxy-arcana.otnelhq.com/v1/memory/user.theme</code></pre>
-
-      <h3 id="api-profile">GET / PUT /v1/profile</h3>
-      <p>User profile preferences used by the workspace UI.</p>
-
-      <h3 id="api-purchases">GET /v1/purchases</h3>
-      <p>Purchase history for the authenticated account.</p>
+      <p><a href="/docs/proxy" class="docs-cta-link">Read the full Proxy API reference →</a></p>
 
       <!-- ========== DEVICE ========== -->
       <h2 id="device-overview">How device pairing works</h2>
@@ -532,9 +313,9 @@ curl -X DELETE -H "Authorization: Bearer $ARCANA_PROXY_KEY" \
           <span class="docs-pager-dir">← Previous</span>
           <span class="docs-pager-title">Home</span>
         </a>
-        <a class="docs-pager-next" href="/changelog">
+        <a class="docs-pager-next" href="/docs/gateway">
           <span class="docs-pager-dir">Next →</span>
-          <span class="docs-pager-title">Changelog</span>
+          <span class="docs-pager-title">Gateway</span>
         </a>
       </nav>
     </article>
