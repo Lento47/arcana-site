@@ -192,7 +192,29 @@
     <div id="releases">
       <article class="release">
         <div class="rel-top">
-          <span class="tag latest">v0.3.18 — latest</span>
+          <span class="tag latest">v0.3.44 — latest</span>
+          <span class="date">Jul 22, 2026</span>
+        </div>
+        <ul class="changes">
+          <li class="feat">Session status breakdown chart — stacked horizontal bar with clickable legend to filter by status.</li>
+          <li class="feat">"Load more" pagination on Sessions page — fetches older sessions in batches of 200 via cursor-based pagination.</li>
+          <li class="feat">Dashboard usage card now reads daily limit from proxy (no more hardcoded <code>50</code>) — shows "Daily limit unknown" or "Unlimited" for enterprise.</li>
+          <li class="feat">Dashboard refresh button with rotate animation — reloads all data on demand.</li>
+          <li class="feat">Account tier badge in sidebar across all workspace pages — fetched from <code>/v1/health</code> on every page load.</li>
+          <li class="feat">Sidebar usage bar — mini daily request usage bar with color thresholds (green/yellow/red).</li>
+          <li class="feat">Sidebar tier tooltip — hover to see daily used/limit/remaining info from <code>/v1/usage</code>.</li>
+          <li class="feat">Dashboard heading tier badge — shows account tier (Free/Pro/Enterprise) next to the page title.</li>
+          <li class="feat">"Last refreshed" timestamp on dashboard — updates on every successful data load.</li>
+          <li class="feat">Status badge tooltips on session rows — hover for description ("Finished normally", "Streamed over SSE", "Error occurred").</li>
+          <li class="feat">Console logging of session status counts on load — helps debug what the proxy returns.</li>
+          <li class="perf">Increased session fetch limit from 50 to 200 across Sessions and Dashboard pages.</li>
+          <li class="fix">Dashboard daily usage no longer hardcodes <code>50</code> as fallback limit — uses server-provided value or shows "—".</li>
+        </ul>
+      </article>
+
+      <article class="release">
+        <div class="rel-top">
+          <span class="tag">v0.3.18</span>
           <span class="date">Jul 21, 2026</span>
         </div>
         <ul class="changes">
