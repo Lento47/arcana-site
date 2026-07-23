@@ -11,8 +11,7 @@ var countEl=e('s-count');
 var allSessions=[],filtered=[],page=0,perPage=12;
 var detailCache={};
 
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function timeAgo(iso){if(!iso)return'';var d=new Date(iso);var sec=Math.floor((Date.now()-d)/1000);if(sec<60)return'just now';if(sec<3600)return Math.floor(sec/60)+'m ago';if(sec<86400)return Math.floor(sec/3600)+'h ago';return Math.floor(sec/86400)+'d ago'}
+var esc=ws.esc,timeAgo=ws.timeAgo;
 function fmtTokens(s){return ((s.tokensIn||0)+(s.tokensOut||0)).toLocaleString()}
 function fmtCost(s){
   if(s.costCredits==null)return'—';
@@ -33,9 +32,9 @@ function preview(s){
 }
 
 function showContent(vis){
-  if(skelEl)skelEl.style.display=vis?'none':'';
-  if(tableEl)tableEl.style.display=vis?'':'none';
-  if(pagEl)pagEl.style.display=vis&&filtered.length>perPage?'':'none';
+  if(skelEl)skelEl.classList.toggle('is-hidden',vis);
+  if(tableEl)tableEl.classList.toggle('is-hidden',!vis);
+  if(pagEl)pagEl.classList.toggle('is-hidden',!(vis&&filtered.length>perPage));
 }
 
 function applyFilters(){
@@ -63,9 +62,9 @@ function renderPage(){
 
   if(!tableEl)return;
   if(pageSessions.length===0){
-    tableEl.style.display='none';
+    tableEl.classList.add('is-hidden');
     if(emptyEl){
-      emptyEl.style.display='';
+      emptyEl.classList.remove('is-hidden');
       emptyEl.innerHTML=allSessions.length===0
         ?'No sessions for <b>this web account</b> yet.<br><br>'
           +'Sessions are recorded when this signed-in user hits Arcana Proxy.<br>'
@@ -73,12 +72,12 @@ function renderPage(){
           +'Fix: run <code>arcana console login</code> (device login with the same email as the site), then use the CLI so sessions land on your Supabase user id.'
         :'No sessions match your filters.';
     }
-    if(pagEl)pagEl.style.display='none';
+    if(pagEl)pagEl.classList.add('is-hidden');
     return;
   }
-  if(emptyEl)emptyEl.style.display='none';
-  tableEl.style.display='';
-  if(pagEl)pagEl.style.display=filtered.length>perPage?'':'none';
+  if(emptyEl)emptyEl.classList.add('is-hidden');
+  tableEl.classList.remove('is-hidden');
+  if(pagEl)pagEl.classList.toggle('is-hidden',!(filtered.length>perPage));
 
   var html=pageSessions.map(function(s,i){
     var idx=start+i;
@@ -107,7 +106,7 @@ function renderPage(){
           '<div class="span-2"><span class="label">Session ID</span><code class="mono-id">'+esc(s.id||'—')+'</code></div>'+
           (pv?'<div class="span-2"><span class="label">Preview</span><div class="sr-preview-full">'+esc(pv)+'</div></div>':'')+
         '</div>'+
-        '<div class="sr-detail-loading" id="sdl-'+idx+'" style="display:none">Loading detail…</div>'+
+        '<div class="sr-detail-loading is-hidden" id="sdl-'+idx+'">Loading detail…</div>'+
       '</div>'+
     '</div>';
   }).join('');
@@ -132,13 +131,13 @@ function loadDetail(idx,id){
   if(!id||!ws.session)return;
   if(detailCache[id]){applyDetail(idx,detailCache[id]);return}
   var loadEl=document.getElementById('sdl-'+idx);
-  if(loadEl)loadEl.style.display='';
+  if(loadEl)loadEl.classList.remove('is-hidden');
   ws.pf('/v1/sessions/'+encodeURIComponent(id),ws.session.access_token).then(function(d){
     if(d)detailCache[id]=d;
-    if(loadEl)loadEl.style.display='none';
+    if(loadEl)loadEl.classList.add('is-hidden');
     if(d)applyDetail(idx,d);
   })['catch'](function(){
-    if(loadEl){loadEl.textContent='Could not load session detail.';loadEl.style.display='block'}
+    if(loadEl){loadEl.textContent='Could not load session detail.';loadEl.classList.remove('is-hidden')}
   });
 }
 
@@ -176,8 +175,8 @@ function init(s){
     applyFilters();
     showContent(true);
   })['catch'](function(){
-    if(skelEl)skelEl.style.display='none';
-    if(emptyEl){emptyEl.textContent='Failed to load sessions.';emptyEl.style.display='';}
+    if(skelEl)skelEl.classList.add('is-hidden');
+    if(emptyEl){emptyEl.textContent='Failed to load sessions.';emptyEl.classList.remove('is-hidden');}
   });
 }
 

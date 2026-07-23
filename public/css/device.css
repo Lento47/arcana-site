@@ -43,11 +43,29 @@ html, body {
 
 body {
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   padding: clamp(24px, 4vw, 56px) clamp(20px, 4vw, 48px);
   background-image:
     radial-gradient(ellipse 800px 400px at 50% -10%, rgba(179, 140, 255, 0.05), transparent 60%);
+}
+
+/* — Brand logo above terminal — */
+
+.d-brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: opacity 140ms ease;
+}
+.d-brand:hover { opacity: 0.85; }
+.d-brand-logo {
+  width: 28px;
+  height: 28px;
+  transition: filter 200ms ease;
+}
+.d-brand-logo:hover {
+  filter: drop-shadow(0 0 8px rgba(179, 140, 255, 0.5));
 }
 
 /* — Terminal window — */

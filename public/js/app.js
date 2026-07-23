@@ -5,6 +5,60 @@ function onReady(fn) {
   else { document.addEventListener('DOMContentLoaded', fn); }
 }
 
+// ── Site Theme Toggle (Home page) ──
+function setupSiteThemeToggle() {
+  const desktopToggle = document.getElementById('site-theme-toggle');
+  const mobileToggle = document.getElementById('mobile-theme-toggle');
+  const STORAGE_KEY = 'arcana-site-theme';
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function getPreferredTheme() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'light' || saved === 'dark') return saved;
+    return prefersDark.matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    const isLight = theme === 'light';
+    if (isLight) {
+      document.documentElement.classList.add('site-light');
+    } else {
+      document.documentElement.classList.remove('site-light');
+    }
+    // Sync labels on both buttons
+    const label = isLight ? 'dark' : 'light';
+    if (desktopToggle) desktopToggle.setAttribute('aria-label', `Switch to ${label} mode`);
+    if (mobileToggle) {
+      const labelEl = mobileToggle.querySelector('.mobile-theme-label');
+      if (labelEl) labelEl.textContent = `Switch to ${label} mode`;
+    }
+  }
+
+  // Initialize theme (FOUC prevention script already ran, but sync button state)
+  const currentTheme = getPreferredTheme();
+  applyTheme(currentTheme);
+
+  // Toggle handler
+  function toggleTheme() {
+    const isLight = document.documentElement.classList.contains('site-light');
+    const newTheme = isLight ? 'dark' : 'light';
+    localStorage.setItem(STORAGE_KEY, newTheme);
+    applyTheme(newTheme);
+  }
+
+  // Desktop toggle click
+  if (desktopToggle) desktopToggle.addEventListener('click', toggleTheme);
+  // Mobile toggle click
+  if (mobileToggle) mobileToggle.addEventListener('click', toggleTheme);
+
+  // Follow system changes if no manual preference
+  prefersDark.addEventListener('change', () => {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      applyTheme(prefersDark.matches ? 'dark' : 'light');
+    }
+  });
+}
+
 // ── Mobile Menu ──
 function initMobileMenu() {
   const hamburger = document.getElementById('hamburger');
@@ -194,6 +248,69 @@ function initCodeCopy() {
   });
 }
 
+// ── Logo Probe: auto-detect logo color and apply correct filter ──
+function initLogoProbe() {
+  const logo = document.querySelector('.brand .mark');
+  if (!logo) return;
+
+  const STORAGE_KEY = 'arcana-logo-color:' + logo.getAttribute('src');
+
+  function applyLogoFilter(isDark) {
+    document.documentElement.classList.toggle('logo-is-dark', isDark);
+    const style = document.createElement('style');
+    const darkInvert = isDark
+      ? '.logo-is-dark .mark{filter:invert(1)}.logo-is-dark .brand:hover .mark{filter:invert(1) drop-shadow(0 0 8px rgba(179,140,255,.5))}'
+      : '';
+    const lightInvert = isDark
+      ? ''
+      : '.site-light .mark{filter:invert(1)}.site-light .brand:hover .mark{filter:invert(1) drop-shadow(0 0 6px rgba(139,79,212,.4))}';
+    style.textContent = darkInvert + lightInvert;
+    document.head.appendChild(style);
+  }
+
+  // Check cache first
+  const cached = localStorage.getItem(STORAGE_KEY);
+  if (cached === 'dark' || cached === 'light') {
+    applyLogoFilter(cached === 'dark');
+    return;
+  }
+
+  // Cache miss — sample logo pixels
+  function probe() {
+    if (!logo.complete || logo.naturalWidth === 0) return;
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = logo.naturalWidth;
+      canvas.height = logo.naturalHeight;
+      ctx.drawImage(logo, 0, 0);
+      const w = canvas.width;
+      const h = canvas.height;
+      const step = Math.max(1, Math.floor(Math.min(w, h) / 8));
+      const data = ctx.getImageData(0, 0, w, h).data;
+      let totalBrightness = 0;
+      let opaquePixels = 0;
+      for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+          const i = (y * w + x) * 4;
+          if (data[i + 3] > 128) {
+            totalBrightness += (data[i] + data[i + 1] + data[i + 2]) / 3;
+            opaquePixels++;
+          }
+        }
+      }
+      if (opaquePixels === 0) return;
+      const avgBrightness = totalBrightness / opaquePixels;
+      const isDark = avgBrightness < 128;
+      try { localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light'); } catch (e) {}
+      applyLogoFilter(isDark);
+    } catch (e) { /* cross-origin or canvas failure — leave default */ }
+  }
+
+  if (logo.complete) probe();
+  else logo.addEventListener('load', probe);
+}
+
 // ── Hero Parallax ──
 function initHeroParallax() {
   const hero = document.querySelector('.hero');
@@ -220,77 +337,9 @@ function initHeroParallax() {
           content.style.opacity = 1 - (scrollY / maxScroll) * 0.4;
         }
         ticking = false;
-      });
-      ticking = true;
+      });  ticking = true;
     }
   }, { passive: true });
-}
-
-// ── Hero Particles ──
-function initHeroParticles() {
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const container = document.createElement('div');
-  container.className = 'hero-particles';
-  container.setAttribute('aria-hidden', 'true');
-  hero.style.position = 'relative';
-  hero.insertBefore(container, hero.firstChild);
-
-  const count = window.innerWidth < 600 ? 12 : 20;
-  const colors = [
-    'rgba(179,140,255,.5)',
-    'rgba(217,249,157,.35)',
-    'rgba(140,255,191,.3)',
-    'rgba(255,140,179,.25)'
-  ];
-
-  for (let i = 0; i < count; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'hero-particle';
-    const size = 2 + Math.random() * 4;
-    const x = 10 + Math.random() * 80;
-    const delay = Math.random() * 2;
-    const dur = 2.5 + Math.random() * 3;
-    const travel = -(80 + Math.random() * 160);
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    dot.style.cssText = `width:${size}px;height:${size}px;left:${x}%;bottom:0;--delay:${delay}s;--dur:${dur}s;--travel:${travel}px;--peak-opacity:${.3 + Math.random() * .4};background:radial-gradient(circle,${color},transparent 70%)`;
-    container.appendChild(dot);
-  }
-
-  // Clean up after animation finishes
-  setTimeout(() => container.remove(), 7000);
-}
-
-// ── Hero Entrance Animation ──
-function initHeroEntrance() {
-  const h1 = document.querySelector('.hero h1');
-  if (!h1) return;
-
-  // Respect reduced motion — skip splitting, keep text as-is
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const text = h1.textContent;
-  h1.textContent = '';
-  h1.setAttribute('aria-label', text);
-
-  let charIndex = 0;
-  for (const ch of text) {
-    const span = document.createElement('span');
-    span.className = 'hero-reveal-char';
-    if (ch === ' ') {
-      span.innerHTML = '&nbsp;';
-      span.style.width = '.3em';
-    } else {
-      span.textContent = ch;
-    }
-    // Stagger: ~35ms per character, capped at 1200ms total
-    const delay = Math.min(charIndex * 35, 1200);
-    span.style.animationDelay = delay + 'ms';
-    h1.appendChild(span);
-    charIndex++;
-  }
 }
 
 // ── Keyboard Shortcuts ──
@@ -387,16 +436,16 @@ function showSignedOut() {
 }
 
 onReady(() => {
+  setupSiteThemeToggle();
   initMobileMenu();
   initScrollReveal();
   initStatsCounter();
   initCodeCopy();
   initHeroParallax();
-  initHeroParticles();
-  initHeroEntrance();
   initBackToTop();
   initKeyboardShortcuts();
   updateNavSession();
+  initLogoProbe();
 
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((a) => {

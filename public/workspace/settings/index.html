@@ -48,54 +48,71 @@
       <div class="content-inner">
         <h1>Settings</h1>
 
-        <div class="card" style="margin-bottom:0.5rem">
-          <div class="card-head"><h2>Profile</h2></div>
-          <div class="card-body">
-            <div class="form-group">
-              <label for="s-name">Display Name</label>
-              <input type="text" id="s-name" class="form-input" placeholder="Your name" autocomplete="name">
-            </div>
-            <div class="form-group">
-              <label for="s-email">Email</label>
-              <input type="email" id="s-email" class="form-input" disabled>
-            </div>
-            <button class="btn-primary" id="s-save">Save Changes</button>
-            <div class="msg" id="s-msg"></div>
+        <div class="skel-grid skel-grid-2" id="s-skeleton">
+          <div class="skel">
+            <div class="skel-line w40 skel-mb"></div>
+            <div class="skel-form-row"><div class="skel-line w30 skel-h-sm"></div><div class="skel-line w70 skel-h-input"></div></div>
+            <div class="skel-form-row"><div class="skel-line w30 skel-h-sm"></div><div class="skel-line w60 skel-h-input"></div></div>
+            <div class="skel-line w30 skel-h-btn"></div>
+          </div>
+          <div class="skel">
+            <div class="skel-line w40 skel-mb"></div>
+            <div class="skel-pref-row"><div><div class="skel-line w30 skel-h-xs skel-mb-sm"></div><div class="skel-line w50 skel-h-desc"></div></div><div class="skel-toggle"></div></div>
+            <div class="skel-pref-row"><div><div class="skel-line w40 skel-h-xs skel-mb-sm"></div><div class="skel-line w60 skel-h-desc"></div></div><div class="skel-toggle"></div></div>
+            <div class="skel-pref-row"><div><div class="skel-line w35 skel-h-xs skel-mb-sm"></div><div class="skel-line w55 skel-h-desc"></div></div><div class="skel-toggle"></div></div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-head"><h2>Preferences</h2></div>
-          <div class="card-body">
-            <div class="pref-row">
-              <div>
-                <div class="pref-label">Theme</div>
-                <div class="pref-desc">Dark / Light mode</div>
+        <div id="s-content" class="is-hidden">
+          <div class="card card-mb">
+            <div class="card-head"><h2>Profile</h2></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="s-name">Display Name</label>
+                <input type="text" id="s-name" class="form-input" placeholder="Your name" autocomplete="name">
               </div>
-              <label class="toggle">
-                <input type="checkbox" id="s-theme">
-                <span class="toggle-slider"></span>
-              </label>
+              <div class="form-group">
+                <label for="s-email">Email</label>
+                <input type="email" id="s-email" class="form-input" disabled>
+              </div>
+              <button class="btn-primary" id="s-save">Save Changes</button>
+              <div class="msg" id="s-msg"></div>
             </div>
-            <div class="pref-row">
-              <div>
-                <div class="pref-label">Email Receipts</div>
-                <div class="pref-desc">Receive purchase receipts via email</div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Preferences</h2></div>
+            <div class="card-body">
+              <div class="pref-row">
+                <div>
+                  <div class="pref-label">Theme</div>
+                  <div class="pref-desc">Dark / Light mode</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="s-theme">
+                  <span class="toggle-slider"></span>
+                </label>
               </div>
-              <label class="toggle">
-                <input type="checkbox" id="s-receipts" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="pref-row">
-              <div>
-                <div class="pref-label">Usage Alerts</div>
-                <div class="pref-desc">Notify when approaching daily limit</div>
+              <div class="pref-row">
+                <div>
+                  <div class="pref-label">Email Receipts</div>
+                  <div class="pref-desc">Receive purchase receipts via email</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="s-receipts" checked>
+                  <span class="toggle-slider"></span>
+                </label>
               </div>
-              <label class="toggle">
-                <input type="checkbox" id="s-alerts">
-                <span class="toggle-slider"></span>
-              </label>
+              <div class="pref-row">
+                <div>
+                  <div class="pref-label">Usage Alerts</div>
+                  <div class="pref-desc">Notify when approaching daily limit</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="s-alerts">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
             </div>
           </div>
         </div>

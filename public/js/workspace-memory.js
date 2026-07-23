@@ -9,8 +9,7 @@ var keyEl=e('m-key'),valEl=e('m-value'),saveBtn=e('m-save'),refreshBtn=e('m-refr
 
 var allFacts=[],filtered=[];
 
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function timeAgo(iso){if(!iso)return'';var d=new Date(iso);var sec=Math.floor((Date.now()-d)/1000);if(sec<60)return'just now';if(sec<3600)return Math.floor(sec/60)+'m ago';if(sec<86400)return Math.floor(sec/3600)+'h ago';return Math.floor(sec/86400)+'d ago'}
+var esc=ws.esc,timeAgo=ws.timeAgo;
 function confPct(c){return Math.round((Number(c)||0)*100)+'%'}
 
 function showMsg(text,ok){
@@ -36,9 +35,9 @@ function render(){
   if(!listEl)return;
 
   if(filtered.length===0){
-    listEl.style.display='none';
+    listEl.classList.add('is-hidden');
     if(emptyEl){
-      emptyEl.style.display='';
+      emptyEl.classList.remove('is-hidden');
       emptyEl.innerHTML=allFacts.length===0
         ?'No memory facts for <b>this web account</b> yet.<br><br>'
           +'Cloud memory is keyed by your site login (Supabase user), not by an unrelated CLI license.<br><br>'
@@ -50,8 +49,8 @@ function render(){
     }
     return;
   }
-  if(emptyEl)emptyEl.style.display='none';
-  listEl.style.display='';
+  if(emptyEl)emptyEl.classList.add('is-hidden');
+  listEl.classList.remove('is-hidden');
 
   listEl.innerHTML=filtered.map(function(f,i){
     return '<article class="memory-card" data-key="'+esc(f.key)+'">'+
@@ -83,18 +82,18 @@ function token(){
 }
 
 function load(){
-  if(skelEl)skelEl.style.display='';
-  if(listEl)listEl.style.display='none';
-  if(emptyEl)emptyEl.style.display='none';
+  if(skelEl)skelEl.classList.remove('is-hidden');
+  if(listEl)listEl.classList.add('is-hidden');
+  if(emptyEl)emptyEl.classList.add('is-hidden');
   var t=token();
   if(!t)return;
   ws.pf('/v1/memory?limit=200',t).then(function(data){
     allFacts=data&&data.facts?data.facts:[];
-    if(skelEl)skelEl.style.display='none';
+    if(skelEl)skelEl.classList.add('is-hidden');
     applyFilters();
     showMsg('',true);
   })['catch'](function(err){
-    if(skelEl)skelEl.style.display='none';
+    if(skelEl)skelEl.classList.add('is-hidden');
     var msg=err&&err.message?String(err.message):'Failed to load memory from proxy.';
     if(/429|rate_limited/i.test(msg)){
       msg='Rate limited — wait a few seconds and refresh. Workspace reads no longer share the free LLM burst bucket after the latest proxy deploy.';
@@ -105,7 +104,7 @@ function load(){
     }else{
       msg='Failed to load memory from proxy. '+msg;
     }
-    if(emptyEl){emptyEl.style.display='';emptyEl.textContent=msg;}
+    if(emptyEl){emptyEl.classList.remove('is-hidden');emptyEl.textContent=msg;}
     showMsg(msg,false);
   });
 }
@@ -117,22 +116,22 @@ function saveFact(){
   if(key.length>120){showMsg('Key is too long (max 120).',false);return}
   var t=token();
   if(!t)return;
-  if(saveBtn)saveBtn.disabled=true;
+  if(saveBtn){saveBtn.disabled=true;saveBtn.classList.add('loading')}
   showMsg('',true);
   ws.proxyFetch('/v1/memory',{
     method:'PUT',
     token:t,
     body:{facts:[{key:key,value:value,source:'web',confidence:1,updatedAt:new Date().toISOString()}]}
   }).then(function(res){
-    if(saveBtn)saveBtn.disabled=false;
     if(!res){showMsg('Save failed.',false);return}
     showMsg('Saved · '+(res.merged||0)+' merged, total '+(res.total||0)+'.',true);
     if(keyEl)keyEl.value='';
     if(valEl)valEl.value='';
     load();
   })['catch'](function(err){
-    if(saveBtn)saveBtn.disabled=false;
     showMsg('Save failed: '+(err&&err.message||'error'),false);
+  })['finally'](function(){
+    if(saveBtn){saveBtn.disabled=false;saveBtn.classList.remove('loading')}
   });
 }
 

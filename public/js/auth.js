@@ -533,6 +533,60 @@
         });
       }
 
+      // ── Logo Probe: auto-detect logo color and apply correct filter ──
+      function initLogoProbe() {
+        const logo = document.querySelector('.brand-logo');
+        if (!logo) return;
+        const STORAGE_KEY = 'arcana-logo-color:' + logo.getAttribute('src');
+        function applyLogoFilter(isDark) {
+          document.documentElement.classList.toggle('logo-is-dark', isDark);
+          const s = document.createElement('style');
+          const darkCSS = isDark
+            ? '.logo-is-dark .brand-logo{filter:invert(1)}.logo-is-dark .brand:hover .brand-logo{filter:invert(1) drop-shadow(0 0 6px rgba(179,140,255,.35))}'
+            : '';
+          const lightCSS = isDark
+            ? ''
+            : '[data-theme="light"] .brand-logo{filter:invert(1)}[data-theme="light"] .brand:hover .brand-logo{filter:invert(1) drop-shadow(0 0 6px rgba(158,116,240,.35))}';
+          s.textContent = darkCSS + lightCSS;
+          document.head.appendChild(s);
+        }
+        const cached = localStorage.getItem(STORAGE_KEY);
+        if (cached === 'dark' || cached === 'light') {
+          applyLogoFilter(cached === 'dark');
+          return;
+        }
+        function probe() {
+          if (!logo.complete || logo.naturalWidth === 0) return;
+          try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = logo.naturalWidth;
+            canvas.height = logo.naturalHeight;
+            ctx.drawImage(logo, 0, 0);
+            const w = canvas.width, h = canvas.height;
+            const step = Math.max(1, Math.floor(Math.min(w, h) / 8));
+            const data = ctx.getImageData(0, 0, w, h).data;
+            let totalBrightness = 0, opaquePixels = 0;
+            for (let y = 0; y < h; y += step) {
+              for (let x = 0; x < w; x += step) {
+                const i = (y * w + x) * 4;
+                if (data[i + 3] > 128) {
+                  totalBrightness += (data[i] + data[i + 1] + data[i + 2]) / 3;
+                  opaquePixels++;
+                }
+              }
+            }
+            if (opaquePixels === 0) return;
+            const isDark = (totalBrightness / opaquePixels) < 128;
+            try { localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light'); } catch (e) {}
+            applyLogoFilter(isDark);
+          } catch (e) { /* cross-origin or canvas failure — leave default */ }
+        }
+        if (logo.complete) probe();
+        else logo.addEventListener('load', probe);
+      }
+      initLogoProbe();
+
       // Initial state
       setMode('personal');
       // Allow ?tab= deep links from /auth/device's "email me a magic link

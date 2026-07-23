@@ -23,6 +23,63 @@ const EXPIRY_ANNOUNCE_THRESHOLDS = [600, 300, 120, 60, 30, 10, 0]
 ;(function () {
 "use strict"
 
+// — Logo probe: detect dark/light logo and apply correct invert filter —
+function initLogoProbe() {
+  var logo = document.querySelector('.d-brand-logo');
+  if (!logo) return;
+  var src = logo.getAttribute('src') || '';
+  var cacheKey = 'arcana-logo-color:' + src;
+  try {
+    var cached = localStorage.getItem(cacheKey);
+    if (cached !== null) {
+      document.documentElement.classList.toggle('logo-is-dark', cached === '1');
+      return;
+    }
+  } catch (e) { /* localStorage unavailable */ }
+
+  function probe() {
+    if (!logo.complete || !logo.naturalWidth) { logo.addEventListener('load', probe, { once: true }); return; }
+    try {
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) return;
+      canvas.width = logo.naturalWidth;
+      canvas.height = logo.naturalHeight;
+      ctx.drawImage(logo, 0, 0);
+
+      // Sample a wider grid to handle outlined/ring logos with transparent centers
+      var w = canvas.width, h = canvas.height;
+      var step = Math.max(1, Math.floor(Math.min(w, h) / 8));
+      var data = ctx.getImageData(0, 0, w, h).data;
+      var totalBrightness = 0, opaquePixels = 0;
+      for (var y = 0; y < h; y += step) {
+        for (var x = 0; x < w; x += step) {
+          var i = (y * w + x) * 4;
+          if (data[i + 3] > 128) {
+            totalBrightness += (data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114);
+            opaquePixels++;
+          }
+        }
+      }
+      var avgBrightness = opaquePixels > 0 ? totalBrightness / opaquePixels : 128;
+      var isDark = avgBrightness < 128;
+      document.documentElement.classList.toggle('logo-is-dark', isDark);
+      try { localStorage.setItem(cacheKey, isDark ? '1' : '0'); } catch (e) { /* quota exceeded */ }
+
+      // Inject theme-aware CSS
+      var style = document.createElement('style');
+      if (isDark) {
+        style.textContent = '.logo-is-dark .d-brand-logo{filter:invert(1)}.logo-is-dark .d-brand:hover .d-brand-logo{filter:invert(1) drop-shadow(0 0 8px rgba(179,140,255,.5))}';
+      } else {
+        style.textContent = '[data-theme="light"] .d-brand-logo{filter:invert(1)}[data-theme="light"] .d-brand:hover .d-brand-logo{filter:invert(1) drop-shadow(0 0 8px rgba(179,140,255,.5))}';
+      }
+      document.head.appendChild(style);
+    } catch (e) { /* cross-origin or canvas failure — leave default */ }
+  }
+  probe();
+}
+initLogoProbe();
+
 let state = "loading"
 let userCode = ""
 let deviceSb = null

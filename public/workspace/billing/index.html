@@ -52,16 +52,26 @@
           <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
           <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>
         </div>
+        <div class="card card-mb is-hidden" id="b-tx-skel">
+          <div class="card-head"><h2>Transaction History</h2></div>
+          <div class="card-body">
+            <div class="skel-list">
+              <div class="skel-row"><div class="skel-line w70"></div><div class="skel-line w20"></div></div>
+              <div class="skel-row"><div class="skel-line w50"></div><div class="skel-line w30"></div></div>
+              <div class="skel-row"><div class="skel-line w60"></div><div class="skel-line w20"></div></div>
+            </div>
+          </div>
+        </div>
 
-        <div id="b-content" style="display:none">
-          <div class="card" style="margin-bottom:0.5rem" id="b-sub-card">
+        <div id="b-content" class="is-hidden">
+          <div class="card card-mb" id="b-sub-card">
             <div class="card-head"><h2>Subscription</h2></div>
             <div class="card-body">
               <div class="sub-grid">
-                <div><span class="label" style="display:block;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em">Plan</span><span id="b-tier" style="font-size:var(--text-sm)">—</span></div>
-                <div><span class="label" style="display:block;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em">Status</span><span id="b-status" style="font-size:var(--text-sm)">—</span></div>
-                <div><span class="label" style="display:block;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em">Renewal</span><span id="b-renewal" style="font-size:var(--text-sm)">—</span></div>
-                <div><span class="label" style="display:block;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em">Credits</span><span id="b-credits" style="font-size:var(--text-sm)">—</span></div>
+                <div><span class="billing-label">Plan</span><span id="b-tier" class="billing-value">—</span></div>
+                <div><span class="billing-label">Status</span><span id="b-status" class="billing-value">—</span></div>
+                <div><span class="billing-label">Renewal</span><span id="b-renewal" class="billing-value">—</span></div>
+                <div><span class="billing-label">Credits</span><span id="b-credits" class="billing-value">—</span></div>
               </div>
             </div>
           </div>
@@ -70,9 +80,15 @@
             <div class="card-head"><h2>Transaction History</h2></div>
             <div class="card-body">
               <div class="tx-table" id="b-transactions"></div>
-              <div class="empty-state" id="b-empty" style="display:none">No purchases yet. <a href="/credits" style="color:var(--color-primary);text-decoration:underline">Buy credits</a></div>
+              <div class="empty-state is-hidden" id="b-empty">No purchases yet. <a href="/credits" style="color:var(--color-primary);text-decoration:underline">Buy credits</a></div>
             </div>
           </div>
+        </div>
+
+        <div class="empty-state is-hidden" id="b-error">
+          <div style="margin-bottom:0.75rem;font-size:1.5rem;opacity:.5">💳</div>
+          <div style="margin-bottom:0.5rem;color:var(--color-text);font-weight:500">Billing unavailable</div>
+          <div>Could not load billing data. Check your connection and <button type="button" id="b-retry" style="color:var(--color-primary);background:none;border:none;cursor:pointer;font:inherit;text-decoration:underline">retry</button>.</div>
         </div>
       </div>
     </main>

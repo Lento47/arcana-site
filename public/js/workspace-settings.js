@@ -4,6 +4,12 @@ var ws=window.__ARCANA_WORKSPACE__;
 if(!ws)return;
 var e=function(id){return document.getElementById(id)};
 var nameEl=e('s-name'),emailEl=e('s-email'),themeEl=e('s-theme'),receiptsEl=e('s-receipts'),alertsEl=e('s-alerts'),saveBtn=e('s-save'),msgEl=e('s-msg');
+var skelEl=e('s-skeleton'),contentEl=e('s-content');
+
+function showContent(show){
+  if(skelEl)skelEl.classList.toggle('is-hidden',show);
+  if(contentEl)contentEl.classList.toggle('is-hidden',!show);
+}
 
 function showMsg(text,type){
   if(!msgEl)return;
@@ -20,6 +26,7 @@ function applyTheme(light){
 
 // Load profile
 function loadProfile(s){
+  showContent(false);
   ws.pf('/v1/profile',s.access_token).then(function(profile){
     if(!profile)return;
     if(nameEl)nameEl.value=profile.displayName||'';
@@ -29,21 +36,23 @@ function loadProfile(s){
     applyTheme(theme==='light');
     if(receiptsEl)receiptsEl.checked=profile.notifications?.emailReceipts!==false;
     if(alertsEl)alertsEl.checked=profile.notifications?.usageAlerts===true;
+    showContent(true);
   })['catch'](function(){
     if(emailEl)emailEl.value=s.user.email||'';
+    showContent(true);
   });
 }
 
 // Save profile
 function saveProfile(s){
-  if(saveBtn)saveBtn.disabled=true;
+  if(saveBtn){saveBtn.disabled=true;saveBtn.classList.add('loading')}
   var body={displayName:nameEl?nameEl.value:'',theme:themeEl&&themeEl.checked?'light':'dark',notifications:{emailReceipts:receiptsEl?receiptsEl.checked:true,usageAlerts:alertsEl?alertsEl.checked:false}};
 
   // Use Pages Function relay for PUT
   fetch('/api/profile',{method:'PUT',headers:{Authorization:'Bearer '+s.access_token,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){
     if(r.ok)showMsg('Settings saved.','ok');
     else showMsg('Failed to save settings.','err');
-  })['catch'](function(){showMsg('Network error.','err')})['finally'](function(){if(saveBtn)saveBtn.disabled=false});
+  })['catch'](function(){showMsg('Network error.','err')})['finally'](function(){if(saveBtn){saveBtn.disabled=false;saveBtn.classList.remove('loading')}});
 }
 
 // Theme toggle immediate apply

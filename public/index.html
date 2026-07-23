@@ -41,6 +41,11 @@
 
   <link rel="stylesheet" href="/css/main.css" media="all">
 
+  <!-- FOUC prevention: apply light theme before render -->
+  <script>
+  (function(){var t=localStorage.getItem('arcana-site-theme');if(t==='light'){document.documentElement.classList.add('site-light')}else if(!t&&window.matchMedia('(prefers-color-scheme:light)').matches){document.documentElement.classList.add('site-light')}})();
+  </script>
+
   <!-- Structured Data — SoftwareApplication -->
   <script type="application/ld+json">
   {
@@ -87,7 +92,13 @@
         <a href="/docs">Docs</a>
         <a href="/changelog">Changelog</a>
         <a class="status" href="/status">Status</a>
-        <a class="signin" href="/auth">Sign In</a>
+        <div class="nav-right">
+          <button class="theme-toggle" id="site-theme-toggle" type="button" aria-label="Switch to light mode">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <a class="signin" href="/auth">Sign In</a>
+        </div>
       </nav>
       <!-- Mobile hamburger -->
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
@@ -112,6 +123,12 @@
     <a href="/docs">Docs</a>
     <a href="/changelog">Changelog</a>
     <a href="/status">Status</a>
+    <!-- Mobile theme toggle -->
+    <button class="mobile-theme-toggle" id="mobile-theme-toggle" type="button">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span class="mobile-theme-label">Switch to light mode</span>
+    </button>
     <a class="mobile-cta" href="/auth">Sign In</a>
   </div>
 
@@ -261,7 +278,7 @@
 
   <footer>
     <div class="wrap footer">
-      <div><img src="/arcanalogo-transparent.png" alt="" width="16" height="16" style="vertical-align:text-bottom;margin-right:4px"> ARCANA · Terminal Interface For AI Keys</div>
+      <div><img class="mark" src="/arcanalogo-transparent.png" alt="" width="16" height="16" style="vertical-align:text-bottom;margin-right:4px"> ARCANA · Terminal Interface For AI Keys</div>
       <div class="links">
         <a href="/changelog">Changelog</a>
         <a href="/auth">Sign In</a>
@@ -281,7 +298,6 @@
   <!-- Toast -->
   <div class="toast" id="toast" aria-live="polite"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase.js"></script>
   <script type="module" src="/js/app.js" async></script>
 

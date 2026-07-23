@@ -447,8 +447,70 @@
     })
   }
 
+  // --- 10. Logo Probe: auto-detect logo color and apply correct filter ---
+  function initLogoProbe() {
+    const logo = $(".docs-brand img")
+    if (!logo) return
+
+    const STORAGE_KEY = "arcana-logo-color:" + logo.getAttribute("src")
+
+    function applyLogoFilter(isDark) {
+      document.documentElement.classList.toggle("logo-is-dark", isDark)
+      const style = document.createElement("style")
+      const darkInvert = isDark
+        ? '.logo-is-dark .docs-brand .docs-brand-mark,.logo-is-dark .docs-brand img{filter:invert(1)}.logo-is-dark .docs-brand:hover .docs-brand-mark,.logo-is-dark .docs-brand:hover img{filter:invert(1) drop-shadow(0 0 8px rgba(212,168,255,.45))}'
+        : ''
+      const lightInvert = isDark
+        ? ''
+        : '.docs-light .docs-brand .docs-brand-mark,.docs-light .docs-brand img{filter:invert(1)}.docs-light .docs-brand:hover .docs-brand-mark,.docs-light .docs-brand:hover img{filter:invert(1) drop-shadow(0 0 8px rgba(139,79,212,.35))}'
+      style.textContent = darkInvert + lightInvert
+      document.head.appendChild(style)
+    }
+
+    const cached = localStorage.getItem(STORAGE_KEY)
+    if (cached === 'dark' || cached === 'light') {
+      applyLogoFilter(cached === 'dark')
+      return
+    }
+
+    function probe() {
+      if (!logo.complete || logo.naturalWidth === 0) return
+      try {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        canvas.width = logo.naturalWidth
+        canvas.height = logo.naturalHeight
+        ctx.drawImage(logo, 0, 0)
+        const w = canvas.width
+        const h = canvas.height
+        const step = Math.max(1, Math.floor(Math.min(w, h) / 8))
+        const data = ctx.getImageData(0, 0, w, h).data
+        let totalBrightness = 0
+        let opaquePixels = 0
+        for (let y = 0; y < h; y += step) {
+          for (let x = 0; x < w; x += step) {
+            const i = (y * w + x) * 4
+            if (data[i + 3] > 128) {
+              totalBrightness += (data[i] + data[i + 1] + data[i + 2]) / 3
+              opaquePixels++
+            }
+          }
+        }
+        if (opaquePixels === 0) return
+        const avgBrightness = totalBrightness / opaquePixels
+        const isDark = avgBrightness < 128
+        try { localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light') } catch (e) {}
+        applyLogoFilter(isDark)
+      } catch (e) { /* cross-origin or canvas failure */ }
+    }
+
+    if (logo.complete) probe()
+    else logo.addEventListener('load', probe)
+  }
+
   const init = () => {
     setupThemeToggle()
+    initLogoProbe()
     attachCopyButtons()
     injectAnchors()
     setupSidebarObserver()

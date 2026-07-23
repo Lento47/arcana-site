@@ -10,8 +10,8 @@ var statsEl=e('ws-stats'),skelEl=e('ws-skeleton');
 var sparklineEl=e('ws-sparkline'),modelUsageEl=e('ws-model-usage'),recentEl=e('ws-recent-sessions');
 
 function showContent(vis){
-  if(skelEl)skelEl.style.display=vis?'none':'';
-  if(statsEl)statsEl.style.display=vis?'':'none';
+  if(skelEl)skelEl.classList.toggle('is-hidden',vis);
+  if(statsEl)statsEl.classList.toggle('is-hidden',!vis);
 }
 
 function renderSparkline(sessions){
@@ -29,7 +29,7 @@ function renderSparkline(sessions){
 }
 
 function renderModelBreakdown(sessions){
-  if(!modelUsageEl||!sessions||sessions.length===0){if(modelUsageEl)modelUsageEl.innerHTML='<div class="empty-state" style="padding:1rem 0">No sessions yet.</div>';return}
+  if(!modelUsageEl||!sessions||sessions.length===0){if(modelUsageEl)modelUsageEl.innerHTML='<div class="empty-state empty-state-padded">No sessions yet.</div>';return}
   var counts={};
   sessions.forEach(function(s){var m=s.model||'unknown';counts[m]=(counts[m]||0)+1});
   var total=Object.values(counts).reduce(function(a,b){return a+b},0);
@@ -54,8 +54,7 @@ function renderRecent(sessions){
   recentEl.innerHTML='<div class="session-table">'+html+'</div>';
 }
 
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function timeAgo(iso){if(!iso)return'';var d=new Date(iso);var sec=Math.floor((Date.now()-d)/1000);if(sec<60)return'just now';if(sec<3600)return Math.floor(sec/60)+'m ago';if(sec<86400)return Math.floor(sec/3600)+'h ago';return Math.floor(sec/86400)+'d ago'}
+var esc=ws.esc,timeAgo=ws.timeAgo;
 
 function init(s){
   showContent(false);

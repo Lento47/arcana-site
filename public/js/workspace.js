@@ -90,7 +90,53 @@ function initSidebar(s){
 }
 
 // Expose shared utilities
-window.__ARCANA_WORKSPACE__={pf:pf,proxyFetch:proxyFetch,sb:sb,user:null,session:null,initSidebar:initSidebar};
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function timeAgo(iso){if(!iso)return'';var d=new Date(iso);var sec=Math.floor((Date.now()-d)/1000);if(sec<60)return'just now';if(sec<3600)return Math.floor(sec/60)+'m ago';if(sec<86400)return Math.floor(sec/3600)+'h ago';return Math.floor(sec/86400)+'d ago'}
+window.__ARCANA_WORKSPACE__={pf:pf,proxyFetch:proxyFetch,sb:sb,user:null,session:null,initSidebar:initSidebar,esc:esc,timeAgo:timeAgo};
+
+// --- Logo Probe: auto-detect logo color and apply correct filter ---
+function initLogoProbe(){
+  var logo=document.querySelector('.side-head img');
+  if(!logo)return;
+  var STORAGE_KEY='arcana-logo-color:'+logo.getAttribute('src');
+  function applyLogoFilter(isDark){
+    document.documentElement.classList.toggle('logo-is-dark',isDark);
+    var s=document.createElement('style');
+    var darkCSS=isDark?'.logo-is-dark .side-head img{filter:invert(1)}.logo-is-dark .side-head img:hover{filter:invert(1) drop-shadow(0 0 6px rgba(179,140,255,.5))}':'';
+    var lightCSS=isDark?'':'[data-theme=light] .side-head img{filter:invert(1)}[data-theme=light] .side-head img:hover{filter:invert(1) drop-shadow(0 0 6px rgba(139,79,212,.4))}';
+    s.textContent=darkCSS+lightCSS;
+    document.head.appendChild(s);
+  }
+  var cached=localStorage.getItem(STORAGE_KEY);
+  if(cached==='dark'||cached==='light'){applyLogoFilter(cached==='dark');return}
+  function probe(){
+    if(!logo.complete||logo.naturalWidth===0)return;
+    try{
+      var canvas=document.createElement('canvas');
+      var ctx=canvas.getContext('2d');
+      canvas.width=logo.naturalWidth;
+      canvas.height=logo.naturalHeight;
+      ctx.drawImage(logo,0,0);
+      var w=canvas.width,h=canvas.height;
+      var step=Math.max(1,Math.floor(Math.min(w,h)/8));
+      var data=ctx.getImageData(0,0,w,h).data;
+      var totalBrightness=0,opaquePixels=0;
+      for(var y=0;y<h;y+=step){
+        for(var x=0;x<w;x+=step){
+          var i=(y*w+x)*4;
+          if(data[i+3]>128){totalBrightness+=(data[i]+data[i+1]+data[i+2])/3;opaquePixels++}
+        }
+      }
+      if(opaquePixels===0)return;
+      var avgBrightness=totalBrightness/opaquePixels;
+      var isDark=avgBrightness<128;
+      try{localStorage.setItem(STORAGE_KEY,isDark?'dark':'light')}catch(e){}
+      applyLogoFilter(isDark);
+    }catch(e){/* cross-origin or canvas failure — leave default */}
+  }
+  if(logo.complete)probe();
+  else logo.addEventListener('load',probe);
+}
 
 // Signout
 e('btn-signout').addEventListener('click',async function(){await sb.auth.signOut();location.replace('/')});
@@ -106,6 +152,7 @@ document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeSideb
 window.addEventListener('arcana:signed-out',function(){location.replace('/')});
 
 // Init
+initLogoProbe();
 sb.auth.getSession().then(function(r){
   if(!r.data.session){location.replace('/auth');return}
   var s=r.data.session;

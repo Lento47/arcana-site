@@ -43,7 +43,7 @@
   --docs-info:    #8eb6e8;
   --docs-info-subtle: rgba(142, 182, 232, 0.12);
 
-  /* Typography */
+  /* Typography — Inter as primary, matching main site */
   --docs-font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --docs-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --docs-font-display: 'Inter', system-ui, sans-serif;
@@ -104,17 +104,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 ::selection { background: var(--docs-accent-glow); color: var(--docs-text); }
 
-/* — Logo: invert black logo on dark backgrounds — */
+/* — Logo: display as-is on dark bg, probe handles invert via JS — */
 .docs-brand .docs-brand-mark,
 .docs-brand img {
   width: 26px;
   height: 26px;
-  filter: invert(1);
   transition: filter var(--docs-dur-base) var(--docs-ease-out), transform var(--docs-dur-base) var(--docs-ease-out);
 }
 .docs-brand:hover .docs-brand-mark,
 .docs-brand:hover img {
-  filter: invert(1) drop-shadow(0 0 8px rgba(212, 168, 255, 0.45));
+  filter: drop-shadow(0 0 8px rgba(212, 168, 255, 0.45));
   transform: scale(1.08);
 }
 
@@ -169,8 +168,67 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .docs-header-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
+
+/* — Header Nav Links — */
+.docs-header-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+}
+.docs-header-links a {
+  padding: 7px 12px;
+  border-radius: var(--docs-radius-sm);
+  color: var(--docs-text-muted);
+  text-decoration: none;
+  font-weight: 400;
+  position: relative;
+  transition: color var(--docs-dur-fast) var(--docs-ease-out), background var(--docs-dur-fast) var(--docs-ease-out);
+}
+.docs-header-links a:hover {
+  color: var(--docs-text);
+  background: var(--docs-accent-subtle);
+  text-decoration: none;
+}
+.docs-header-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 3px; left: 12px; right: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, var(--docs-accent), var(--docs-rose));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--docs-dur-base) var(--docs-ease-out);
+}
+.docs-header-links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* — Sign In button in header — */
+.docs-header-signin {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px !important;
+  border-radius: var(--docs-radius-pill) !important;
+  border: 1px solid rgba(212, 168, 255, 0.45) !important;
+  background: linear-gradient(135deg, rgba(212, 168, 255, 0.22), rgba(240, 168, 192, 0.14)) !important;
+  color: var(--docs-cream) !important;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none !important;
+  transition: all var(--docs-dur-fast) var(--docs-ease-out) !important;
+}
+.docs-header-signin:hover {
+  background: linear-gradient(135deg, rgba(212, 168, 255, 0.35), rgba(240, 168, 192, 0.22)) !important;
+  border-color: rgba(212, 168, 255, 0.7) !important;
+  box-shadow: 0 0 24px rgba(212, 168, 255, 0.2);
+  color: #fff !important;
+}
+.docs-header-signin::after { display: none !important; }
 
 /* — Theme Toggle — */
 .docs-theme-toggle {
@@ -368,72 +426,6 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   font-size: 24px;
   margin-bottom: 8px;
   opacity: 0.6;
-}
-
-.docs-nav {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 13.5px;
-}
-.docs-nav a {
-  padding: 7px 12px;
-  border-radius: var(--docs-radius-sm);
-  position: relative;
-  color: var(--docs-text-muted);
-  text-decoration: none;
-}
-.docs-nav a:hover {
-  color: var(--docs-text);
-  background: var(--docs-accent-subtle);
-  text-decoration: none;
-}
-.docs-nav a.is-active { color: var(--docs-text); }
-.docs-nav a.is-active::after {
-  content: "";
-  position: absolute;
-  left: 12px; right: 12px; bottom: 3px;
-  height: 2px;
-  border-radius: 1px;
-  background: linear-gradient(90deg, var(--docs-accent), var(--docs-rose));
-}
-
-.docs-nav-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: 6px;
-  padding: 7px 16px !important;
-  border-radius: var(--docs-radius-pill) !important;
-  border: 1px solid rgba(212, 168, 255, 0.45);
-  background: linear-gradient(135deg, rgba(212, 168, 255, 0.22), rgba(240, 168, 192, 0.14));
-  color: var(--docs-cream) !important;
-  font-size: 12.5px;
-  font-weight: 500;
-  transition: all var(--docs-dur-fast) var(--docs-ease-out);
-}
-.docs-nav-cta:hover {
-  background: linear-gradient(135deg, rgba(212, 168, 255, 0.35), rgba(240, 168, 192, 0.22));
-  border-color: rgba(212, 168, 255, 0.7);
-  box-shadow: 0 0 24px rgba(212, 168, 255, 0.2);
-  color: #fff !important;
-  text-decoration: none;
-}
-
-/* — Layout — */
-.docs-layout {
-  display: grid;
-  grid-template-columns: var(--docs-sidebar-w) minmax(0, 1fr);
-  gap: 48px;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 36px 24px 100px;
-  align-items: start;
-}
-
-@media (max-width: 960px) {
-  .docs-layout { grid-template-columns: 1fr; gap: 0; padding: 16px 16px 72px; }
-  .docs-search { max-width: 100%; }
 }
 
 /* — Sidebar — */
@@ -1168,12 +1160,28 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   box-shadow: 0 0 0 2px var(--docs-accent);
 }
 
+/* Layout */
+.docs-layout {
+  display: grid;
+  grid-template-columns: var(--docs-sidebar-w) minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 24px 100px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .docs-layout { grid-template-columns: 1fr; gap: 0; padding: 16px 16px 72px; }
+  .docs-search { max-width: 100%; }
+}
+
 @media (max-width: 720px) {
   body { font-size: 16px; }
   .docs-h1 { font-size: 1.75rem; }
   .docs-lead { font-size: 16px; }
   .docs-header-inner { padding: 0 14px; }
-  .docs-nav a:not(.docs-nav-cta) { padding: 6px 8px; font-size: 12.5px; }
+  .docs-header-links a:not(.docs-header-signin) { padding: 6px 8px; font-size: 12.5px; }
 }
 
 /* — Light Theme Overrides — */
@@ -1224,11 +1232,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
-/* No logo invert in light mode */
-.docs-light .docs-brand .docs-brand-mark,
-.docs-light .docs-brand img {
-  filter: none;
-}
+/* Logo handled by JS probe — no hardcoded filter overrides */
 .docs-light .docs-brand:hover .docs-brand-mark,
 .docs-light .docs-brand:hover img {
   filter: drop-shadow(0 0 8px rgba(139, 79, 212, 0.35));

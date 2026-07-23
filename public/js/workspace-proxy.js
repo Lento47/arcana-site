@@ -3,7 +3,7 @@
 var ws=window.__ARCANA_WORKSPACE__;
 if(!ws)return;
 var e=function(id){return document.getElementById(id)};
-var skelEl=e('p-skeleton'),contentEl=e('p-content');
+var skelEl=e('p-skeleton'),contentEl=e('p-content'),emptyEl=e('p-empty');
 var balanceEl=e('p-balance'),balanceBar=e('p-balance-bar');
 var usedEl=e('p-used'),limitEl=e('p-limit'),remEl=e('p-remaining'),usageBar=e('p-usage-bar');
 var tierEl=e('p-tier');
@@ -19,8 +19,14 @@ function getDailyLimit(usage, health) {
 }
 
 function showContent(vis){
-  if(skelEl)skelEl.style.display=vis?'none':'';
-  if(contentEl)contentEl.style.display=vis?'':'none';
+  if(skelEl)skelEl.classList.toggle('is-hidden',vis);
+  if(contentEl)contentEl.classList.toggle('is-hidden',!vis);
+  if(emptyEl)emptyEl.classList.add('is-hidden');
+}
+function showError(){
+  if(skelEl)skelEl.classList.add('is-hidden');
+  if(contentEl)contentEl.classList.add('is-hidden');
+  if(emptyEl)emptyEl.classList.remove('is-hidden');
 }
 
 function init(s){
@@ -58,9 +64,13 @@ function init(s){
     if(tierEl)tierEl.textContent=(hd&&hd.tier)?hd.tier.charAt(0).toUpperCase()+hd.tier.slice(1):'—';
 
     showContent(true);
-  })['catch'](function(){showContent(true)});
+  })['catch'](function(){showError()});
 }
 
+var retryBtn=e('p-retry');
+if(retryBtn)retryBtn.addEventListener('click',function(){
+  if(ws.session)init(ws.session);
+});
 window.addEventListener('arcana:workspace-ready',function(ev){init(ev.detail)});
 if(ws.session)init(ws.session);
 })();
