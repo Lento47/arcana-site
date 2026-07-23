@@ -5,7 +5,8 @@ if(!sb){location.replace('/auth');return}
 var e=function(id){return document.getElementById(id)};
 
 // Sidebar elements
-var emailEl=e('ws-email'),avatarEl=e('ws-avatar'),sidEl=e('ws-session-id');
+var emailEl=e('ws-email'),avatarEl=e('ws-avatar'),sidEl=e('ws-session-id'),sideTierEl=e('ws-side-tier');
+var sideUsageEl=e('ws-side-usage'),sideUsageFillEl=e('ws-side-usage-fill');
 
 function proxyErr(status,text){
   var msg='Proxy '+status;
@@ -151,6 +152,52 @@ document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeSideb
 // Auth events
 window.addEventListener('arcana:signed-out',function(){location.replace('/')});
 
+// Fetch account tier + usage from proxy, show badge with daily-limit tooltip
+function loadSidebarTier(){
+  if(!sideTierEl)return;
+  var s=window.__ARCANA_WORKSPACE__.session;
+  if(!s)return;
+
+  // Fetch health first — badge shows on its own
+  pf('/v1/health',s.access_token).then(function(hd){
+    var tier=hd&&hd.tier?hd.tier.charAt(0).toUpperCase()+hd.tier.slice(1):'';
+    if(!tier)return;
+    sideTierEl.textContent=tier;
+    sideTierEl.title=tier;
+    sideTierEl.classList.remove('is-hidden');
+
+    // Enrich tooltip with usage data (fire-and-forget)
+    pf('/v1/usage',s.access_token).then(function(ud){
+      if(!ud)return;
+      var used=ud.requests||ud.count||0;
+      var limit=ud.limit;
+      var tip=tier;
+      // Update sidebar usage bar (only when a numeric limit exists)
+      if(sideUsageEl&&sideUsageFillEl){
+        var hasLimit=typeof limit==='number'&&Number.isFinite(limit)&&limit>0;
+        if(hasLimit){
+          var pct=Math.min(100,Math.round(used/limit*100));
+          sideUsageFillEl.style.width=pct+'%';
+          sideUsageFillEl.style.background=pct>95?'var(--color-error)':pct>80?'var(--color-warning)':'var(--color-primary)';
+          sideUsageEl.classList.remove('is-hidden');
+        }else{
+          sideUsageEl.classList.add('is-hidden');
+        }
+      }
+
+      if(typeof limit==='number'&&Number.isFinite(limit)){
+        var rem=Math.max(0,limit-used);
+        tip+=' \u00B7 '+used.toLocaleString()+'/'+limit.toLocaleString()+' today \u00B7 '+rem.toLocaleString()+' remaining';
+      }else if(hd&&hd.tier==='enterprise'){
+        tip+=' \u00B7 Unlimited';
+      }else{
+        tip+=' \u00B7 Daily limit unavailable';
+      }
+      sideTierEl.title=tip;
+    })['catch'](function(){});
+  })['catch'](function(){});
+}
+
 // Init
 initLogoProbe();
 sb.auth.getSession().then(function(r){
@@ -159,6 +206,7 @@ sb.auth.getSession().then(function(r){
   window.__ARCANA_WORKSPACE__.session=s;
   window.__ARCANA_WORKSPACE__.user=s.user;
   initSidebar(s);
+  loadSidebarTier();
   window.dispatchEvent(new CustomEvent('arcana:workspace-ready',{detail:s}));
 });
 sb.auth.onAuthStateChange(function(ev,s){
@@ -167,6 +215,7 @@ sb.auth.onAuthStateChange(function(ev,s){
     window.__ARCANA_WORKSPACE__.session=s;
     window.__ARCANA_WORKSPACE__.user=s.user;
     initSidebar(s);
+    loadSidebarTier();
     window.dispatchEvent(new CustomEvent('arcana:workspace-ready',{detail:s}));
   }
 });

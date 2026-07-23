@@ -40,6 +40,10 @@
           <div class="side-email" id="ws-email">—</div>
         </div>
         <div class="side-id" id="ws-session-id">—</div>
+        <div class="side-tier"><span class="side-tier-badge is-hidden" id="ws-side-tier"></span></div>
+        <div class="side-usage is-hidden" id="ws-side-usage">
+          <div class="side-usage-track"><div class="side-usage-fill" id="ws-side-usage-fill"></div></div>
+        </div>
         <button class="btn-signout" id="btn-signout">Sign out</button>
       </div>
     </aside>
@@ -57,6 +61,11 @@
           Proxy chat usage for your account (model, tokens, cost). Expand a row for detail.
           Local TUI session transcripts live under <code>~/.arcana/</code> and are not uploaded here.
         </p>
+
+        <div class="status-chart is-hidden" id="s-status-chart">
+          <div class="sc-bar" id="sc-bar"></div>
+          <div class="sc-legend" id="sc-legend"></div>
+        </div>
 
         <div class="toolbar">
           <input type="text" id="s-search" class="search-input" placeholder="Search model, provider, preview…" autocomplete="off">
@@ -78,6 +87,10 @@
 
         <div class="session-table is-hidden" id="s-table"></div>
         <div class="empty-state is-hidden" id="s-empty">No sessions found.</div>
+
+        <div class="load-more is-hidden" id="s-load-more">
+          <button id="s-load-btn" class="btn-ghost">Load more</button>
+        </div>
 
         <div class="pagination is-hidden" id="s-pagination">
           <button id="s-prev">← Previous</button>

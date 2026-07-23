@@ -40,13 +40,25 @@
           <div class="side-email" id="ws-email">—</div>
         </div>
         <div class="side-id" id="ws-session-id">—</div>
+        <div class="side-tier"><span class="side-tier-badge is-hidden" id="ws-side-tier"></span></div>
+        <div class="side-usage is-hidden" id="ws-side-usage">
+          <div class="side-usage-track"><div class="side-usage-fill" id="ws-side-usage-fill"></div></div>
+        </div>
         <button class="btn-signout" id="btn-signout">Sign out</button>
       </div>
     </aside>
 
     <main class="content">
       <div class="content-inner">
-        <h1>Dashboard</h1>
+        <div class="page-head">
+          <h1>Dashboard <span class="tier-badge is-hidden" id="ws-tier"></span></h1>
+          <div class="page-head-meta">
+            <span class="last-refreshed" id="ws-last-refreshed"></span>
+            <button type="button" class="btn-refresh" id="ws-refresh" title="Refresh dashboard data" aria-label="Refresh">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            </button>
+          </div>
+        </div>
 
         <div class="skel-grid" id="ws-skeleton">
           <div class="skel"><div class="skel-line w40"></div><div class="skel-line w60"></div></div>

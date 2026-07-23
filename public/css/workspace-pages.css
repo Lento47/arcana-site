@@ -1,12 +1,19 @@
 /* Page head / lead */
 .page-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
 .page-head h1 { margin-bottom: 0; }
+.tier-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.55rem; text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: var(--radius-sm); background: var(--color-surface-2); border: 1px solid var(--color-border); color: var(--color-text-muted); vertical-align: middle; margin-left: 0.5rem; }
+h1 .tier-badge { position: relative; top: -2px; }
 .page-head-meta { display: flex; align-items: center; gap: 0.75rem; }
 .page-count { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); }
 .page-lead { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.55; margin-bottom: 1.25rem; max-width: 52rem; }
 .page-lead code { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--color-surface-2); padding: 1px 6px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); color: var(--color-text); }
 .btn-ghost { padding: 0.25rem 0.75rem; background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text-muted); font-family: inherit; font-size: var(--text-sm); cursor: pointer; }
 .btn-ghost:hover { color: var(--color-text); border-color: var(--color-text-muted); }
+.last-refreshed { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-faint); white-space: nowrap; }
+.btn-refresh { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); cursor: pointer; transition: color 0.12s, border-color 0.12s, transform 0.12s; }
+.btn-refresh:hover { color: var(--color-text); border-color: var(--color-text-muted); }
+.btn-refresh:active { transform: rotate(90deg); }
+.btn-refresh svg { display: block; }
 .form-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end; }
 .hint-inline { color: var(--color-text-faint); font-size: var(--text-xs); }
 .mono-id { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); word-break: break-all; }
@@ -49,6 +56,7 @@
 .sr-status { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: .04em; text-align: center; padding: 2px 4px; border-radius: var(--radius-sm); color: var(--color-text-muted); background: var(--color-surface-2); }
 .sr-status.ok { color: var(--color-success); background: rgba(140,255,191,.1); }
 .sr-status.err { color: var(--color-error); background: rgba(255,107,107,.1); }
+.sr-status.unknown { color: var(--color-warning); background: rgba(255,211,110,.1); }
 .sr-expand { background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: var(--text-sm); padding: 2px 6px; border-radius: var(--radius-sm); }
 .sr-expand:hover { color: var(--color-text); background: rgba(255,255,255,.05); }
 .sr-detail { grid-column: 1 / -1; padding: 0.75rem 0 0.25rem; border-top: 1px solid var(--color-divider); margin-top: 0.5rem; display: none; }
@@ -94,6 +102,11 @@
 .skel-row .skel-line { height: 12px; border-radius: 3px; background: linear-gradient(100deg,var(--color-surface) 25%,var(--color-surface-2) 50%,var(--color-surface) 75%); background-size: 400% 100%; animation: shimmer 1.8s infinite; }
 .w20 { width: 20%; } .w30 { width: 30%; } .w50 { width: 50%; } .w70 { width: 70%; }
 
+/* Load more button */
+.load-more { display: flex; justify-content: center; padding: 0.75rem 0 0.25rem; }
+.load-more .btn-ghost { min-width: 140px; text-align: center; transition: opacity 0.15s, filter 0.15s; }
+.load-more .btn-ghost:active { transform: scale(0.97); }
+
 /* Pagination */
 .pagination { display: flex; justify-content: center; align-items: center; gap: 1rem; padding: 1rem 0; font-size: var(--text-sm); color: var(--color-text-muted); }
 .pagination button { padding: 0.25rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text-muted); cursor: pointer; font-family: inherit; font-size: var(--text-sm); }
@@ -125,6 +138,22 @@
 .tx-status { font-size: var(--text-xs); padding: 2px 6px; border-radius: var(--radius-sm); text-align: center; }
 .tx-status.completed { color: var(--color-success); background: rgba(140,255,191,.1); }
 .tx-status.pending { color: var(--color-warning); background: rgba(255,211,110,.1); }
+
+/* Status breakdown chart (sessions page) */
+.status-chart { margin-bottom: 0.75rem; padding: 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.sc-bar { display: flex; height: 6px; border-radius: var(--radius-pill); overflow: hidden; gap: 1px; }
+.sc-seg { transition: opacity 0.15s; cursor: default; }
+.sc-seg:first-child { border-radius: var(--radius-pill) 0 0 var(--radius-pill); }
+.sc-seg:last-child { border-radius: 0 var(--radius-pill) var(--radius-pill) 0; }
+.sc-seg:only-child { border-radius: var(--radius-pill); }
+.sc-legend { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; margin-top: 0.5rem; }
+.sc-item { display: inline-flex; align-items: center; gap: 0.3rem; padding: 2px 6px; background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; font-family: inherit; font-size: var(--text-xs); color: var(--color-text-muted); transition: background 0.1s, border-color 0.1s; }
+.sc-item:hover { background: var(--color-surface-2); border-color: var(--color-border); color: var(--color-text); }
+.sc-item:active { transform: scale(0.97); }
+.sc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sc-label { text-transform: capitalize; }
+.sc-count { font-family: var(--font-mono); color: var(--color-text); }
+.sc-pct { font-family: var(--font-mono); color: var(--color-text-faint); }
 
 /* Settings */
 .form-group { margin-bottom: 1rem; }
