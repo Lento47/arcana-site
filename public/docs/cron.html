@@ -70,23 +70,81 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="cron">Cron Jobs</h1>
-        <p>Schedule recurring prompts, reports, reviews, and checks from the same Arcana runtime.</p>
-        <h2 id="create">Create a Job</h2>
-        <pre><code># Daily standup report
-arcana cron add --schedule "0 9 * * *" --prompt "Summarize yesterday's commits"
+        <p>Schedule recurring prompts, reports, reviews, and checks that run automatically from the Arcana runtime. Cron jobs let you set and forget AI workflows — daily standups, weekly code reviews, hourly monitoring alerts, or any other repeated task.</p>
 
-# Weekly code review
-arcana cron add --schedule "0 17 * * 5" --prompt "Review open PRs"</code></pre>
+        <h2 id="schedule-syntax">Schedule Syntax</h2>
+        <p>Arcana uses standard cron syntax with five fields:</p>
+        <pre><code>┌───────── minute (0–59)
+│ ┌──────── hour (0–23)
+│ │ ┌─────── day of month (1–31)
+│ │ │ ┌────── month (1–12)
+│ │ │ │ ┌───── day of week (0–7, 0 and 7 = Sunday)
+│ │ │ │ │
+* * * * *</code></pre>
+
+        <h2 id="create">Create a Cron Job</h2>
+        <p>Use <code>arcana cron add</code> to schedule a recurring job. Each job requires a cron schedule and a prompt to execute.</p>
+        <pre><code># Daily standup report at 9 AM
+arcana cron add \
+  --schedule "0 9 * * *" \
+  --prompt "Summarize yesterday's commits and open PRs"
+
+# Weekly code review every Friday at 5 PM
+arcana cron add \
+  --schedule "0 17 * * 5" \
+  --prompt "Review all open PRs for merge conflicts and stale reviews"
+
+# Hourly health check
+arcana cron add \
+  --schedule "0 * * * *" \
+  --prompt "Check API endpoint health and report any failures"
+
+# First day of every month — billing report
+arcana cron add \
+  --schedule "0 8 1 * *" \
+  --prompt "Generate monthly usage report"</code></pre>
+
         <h2 id="manage">Manage Jobs</h2>
-        <pre><code># List all jobs
+        <pre><code># List all scheduled jobs with their next run time
 arcana cron list
 
-# Run a job immediately
+# Run a job immediately (regardless of schedule)
 arcana cron run &lt;job-id&gt;
 
-# Remove a job
+# View job execution history
+arcana cron history &lt;job-id&gt;
+
+# Pause a job without removing it
+arcana cron pause &lt;job-id&gt;
+
+# Resume a paused job
+arcana cron resume &lt;job-id&gt;
+
+# Remove a job permanently
 arcana cron remove &lt;job-id&gt;</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+
+        <h2 id="common-schedules">Common Schedule Examples</h2>
+        <table>
+          <thead><tr><th>Schedule</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>*/5 * * * *</code></td><td>Every 5 minutes</td></tr>
+            <tr><td><code>0 * * * *</code></td><td>Every hour at minute 0</td></tr>
+            <tr><td><code>0 9 * * *</code></td><td>Daily at 9 AM</td></tr>
+            <tr><td><code>0 9,17 * * *</code></td><td>Daily at 9 AM and 5 PM</td></tr>
+            <tr><td><code>0 0 * * 1</code></td><td>Every Monday at midnight</td></tr>
+            <tr><td><code>0 8 1 * *</code></td><td>First of every month at 8 AM</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="output">Job Output</h2>
+        <p>Cron job results are stored and can be viewed later. Each execution records the prompt used, the model response, execution time, and any errors.</p>
+        <pre><code># View the last N results for a job
+arcana cron history &lt;job-id&gt; --last 5
+
+# View all results (paginated)
+arcana cron history &lt;job-id&gt; --limit 20</code></pre>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

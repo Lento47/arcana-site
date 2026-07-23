@@ -70,14 +70,101 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="plugins">Plugins</h1>
-        <p>Extend Arcana's functionality with community and custom plugins.</p>
-        <h2 id="install">Install a Plugin</h2>
-        <pre><code>arcana plugin install &lt;name&gt;</code></pre>
-        <h2 id="list">List Installed Plugins</h2>
-        <pre><code>arcana plugin list</code></pre>
-        <h2 id="remove">Remove a Plugin</h2>
-        <pre><code>arcana plugin remove &lt;name&gt;</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+        <p>Extend Arcana's capabilities with community and custom plugins. Plugins can add new tools, integrate with external services, modify the terminal UI, or hook into session lifecycle events.</p>
+
+        <h2 id="overview">How Plugins Work</h2>
+        <p>Plugins are self-contained packages that register capabilities with Arcana at startup. They can:</p>
+        <ul>
+          <li>Add new <strong>tools</strong> for the AI to use (e.g., a SQL query tool)</li>
+          <li>Register <strong>MCP servers</strong> automatically</li>
+          <li>Provide <strong>custom prompts</strong> and templates</li>
+          <li>Hook into session <strong>lifecycle events</strong> (start, message, end)</li>
+          <li>Integrate with external <strong>APIs and services</strong></li>
+        </ul>
+
+        <h2 id="installing">Installing Plugins</h2>
+        <p>Plugins are distributed through the Arcana plugin registry. Install them with a single command:</p>
+        <pre><code># Install from the registry
+arcana plugin install arcana-mcp-fs
+
+# Install from a local directory
+arcana plugin install ./my-plugin
+
+# Install from a Git repository
+arcana plugin install https://github.com/user/arcana-plugin</code></pre>
+
+        <h2 id="managing">Managing Plugins</h2>
+        <pre><code># List all installed plugins
+arcana plugin list
+
+# View plugin details and permissions
+arcana plugin info arcana-mcp-fs
+
+# Update a plugin to the latest version
+arcana plugin update arcana-mcp-fs
+
+# Update all plugins
+arcana plugin update --all
+
+# Remove a plugin
+arcana plugin remove arcana-mcp-fs</code></pre>
+
+        <h2 id="registry">Plugin Registry</h2>
+        <p>Search the community plugin registry to discover plugins:</p>
+        <pre><code># Search by keyword
+arcana plugin search "database"
+arcana plugin search "monitoring"
+arcana plugin search "github"
+
+# List popular plugins
+arcana plugin list --remote
+
+# View plugin details before installing
+arcana plugin info arcana-mcp-fs --remote</code></pre>
+
+        <h2 id="permissions">Plugin Permissions</h2>
+        <p>Each plugin declares the permissions it needs. Arcana prompts you to review and approve them on first install:</p>
+        <table>
+          <thead><tr><th>Permission</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>shell</code></td><td>Execute arbitrary shell commands</td></tr>
+            <tr><td><code>filesystem</code></td><td>Read and write files</td></tr>
+            <tr><td><code>network</code></td><td>Make HTTP requests</td></tr>
+            <tr><td><code>memory</code></td><td>Read and write session memory</td></tr>
+            <tr><td><code>clipboard</code></td><td>Read clipboard contents</td></tr>
+          </tbody>
+        </table>
+        <pre><code># Review permissions of a plugin
+arcana plugin permissions arcana-mcp-fs
+
+# Set permissions (disable a permission)
+arcana plugin permissions arcana-mcp-fs --deny network</code></pre>
+
+        <h2 id="creating">Creating a Plugin</h2>
+        <p>Plugins are JavaScript/TypeScript modules. A minimal plugin structure:</p>
+        <pre><code>my-plugin/
+  package.json
+  index.js          # Main plugin entry point
+  manifest.json     # Plugin metadata and permissions</code></pre>
+        <p>An example <code>manifest.json</code>:</p>
+        <pre><code>{
+  "name": "hello-arcana",
+  "version": "1.0.0",
+  "description": "A simple example plugin",
+  "permissions": ["network"],
+  "tools": [{
+    "name": "hello",
+    "description": "A friendly greeting tool",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" }
+      }
+    }
+  }]
+}</code></pre>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

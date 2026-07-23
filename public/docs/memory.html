@@ -70,29 +70,68 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="memory">Memory</h1>
-        <p>Arcana's wiki-style memory system uses FTS5-powered search, extracted facts, and optional cloud sync across machines.</p>
+        <p>Arcana's memory system is a persistent, searchable knowledge base that grows with every session. During conversations, Arcana automatically extracts key facts, decisions, and context — storing them in a local SQLite database with full-text search (FTS5). Over time, your memory becomes a rich wiki of your project's architecture, decisions, and conventions.</p>
+
         <h2 id="how-it-works">How It Works</h2>
-        <p>During each session, Arcana automatically extracts facts and stores them in a local SQLite database with full-text search.</p>
-        <h2 id="search">Search</h2>
-        <pre><code># Search memory
+        <p>Memory operates in three stages:</p>
+        <ol>
+          <li><strong>Extraction</strong> — During each session, Arcana identifies and extracts factual statements (e.g., "The API uses JWT tokens with a 24-hour expiry")</li>
+          <li><strong>Storage</strong> — Facts are stored in a local SQLite database with FTS5 indexing for fast full-text search</li>
+          <li><strong>Retrieval</strong> — At the start of new sessions, relevant facts are automatically retrieved and surfaced to the AI</li>
+        </ol>
+
+        <h2 id="search">Searching Memory</h2>
+        <p>You can search your memory at any time using <code>arcana memory search</code>. Results are ranked by relevance using FTS5's built-in ranking.</p>
+        <pre><code># Full-text search across all facts
 arcana memory search "project architecture"
 
-# List all facts
-arcana memory facts
+# List all stored facts (paginated)
+arcana memory facts --limit 50
 
-# Filter by topic
-arcana memory facts --topic "api"</code></pre>
+# Filter facts by topic tag
+arcana memory facts --topic "api"
+
+# Filter by date range
+arcana memory facts --since 2026-06-01 --until 2026-07-01
+
+# View fact details
+arcana memory fact &lt;fact-id&gt;</code></pre>
+
         <h2 id="cloud-sync">Cloud Sync</h2>
-        <p>Enable cloud sync to share knowledge across machines:</p>
-        <pre><code># Enable cloud sync
+        <p>Enable cloud sync to share memory across multiple machines. This is useful if you work from different computers and want your knowledge base to follow you. Cloud sync requires an active Pro or Enterprise license.</p>
+        <pre><code># Enable cloud sync in config
 arcana config set memory.cloudSync true
 
-# Push local facts
+# Push local facts to the cloud
 arcana memory push
 
-# Pull from cloud
-arcana memory pull</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+# Pull latest facts from the cloud
+arcana memory pull
+
+# View sync status
+arcana memory sync-status</code></pre>
+        <p>Cloud sync is bidirectional: <code>push</code> uploads your local changes, while <code>pull</code> downloads facts from other machines. Conflicts are resolved by timestamp (latest wins).</p>
+
+        <h2 id="management">Memory Management</h2>
+        <pre><code># View memory statistics (total facts, size, last sync)
+arcana memory stats
+
+# Clear all local memory
+arcana memory clear
+
+# Rebuild the FTS5 search index (if search feels slow)
+arcana memory rebuild-index
+
+# Export memory to JSON
+arcana memory export --file memory-backup.json
+
+# Import memory from JSON
+arcana memory import --file memory-backup.json</code></pre>
+
+        <h2 id="privacy">Privacy</h2>
+        <p>Memory is stored locally by default. Facts never leave your machine unless you explicitly enable cloud sync. You can review, edit, or delete individual facts at any time.</p>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

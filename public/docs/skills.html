@@ -70,20 +70,87 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="skills">Skills</h1>
-        <p>Load specialized instructions only when needed to keep the base session clean.</p>
-        <h2 id="list">Available Skills</h2>
-        <pre><code># List all available skills
+        <p>Skills are reusable, self-contained instruction sets that you can load on demand to give Arcana specialized knowledge or behavior. Instead of cluttering every session with every possible instruction, skills let you load expertise only when you need it — keeping your base context clean and your responses focused.</p>
+
+        <h2 id="overview">How Skills Work</h2>
+        <p>A skill is a set of instructions (like a mini-prompt) stored in a local file. When you load a skill, its instructions are injected into the current session context, temporarily teaching the AI new capabilities, constraints, or domain knowledge. Skills persist between sessions but are only active when explicitly loaded.</p>
+
+        <h2 id="finding">Finding Skills</h2>
+        <p>Arcana includes several built-in skills and a growing library of community-contributed skills:</p>
+        <pre><code># List all locally available skills
 arcana skills list
 
-# Load a skill
-arcana skills load &lt;name&gt;</code></pre>
-        <h2 id="create">Create a Skill</h2>
-        <pre><code># Create a new skill
-arcana skills create &lt;name&gt;
+# Search the community skill registry
+arcana skills search "database"
+arcana skills search "testing"
 
-# Edit skill instructions
-arcana skills edit &lt;name&gt;</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+# View details about a skill
+arcana skills info arcana-mcp-fs</code></pre>
+
+        <h2 id="loading">Loading a Skill</h2>
+        <p>Load a skill during an active session. The skill's instructions are added to the AI's context:</p>
+        <pre><code># Load a skill by name
+arcana skills load arcana-mcp-fs
+
+# Load multiple skills at once
+arcana skills load arcana-mcp-fs arcana-git-workflow
+
+# Load a skill from a file path
+arcana skills load ./path/to/skill.md
+
+# List currently loaded skills
+arcana skills loaded</code></pre>
+
+        <h2 id="creating">Creating a Skill</h2>
+        <p>Skills are plain Markdown files with a YAML frontmatter header. Create one in the <code>~/.config/arcana/skills/</code> directory:</p>
+        <pre><code>---
+name: react-expert
+description: Expert-level React and Next.js guidance
+version: 1.0.0
+tags: [react, nextjs, frontend]
+---
+
+You are a React expert with deep knowledge of:
+- React 19 features and server components
+- Next.js App Router patterns
+- State management with Zustand and TanStack Query
+- Performance optimization and bundle splitting
+
+When answering React questions:
+1. Prefer server components by default
+2. Use TypeScript in all examples
+3. Include error boundaries for async operations
+4. Show both client and server component patterns</code></pre>
+        <p>Then use the CLI to register it:</p>
+        <pre><code># Create a new skill interactively
+arcana skills create react-expert
+
+# Edit an existing skill
+arcana skills edit react-expert
+
+# Export a skill to share
+arcana skills export react-expert --file react-expert.md</code></pre>
+
+        <h2 id="community">Community Skills</h2>
+        <p>Install community-contributed skills from GitHub repositories. These are vetted instruction sets shared by the Arcana community:</p>
+        <pre><code># Search the community registry
+npx skills find database
+npx skills find testing
+
+# Install a community skill repo
+npx skills add owner/repo --list
+npx skills add owner/repo --skill skill-name --yes</code></pre>
+
+        <h2 id="tips">Tips for Effective Skills</h2>
+        <ul>
+          <li><strong>Be specific</strong> — Narrow instructions produce more reliable results</li>
+          <li><strong>Use examples</strong> — Include code snippets showing the preferred patterns</li>
+          <li><strong>Set constraints</strong> — Tell the AI what <em>not</em> to do</li>
+          <li><strong>Keep them focused</strong> — A skill should do one thing well</li>
+          <li><strong>Version your skills</strong> — The <code>version</code> field helps track changes</li>
+        </ul>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

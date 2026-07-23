@@ -70,24 +70,75 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="themes">Themes</h1>
-        <p>Arcana includes 7 built-in themes with custom backgrounds for supported truecolor terminals.</p>
+        <p>Arcana includes 7 built-in themes with custom backgrounds and color palettes for supported truecolor terminals. Each theme transforms the terminal UI — from the prompt colors and borders to background imagery and accent highlights.</p>
+
         <h2 id="available">Available Themes</h2>
-        <ul>
-          <li><code>bloodmoon</code> — Dark red accents</li>
-          <li><code>coven</code> — Purple witchy vibes</li>
-          <li><code>crypt</code> — Cool blue-grey</li>
-          <li><code>dragon</code> — Fiery orange</li>
-          <li><code>lich</code> — Ghostly green</li>
-          <li><code>wraith</code> — Ethereal white</li>
-          <li><code>default</code> — Clean minimal</li>
-        </ul>
-        <h2 id="set">Set a Theme</h2>
-        <pre><code># Set theme
+        <table>
+          <thead><tr><th>Theme</th><th>Vibe</th><th>Background</th></tr></thead>
+          <tbody>
+            <tr><td><code>bloodmoon</code></td><td>Dark red accents, gothic</td><td>Deep crimson gradient</td></tr>
+            <tr><td><code>coven</code></td><td>Purple, mystical</td><td>Amethyst vignette</td></tr>
+            <tr><td><code>crypt</code></td><td>Cool blue-grey, stoic</td><td>Slate metallic</td></tr>
+            <tr><td><code>dragon</code></td><td>Fiery orange-amber</td><td>Ember glow</td></tr>
+            <tr><td><code>lich</code></td><td>Ghostly green, undead</td><td>Phosphorescent mist</td></tr>
+            <tr><td><code>wraith</code></td><td>Ethereal white-silver</td><td>Mist overlay</td></tr>
+            <tr><td><code>default</code></td><td>Clean minimal, dark</td><td>Solid dark</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="set">Setting a Theme</h2>
+        <p>You can set a theme using either the config command or the dedicated theme command:</p>
+        <pre><code># Set theme via config
 arcana config set theme bloodmoon
 
-# Or use the command
-arcana theme set crypt</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+# Or use the dedicated command
+arcana theme set crypt
+
+# Apply immediately without saving (session only)
+arcana theme set dragon --temporary</code></pre>
+
+        <h2 id="preview">Preview a Theme</h2>
+        <p>Preview a theme without permanently switching to it:</p>
+        <pre><code># Preview a theme (revert on exit)
+arcana theme preview lich
+
+# List available themes with preview
+arcana theme list --preview</code></pre>
+
+        <h2 id="custom">Creating a Custom Theme</h2>
+        <p>You can create your own theme by placing a JSON file in <code>~/.config/arcana/themes/</code>. Themes use a simple color scheme format:</p>
+        <pre><code>{
+  "name": "midnight-ocean",
+  "type": "dark",
+  "colors": {
+    "background": "#0a0e1a",
+    "foreground": "#c8d6e5",
+    "accent": "#54a0ff",
+    "success": "#5fcf80",
+    "warning": "#feca57",
+    "error": "#ee5a24",
+    "border": "#1e2a4a",
+    "selection": "#2e3a5a"
+  }
+}</code></pre>
+        <p>Custom themes appear automatically in <code>arcana theme list</code> once placed in the themes directory.</p>
+
+        <h2 id="requirements">Requirements</h2>
+        <ul>
+          <li><strong>Truecolor support</strong> — Arcana uses 24-bit truecolor. Supported by most modern terminals (iTerm2, Kitty, Alacritty, Windows Terminal, Gnome Terminal)</li>
+          <li><strong>Kitty image protocol</strong> (optional) — For background images in supported terminals</li>
+        </ul>
+
+        <h2 id="file-locations">Theme File Locations</h2>
+        <table>
+          <thead><tr><th>Path</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>~/.config/arcana/themes/*.json</code></td><td>Custom user themes</td></tr>
+            <tr><td><code>~/.config/arcana/themes/bloodmoon.json</code></td><td>Custom override of built-in theme</td></tr>
+          </tbody>
+        </table>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

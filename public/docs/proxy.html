@@ -70,20 +70,111 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="proxy-api">Proxy API</h1>
-        <p>Route model requests through Arcana's proxy for unified billing, caching, and rate limiting.</p>
-        <h2 id="endpoints">Endpoints</h2>
-        <pre><code># Chat completion
-POST https://proxy.arcana.ai/v1/chat/completions
+        <p>The Arcana Proxy lets you route LLM API requests through Arcana's infrastructure for unified billing, caching, rate limiting, and usage analytics. It's compatible with the OpenAI SDK — just change the base URL and API key.</p>
 
-# List models
-GET https://proxy.arcana.ai/v1/models</code></pre>
-        <h2 id="credits">Credits</h2>
-        <pre><code># Check balance
-arcana credits balance
+        <h2 id="quick-start">Quick Start</h2>
+        <p>Replace your OpenAI client configuration with the Arcana proxy URL and your Arcana session token:</p>
+        <pre><code>import OpenAI from "openai";
 
-# Buy credits
-arcana credits buy 10</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+const client = new OpenAI({
+  baseURL: "https://proxy.arcana.ai/v1",
+  apiKey: "arc-session-token",  // Your Arcana session token
+});
+
+const response = await client.chat.completions.create({
+  model: "openai/gpt-4o",
+  messages: [{ role: "user", content: "Hello!" }],
+});</code></pre>
+
+        <h2 id="authentication">Authentication</h2>
+        <p>Authenticate by passing your <strong>Arcana session token</strong> as the API key. You can get your session token from the Arcana CLI:</p>
+        <pre><code># Copy your session token
+arcana session token</code></pre>
+        <p>The token is sent via the <code>Authorization: Bearer</code> header or the <code>apiKey</code> field in the OpenAI SDK.</p>
+
+        <h2 id="endpoints">API Endpoints</h2>
+
+        <h3 id="chat-completions">Chat Completions</h3>
+        <pre><code>POST https://proxy.arcana.ai/v1/chat/completions</code></pre>
+        <p>Send a chat completion request. The endpoint accepts the same request body as the <a href="https://platform.openai.com/docs/api-reference/chat/create" target="_blank" rel="noopener">OpenAI Chat Completions API</a>.</p>
+        <pre><code>curl https://proxy.arcana.ai/v1/chat/completions \
+  -H "Authorization: Bearer $(arcana session token)" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "anthropic/claude-sonnet-4-20250514",
+    "messages": [{"role": "user", "content": "Explain quantum computing"}],
+    "stream": true
+  }'</code></pre>
+
+        <h3 id="models">List Models</h3>
+        <pre><code>GET https://proxy.arcana.ai/v1/models</code></pre>
+        <p>Returns available models and their providers:</p>
+        <pre><code>curl https://proxy.arcana.ai/v1/models \
+  -H "Authorization: Bearer $(arcana session token)"</code></pre>
+
+        <h3 id="balance">Balance & Usage</h3>
+        <pre><code>GET https://proxy.arcana.ai/v1/balance
+GET https://proxy.arcana.ai/v1/usage</code></pre>
+        <p>Check your proxy credit balance and daily usage:</p>
+        <pre><code>curl https://proxy.arcana.ai/v1/balance \
+  -H "Authorization: Bearer $(arcana session token)"
+
+curl https://proxy.arcana.ai/v1/usage \
+  -H "Authorization: Bearer $(arcana session token)"</code></pre>
+
+        <h3 id="health">Health Check</h3>
+        <pre><code>GET https://proxy.arcana.ai/v1/health</code></pre>
+        <p>Returns proxy status and account tier information:</p>
+        <pre><code>curl https://proxy.arcana.ai/v1/health \
+  -H "Authorization: Bearer $(arcana session token)"
+
+# Response
+{
+  "status": "ok",
+  "tier": "pro",
+  "version": "0.3.44"
+}</code></pre>
+
+        <h2 id="model-naming">Model Naming Convention</h2>
+        <p>Models are specified using the format <code>provider/model-name</code>. Examples:</p>
+        <table>
+          <thead><tr><th>Model String</th><th>Actual Model</th></tr></thead>
+          <tbody>
+            <tr><td><code>openai/gpt-4o</code></td><td>OpenAI GPT-4o</td></tr>
+            <tr><td><code>anthropic/claude-sonnet-4-20250514</code></td><td>Anthropic Claude Sonnet 4</td></tr>
+            <tr><td><code>deepseek/deepseek-v3</code></td><td>DeepSeek V3</td></tr>
+            <tr><td><code>openrouter/mistral/mixtral</code></td><td>Mistral Mixtral (via OpenRouter)</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="streaming">Streaming</h2>
+        <p>The proxy supports server-sent events (SSE) streaming. Set <code>stream: true</code> in your request body:</p>
+        <pre><code>const stream = await client.chat.completions.create({
+  model: "openai/gpt-4o",
+  messages: [{ role: "user", content: "Write a poem" }],
+  stream: true,
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
+}</code></pre>
+
+        <h2 id="rate-limits">Rate Limits</h2>
+        <p>Rate limits depend on your account tier:</p>
+        <table>
+          <thead><tr><th>Tier</th><th>Requests / Day</th><th>Rate Limit</th></tr></thead>
+          <tbody>
+            <tr><td>Free</td><td>200</td><td>10 req/min</td></tr>
+            <tr><td>Pro</td><td>10,000</td><td>100 req/min</td></tr>
+            <tr><td>Enterprise</td><td>Unlimited</td><td>Custom</td></tr>
+          </tbody>
+        </table>
+        <p>Rate limit headers are returned in every response:</p>
+        <pre><code>X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 87
+X-RateLimit-Reset: 1623456789</code></pre>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

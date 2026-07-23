@@ -90,59 +90,108 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="overview">ARCANA Documentation</h1>
-        <p>Welcome to the official documentation for <strong>ARCANA</strong> — the terminal interface for AI keys. This guide covers installation, configuration, and advanced features.</p>
+        <p>Welcome to the official documentation for <strong>ARCANA</strong> — a terminal-native AI workbench that sits one layer above your model providers. This guide covers installation, configuration, core concepts, and advanced features.</p>
 
         <h2 id="quick-start">Quick Start</h2>
-        <p>Install Arcana from npm and start using your AI provider keys immediately:</p>
-        <pre><code class="language-bash"># Install and run
+        <p>Get up and running in under a minute. Install Arcana via npm and launch an interactive session with your first model provider:</p>
+        <pre><code class="language-bash"># Install and launch in one command
 npx arcana-ai@latest
 
-# Or install globally
+# Or install globally for persistent access
 npm install -g arcana-ai
 arcana</code></pre>
+        <p>The first run launches an interactive setup wizard that walks you through adding a provider key. Once configured, you can start a session with <code>arcana</code> from any terminal.</p>
 
         <h2 id="what-is-arcana">What is Arcana?</h2>
-        <p>Arcana is a <strong>terminal-native AI workbench</strong> that lets you use multiple AI model providers (OpenAI, Anthropic, DeepSeek, OpenRouter, Cerebras, Ollama, and more) from a single interface. It adds memory, tools, and scheduled runs on top of your existing API keys.</p>
-
-        <h2 id="features">Features</h2>
+        <p>Arcana is a <strong>terminal-native AI workbench</strong> that decouples your model provider keys from the tools you use to interact with them. Instead of switching between ChatGPT, Claude.ai, and OpenRouter tabs, you work from a single terminal interface that provides:</p>
         <ul>
-          <li><strong>Multi-provider support</strong> — Use any model key from one terminal</li>
-          <li><strong>Wiki-style memory</strong> — FTS5-powered session memory with extracted facts</li>
-          <li><strong>Scoped tools</strong> — Shell, filesystem, git, and skill tools with explicit permissions</li>
-          <li><strong>Skills on demand</strong> — Load specialized instructions when needed</li>
-          <li><strong>Cron jobs</strong> — Schedule recurring prompts and reports</li>
-          <li><strong>Chat gateways</strong> — Route sessions to Telegram, Discord, Slack, or WhatsApp</li>
-          <li><strong>Themes</strong> — 7 arcane themes with custom backgrounds</li>
-          <li><strong>Cloud sync</strong> — Push local facts to the cloud and share across machines</li>
+          <li><strong>Multi-provider sessions</strong> — Route individual prompts to different models (GPT-4, Claude, DeepSeek, Llama) from the same session, using the same toolchain.</li>
+          <li><strong>Persistent memory</strong> — Facts extracted during a session are indexed and searchable across sessions via FTS5 full-text search. Optional cloud sync keeps your knowledge graph available across machines.</li>
+          <li><strong>Scoped tool execution</strong> — Run shell commands, read and write files, interact with git, and invoke gateway APIs — all through explicit permission profiles that you control.</li>
+          <li><strong>Scheduled automation</strong> — Define recurring prompts, daily summaries, code reviews, or health checks that run on a cron schedule from the same runtime.</li>
+        </ul>
+        <p>Arcana does not sell model access. You bring your own API keys from any supported provider. The terminal layer adds session management, memory, tooling, and automation on top of your existing infrastructure.</p>
+
+        <h2 id="installation">Installation</h2>
+        <h3 id="prerequisites">Prerequisites</h3>
+        <ul>
+          <li><strong>Node.js</strong> v18 or later (<code>node --version</code>)</li>
+          <li><strong>An API key</strong> from any supported provider: OpenAI, Anthropic, DeepSeek, OpenRouter, Cerebras, or a local Ollama instance</li>
+          <li><strong>A terminal</strong> with Unicode and truecolor support (iTerm2, Windows Terminal, Kitty, WezTerm, or any modern terminal emulator)</li>
         </ul>
 
-        <h2 id="architecture">Architecture</h2>
-        <p>Arcana sits one layer above your model provider. It provides a session layer with:</p>
-        <ul>
-          <li><strong>Key management</strong> — Add provider keys once, switch models by task</li>
-          <li><strong>Tool profiles</strong> — Explicit permissions for shell, filesystem, and gateway access</li>
-          <li><strong>Memory system</strong> — Extracted facts, full-text search, and optional cloud sync</li>
-          <li><strong>Job scheduler</strong> — Recurring prompts, reviews, and checks from the same runtime</li>
-        </ul>
+        <h3 id="install-npm">Install via npm</h3>
+        <p>The recommended installation method uses npx, which requires no permanent installation:</p>
+        <pre><code class="language-bash">npx arcana-ai@latest</code></pre>
+        <p>For persistent access, install globally:</p>
+        <pre><code class="language-bash">npm install -g arcana-ai
+arcana --help</code></pre>
+
+        <h3 id="first-run">First Run</h3>
+        <p>On first launch, Arcana prompts you to:</p>
+        <ol>
+          <li>Accept the license agreement</li>
+          <li>Add at least one provider API key</li>
+          <li>Select a model for your first session</li>
+        </ol>
+        <p>After setup, you enter the interactive TUI (terminal user interface). Type <code>/help</code> to see available commands, or start typing naturally to chat with the model.</p>
+
+        <h2 id="core-concepts">Core Concepts</h2>
+
+        <h3 id="sessions">Sessions</h3>
+        <p>A session is an interactive conversation with one or more models. Sessions persist until you explicitly end them (<code>/exit</code> or <code>Ctrl+D</code>). Each session is recorded locally with full transcript, token usage, and cost tracking. Sessions made through the Arcana Proxy are also visible in the <a href="/workspace/sessions">workspace dashboard</a>.</p>
+
+        <h3 id="providers">Providers</h3>
+        <p>Arcana supports any provider that exposes a chat-completion API. Add keys through <code>arcana key add &lt;provider&gt; &lt;key&gt;</code>. Supported providers include OpenAI, Anthropic, DeepSeek, OpenRouter (which aggregates 350+ models), Cerebras, Ollama (local models), and any OpenAI-compatible custom endpoint.</p>
+
+        <h3 id="memory">Memory</h3>
+        <p>Arcana's memory system extracts structured facts from your conversations and indexes them using SQLite FTS5 full-text search. You can query your knowledge graph with <code>arcana memory search &lt;query&gt;</code>. The <a href="/docs/memory">Memory documentation</a> covers syncing, pruning, and cloud persistence.</p>
+
+        <h3 id="tools">Tools</h3>
+        <p>Tools extend what the model can do: execute shell commands, read and write files, run git operations, and send messages through gateway integrations. Each tool category is governed by a permission profile — you approve or deny tool calls interactively. See <a href="/docs/mcp">MCP &amp; Tools</a> for details.</p>
+
+        <h3 id="skills">Skills</h3>
+        <p>Skills are reusable instruction sets that you can load into any session. Instead of repeating complex instructions, you define a skill once (<code>arcana skill add</code>) and load it with <code>/load &lt;skill&gt;</code>. The <a href="/docs/skills">Skills documentation</a> covers authoring and sharing skills.</p>
+
+        <h2 id="configuration">Configuration</h2>
+        <p>Arcana stores configuration in <code>~/.arcana/config.yaml</code>. You can view and modify settings through the CLI:</p>
+        <pre><code class="language-bash"># View all configuration
+arcana config --list
+
+# Set a value
+arcana config set editor.theme dracula
+
+# Get a specific value
+arcana config get editor.theme</code></pre>
+        <p>The full configuration reference is available in the <a href="/docs/configuration">Configuration documentation</a>.</p>
 
         <h2 id="next-steps">Next Steps</h2>
+        <p>Explore the documentation by topic:</p>
         <div class="docs-next-steps">
           <a href="/docs/configuration" class="docs-next-step">
             <span class="docs-next-label">Configuration</span>
-            <span class="docs-next-desc">Set up your provider keys and preferences</span>
+            <span class="docs-next-desc">Set up provider keys, themes, preferences, and tool profiles</span>
           </a>
           <a href="/docs/gateway" class="docs-next-step">
             <span class="docs-next-label">Gateway</span>
-            <span class="docs-next-desc">Route sessions to chat platforms</span>
+            <span class="docs-next-desc">Route sessions to Telegram, Discord, Slack, and WhatsApp</span>
           </a>
           <a href="/docs/cli" class="docs-next-step">
             <span class="docs-next-label">CLI Commands</span>
-            <span class="docs-next-desc">Full command reference</span>
+            <span class="docs-next-desc">Full reference for every arcana command and flag</span>
+          </a>
+          <a href="/docs/proxy" class="docs-next-step">
+            <span class="docs-next-label">Proxy API</span>
+            <span class="docs-next-desc">REST API for session management and proxy routing</span>
+          </a>
+          <a href="/docs/troubleshooting" class="docs-next-step">
+            <span class="docs-next-label">Troubleshooting</span>
+            <span class="docs-next-desc">Common issues, error codes, and debugging guides</span>
           </a>
         </div>
 
         <div class="docs-meta">
-          <span>Last updated: Jul 20, 2026</span>
+          <span>Last updated: Jul 22, 2026</span>
         </div>
       </article>
     </main>

@@ -70,20 +70,122 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="troubleshooting">Troubleshooting</h1>
-        <p>Common issues and solutions for Arcana.</p>
+        <p>Common issues when using Arcana and how to resolve them. If you don't find your issue here, try running <code>arcana --verbose</code> to enable debug output.</p>
+
         <h2 id="installation">Installation Issues</h2>
+
         <h3 id="npx-fails"><code>npx arcana-ai@latest</code> fails</h3>
-        <p>Make sure you have Node.js 18+ installed:</p>
-        <pre><code>node --version</code></pre>
-        <h2 id="auth">Authentication</h2>
-        <h3 id="invalid-key">Invalid API key</h3>
-        <p>Re-add your provider key:</p>
-        <pre><code>arcana key add openai &lt;your-key&gt;</code></pre>
-        <h2 id="memory-issues">Memory Issues</h2>
+        <p>This usually means Node.js is not installed or is out of date. Arcana requires <strong>Node.js 18+</strong>.</p>
+        <pre><code># Check your Node.js version
+node --version
+
+# If below v18, upgrade:
+nvm install node --latest    # if using nvm
+# or download from https://nodejs.org</code></pre>
+
+        <h3 id="permissions-error">Permission errors when installing</h3>
+        <pre><code># On macOS/Linux, if you get EACCES errors:
+npm install -g arcana-ai
+# Or use npx without global install:
+npx arcana-ai@latest</code></pre>
+
+        <h3 id="windows-issues">Windows-specific issues</h3>
+        <p>Arcana works on Windows via PowerShell, CMD, or WSL. Ensure you're using a truecolor terminal like <strong>Windows Terminal</strong>:</p>
+        <pre><code># If theme colors don't display correctly:
+# 1. Use Windows Terminal (not the legacy console host)
+# 2. Enable truecolor in your terminal profile
+# 3. Verify with: arcana theme preview default</code></pre>
+
+        <h2 id="authentication">Authentication & Key Issues</h2>
+
+        <h3 id="invalid-key">"Invalid API key" error</h3>
+        <p>Your provider API key may be incorrect, expired, or for the wrong provider:</p>
+        <pre><code># Re-add the key
+arcana key add openai &lt;your-key&gt;
+
+# Test the key
+arcana key test openai
+
+# List configured keys to verify
+arcana key list</code></pre>
+        <p>Ensure you're using the correct key format for each provider:</p>
+        <table>
+          <thead><tr><th>Provider</th><th>Key Format</th></tr></thead>
+          <tbody>
+            <tr><td>OpenAI</td><td><code>sk-proj-...</code> or <code>sk-...</code></td></tr>
+            <tr><td>Anthropic</td><td><code>sk-ant-...</code></td></tr>
+            <tr><td>DeepSeek</td><td><code>sk-...</code> (32+ chars)</td></tr>
+            <tr><td>OpenRouter</td><td><code>sk-or-...</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="proxy-auth-fails">Proxy authentication fails</h3>
+        <p>If you're using the Arcana proxy and getting 401/403 errors:</p>
+        <pre><code># Check your session token
+arcana session token
+
+# Verify your account tier
+arcana license status</code></pre>
+
+        <h2 id="connection">Connection Issues</h2>
+
+        <h3 id="network-errors">Network timeouts or connection refused</h3>
+        <pre><code># Check if Arcana's servers are reachable
+curl https://proxy.arcana.ai/v1/health
+
+# Check internet connectivity
+ping proxy.arcana.ai
+
+# Try with verbose logging
+arcana --verbose</code></pre>
+
+        <h3 id="proxy-errors">Proxy returns errors (500, 502, 503)</h3>
+        <p>These are usually temporary. Check the <a href="/status">Arcana Status</a> page for ongoing incidents.</p>
+
+        <h2 id="memory">Memory Issues</h2>
+
         <h3 id="slow-search">Slow memory search</h3>
-        <p>Rebuild the search index:</p>
+        <p>The FTS5 search index may need rebuilding, especially after importing a large memory export:</p>
         <pre><code>arcana memory rebuild-index</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+
+        <h3 id="cloud-sync-fails">Cloud sync fails</h3>
+        <pre><code># Ensure cloud sync is enabled
+arcana config get memory.cloudSync
+
+# Check sync status
+arcana memory sync-status
+
+# Force a full push
+arcana memory push --force</code></pre>
+
+        <h2 id="performance">Performance Issues</h2>
+
+        <h3 id="slow-responses">Slow responses from the AI</h3>
+        <ul>
+          <li>Try a faster model (e.g., <code>gpt-4o-mini</code> instead of <code>gpt-4o</code>)</li>
+          <li>Reduce context size — large memory loads can slow down responses</li>
+          <li>Check your internet connection speed</li>
+        </ul>
+
+        <h3 id="high-usage">Unexpectedly high usage / rate limited</h3>
+        <pre><code># Check your daily usage
+arcana credits balance
+
+# Upgrade your plan for higher limits
+arcana license activate &lt;license-key&gt;</code></pre>
+
+        <h2 id="debugging">Debugging</h2>
+        <p>Enable verbose logging to get more details about what Arcana is doing:</p>
+        <pre><code># Run with verbose output
+arcana --verbose
+
+# Set log level via environment variable
+ARCANA_LOG_LEVEL=debug arcana
+
+# Save logs to a file
+arcana --verbose 2&gt;&amp;1 | tee arcana-debug.log</code></pre>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

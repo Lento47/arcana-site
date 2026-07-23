@@ -1086,12 +1086,19 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   transition: border-color 0.3s ease;
 }
 
+@media (min-width: 960px) {
+  .docs-layout {
+    grid-template-columns: var(--docs-sidebar-w) minmax(0, 1fr) 180px;
+    gap: 32px;
+  }
+  .docs-toc { display: block; }
+}
+
 @media (min-width: 1280px) {
   .docs-layout {
     grid-template-columns: var(--docs-sidebar-w) minmax(0, 1fr) 196px;
     gap: 40px;
   }
-  .docs-toc { display: block; }
 }
 
 .docs-toc-label {

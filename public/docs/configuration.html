@@ -70,35 +70,84 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="configuration">Configuration</h1>
-        <p>Arcana is configured through a combination of <code>arcana.json</code> in your project root and environment variables.</p>
-        <h2 id="config-file">Config File</h2>
-        <p>Create an <code>arcana.json</code> file in your project root:</p>
+        <p>Arcana is configured through a combination of a JSON config file and environment variables. The config file is loaded from <code>arcana.json</code> in your project root, or <code>~/.config/arcana/config.json</code> as a fallback. Environment variables always take precedence over the config file.</p>
+
+        <h2 id="config-file">Config File Reference</h2>
+        <p>Create an <code>arcana.json</code> file in your project root. All fields are optional.</p>
         <pre><code>{
-  "defaultModel": "openai/gpt-4",
+  "defaultModel": "openai/gpt-4o",
   "providers": {
-    "openai": { "key": "sk-..." },
-    "anthropic": { "key": "sk-ant-..." }
+    "openai": { "key": "sk-proj-..." },
+    "anthropic": { "key": "sk-ant-..." },
+    "deepseek": { "key": "sk-..." }
   },
   "tools": {
     "shell": { "enabled": true },
-    "filesystem": { "enabled": true, "root": "." }
+    "filesystem": { "enabled": true, "root": "./src" },
+    "gateway": { "enabled": false }
   },
-  "memory": { "enabled": true, "cloudSync": false },
-  "theme": "bloodmoon"
+  "memory": {
+    "enabled": true,
+    "cloudSync": false
+  },
+  "theme": "bloodmoon",
+  "proxy": {
+    "url": "https://proxy.arcana.ai"
+  }
 }</code></pre>
-        <h2 id="environment-variables">Environment Variables</h2>
-        <pre><code># Provider keys
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-DEEPSEEK_API_KEY=...
-OPENROUTER_API_KEY=sk-or-...
 
-# Arcana settings
-ARCANA_THEME=bloodmoon
-ARCANA_PROXY_URL=https://proxy.arcana.ai</code></pre>
-        <h2 id="themes">Themes</h2>
-        <p>Arcana includes 7 built-in themes: <code>bloodmoon</code>, <code>coven</code>, <code>crypt</code>, <code>dragon</code>, <code>lich</code>, <code>wraith</code>, and <code>default</code>.</p>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+        <h3 id="config-fields">Configuration Fields</h3>
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>defaultModel</code></td><td>string</td><td><code>openai/gpt-4o</code></td><td>Model string used when none is specified</td></tr>
+            <tr><td><code>providers</code></td><td>object</td><td><code>{}</code></td><td>Map of provider names to API keys</td></tr>
+            <tr><td><code>tools</code></td><td>object</td><td><code>{}</code></td><td>Per-tool configuration (enabled, permissions, root)</td></tr>
+            <tr><td><code>memory.enabled</code></td><td>boolean</td><td><code>true</code></td><td>Enable persistent memory across sessions</td></tr>
+            <tr><td><code>memory.cloudSync</code></td><td>boolean</td><td><code>false</code></td><td>Sync memory to the cloud (requires license)</td></tr>
+            <tr><td><code>theme</code></td><td>string</td><td><code>default</code></td><td>Terminal theme name (see <a href="/docs/themes">Themes</a>)</td></tr>
+            <tr><td><code>proxy.url</code></td><td>string</td><td>—</td><td>Custom proxy endpoint for model routing</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="environment-variables">Environment Variables</h2>
+        <p>Environment variables override config file values and are the recommended way to set API keys (keeps them out of version control).</p>
+
+        <h3 id="provider-keys">Provider API Keys</h3>
+        <table>
+          <thead><tr><th>Variable</th><th>Provider</th></tr></thead>
+          <tbody>
+            <tr><td><code>OPENAI_API_KEY</code></td><td>OpenAI</td></tr>
+            <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic</td></tr>
+            <tr><td><code>DEEPSEEK_API_KEY</code></td><td>DeepSeek</td></tr>
+            <tr><td><code>OPENROUTER_API_KEY</code></td><td>OpenRouter</td></tr>
+            <tr><td><code>GOOGLE_API_KEY</code></td><td>Google AI</td></tr>
+            <tr><td><code>MISTRAL_API_KEY</code></td><td>Mistral</td></tr>
+            <tr><td><code>GROQ_API_KEY</code></td><td>Groq</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="arcana-env-vars">Arcana Settings</h3>
+        <table>
+          <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>ARCANA_THEME</code></td><td>Terminal theme name (overrides config file)</td></tr>
+            <tr><td><code>ARCANA_PROXY_URL</code></td><td>Custom proxy endpoint URL</td></tr>
+            <tr><td><code>ARCANA_LOG_LEVEL</code></td><td>Log verbosity: <code>debug</code>, <code>info</code>, <code>warn</code>, <code>error</code></td></tr>
+            <tr><td><code>ARCANA_CONFIG_DIR</code></td><td>Custom directory for config files</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="config-locations">Config File Locations</h2>
+        <p>Arcana looks for configuration in the following order (first match wins):</p>
+        <ol>
+          <li><code>./arcana.json</code> — project-level config</li>
+          <li><code>~/.config/arcana/config.json</code> — user-level global config</li>
+          <li><code>$ARCANA_CONFIG_DIR/config.json</code> — custom path via env var</li>
+        </ol>
+        <p>Values from all found config files are merged, with closer paths taking priority over global ones.</p>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>

@@ -91,94 +91,174 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="cli-commands">CLI Commands</h1>
-        <p>Complete reference for all Arcana CLI commands. Run <code>arcana --help</code> for a quick summary.</p>
+        <p>Complete reference for all Arcana CLI commands. Run <code>arcana --help</code> in your terminal for a quick summary of available commands and flags.</p>
 
         <h2 id="core">Core Commands</h2>
+
         <h3 id="arcana"><code>arcana</code></h3>
-        <p>Start an interactive session. This is the default command when no arguments are provided.</p>
-        <pre><code class="language-bash">arcana</code></pre>
+        <p>Start an interactive AI session in your terminal. This is the default command when no subcommand is provided. Arcana will load your configured providers, memory, and tools, then present a prompt where you can ask questions, write code, or execute commands.</p>
+        <pre><code class="language-bash"># Start a session with the default model
+arcana
+
+# Start with a specific provider and model
+arcana --model anthropic/claude-sonnet-4-20250514
+
+# Start in headless mode (no TUI)
+arcana --headless
+
+# Pass an initial prompt directly
+arcana "Explain how React context works"</code></pre>
+        <table>
+          <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>--model</code></td><td>Provider/model string (e.g. <code>openai/gpt-4o</code>)</td></tr>
+            <tr><td><code>--headless</code></td><td>Run without the terminal UI</td></tr>
+            <tr><td><code>--no-tools</code></td><td>Disable all tool execution</td></tr>
+            <tr><td><code>--session &lt;id&gt;</code></td><td>Resume an existing session by ID</td></tr>
+          </tbody>
+        </table>
 
         <h3 id="arcana-serve"><code>arcana serve</code></h3>
-        <p>Start the Arcana server with HTTP API support.</p>
-        <pre><code class="language-bash">arcana serve [--port 3000]</code></pre>
+        <p>Start the Arcana server, exposing an HTTP API that other tools and services can use to interact with Arcana. Useful for integrating with editors, CI pipelines, or custom workflows.</p>
+        <pre><code class="language-bash"># Start on the default port (3000)
+arcana serve
 
-        <h2 id="configuration">Configuration</h2>
+# Specify a custom port and host
+arcana serve --port 8080 --host 0.0.0.0
+
+# Enable verbose logging
+arcana serve --verbose</code></pre>
+        <table>
+          <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>--port</code></td><td><code>3000</code></td><td>HTTP port to bind</td></tr>
+            <tr><td><code>--host</code></td><td><code>127.0.0.1</code></td><td>Interface to bind</td></tr>
+            <tr><td><code>--verbose</code></td><td><code>false</code></td><td>Enable verbose request logging</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="configuration">Configuration Commands</h2>
+
         <h3 id="arcana-config"><code>arcana config</code></h3>
-        <p>View or set configuration values.</p>
-        <pre><code class="language-bash"># View all config
+        <p>View or modify Arcana configuration values. Configuration is persisted in <code>arcana.json</code> in your project root or <code>~/.config/arcana/config.json</code>.</p>
+        <pre><code class="language-bash"># View all configuration values
 arcana config --list
 
-# Set a value
-arcana config set &lt;key&gt; &lt;value&gt;
+# Get a specific value
+arcana config get defaultModel
 
-# Get a value
-arcana config get &lt;key&gt;</code></pre>
+# Set a value
+arcana config set theme bloodmoon
+
+# Delete a config key (reset to default)
+arcana config delete proxy.url</code></pre>
 
         <h2 id="keys">Key Management</h2>
-        <h3 id="arcana-key"><code>arcana key</code></h3>
-        <p>Manage provider API keys.</p>
-        <pre><code class="language-bash"># Add a key
-arcana key add &lt;provider&gt; &lt;api-key&gt;
 
-# List keys
+        <h3 id="arcana-key"><code>arcana key</code></h3>
+        <p>Manage AI provider API keys. Keys are stored encrypted at rest and never exposed in plain text through the CLI.</p>
+        <pre><code class="language-bash"># Add a provider key
+arcana key add openai sk-proj-xxxxxxxxxxxx
+
+# List configured providers
 arcana key list
 
-# Remove a key
-arcana key remove &lt;provider&gt;</code></pre>
+# Remove a provider key
+arcana key remove anthropic
 
-        <h2 id="memory">Memory</h2>
+# Test a key (verify it works)
+arcana key test openai</code></pre>
+        <p><strong>Supported providers:</strong> <code>openai</code>, <code>anthropic</code>, <code>deepseek</code>, <code>openrouter</code>, <code>google</code>, <code>cohere</code>, <code>mistral</code>, <code>groq</code>, and any OpenAI-compatible provider.</p>
+
+        <h2 id="memory">Memory Commands</h2>
+
         <h3 id="arcana-memory"><code>arcana memory</code></h3>
-        <p>Manage session memory and facts.</p>
-        <pre><code class="language-bash"># Search memory
-arcana memory search &lt;query&gt;
+        <p>Manage Arcana's wiki-style memory system. Facts extracted during sessions are stored in a local SQLite database with full-text search (FTS5) and can optionally be synced to the cloud.</p>
+        <pre><code class="language-bash"># Search memory for relevant facts
+arcana memory search "deployment architecture"
 
-# List facts
+# List all stored facts
 arcana memory facts
 
-# Clear memory
-arcana memory clear</code></pre>
+# Filter facts by topic
+arcana memory facts --topic "api"
+
+# Clear all local memory
+arcana memory clear
+
+# Rebuild the FTS search index
+arcana memory rebuild-index</code></pre>
 
         <h2 id="tools">Tools</h2>
+
         <h3 id="arcana-tools"><code>arcana tools</code></h3>
-        <p>List and manage available tools.</p>
-        <pre><code class="language-bash"># List all tools
+        <p>List and manage the tools available to your session. Tools allow the AI to perform actions like running shell commands, reading files, or sending HTTP requests.</p>
+        <pre><code class="language-bash"># List all registered tools
 arcana tools list
 
-# Check tool permissions
-arcana tools permissions</code></pre>
+# Check tool permissions and enabled state
+arcana tools permissions
 
-        <h2 id="plugins">Plugins</h2>
+# Enable or disable a tool
+arcana tools enable filesystem
+arcana tools disable shell</code></pre>
+
+        <h2 id="plugins">Plugin Commands</h2>
+
         <h3 id="arcana-plugin"><code>arcana plugin</code></h3>
-        <p>Install, list, and manage plugins.</p>
-        <pre><code class="language-bash"># Install a plugin
-arcana plugin install &lt;name&gt;
+        <p>Install, list, and remove Arcana plugins. Plugins extend Arcana's capabilities — from custom tools to integrations with external services.</p>
+        <pre><code class="language-bash"># Install a plugin from the registry
+arcana plugin install arcana-mcp-fs
 
 # List installed plugins
 arcana plugin list
 
 # Remove a plugin
-arcana plugin remove &lt;name&gt;</code></pre>
+arcana plugin remove arcana-mcp-fs
+
+# Search the plugin registry
+arcana plugin search "database"</code></pre>
 
         <h2 id="credits">Credits</h2>
+
         <h3 id="arcana-credits"><code>arcana credits</code></h3>
-        <p>Manage proxy credits for pay-as-you-go routing.</p>
-        <pre><code class="language-bash"># Check balance
+        <p>Manage proxy credits for pay-as-you-go model routing through the Arcana proxy. Credits let you use the proxy without configuring your own provider keys.</p>
+        <pre><code class="language-bash"># Check your credit balance
 arcana credits balance
 
-# Buy credits
-arcana credits buy &lt;amount&gt;</code></pre>
+# Purchase additional credits
+arcana credits buy 10
+
+# View credit usage history
+arcana credits history</code></pre>
 
         <h2 id="license">License</h2>
-        <h3 id="arcana-license"><code>arcana license</code></h3>
-        <p>Manage your Arcana license.</p>
-        <pre><code class="language-bash"># Activate license
-arcana license activate &lt;key&gt;
 
-# Check status
-arcana license status</code></pre>
+        <h3 id="arcana-license"><code>arcana license</code></h3>
+        <p>Manage your Arcana license key. Activating a license unlocks Pro or Enterprise features such as higher rate limits, cloud memory sync, and priority support.</p>
+        <pre><code class="language-bash"># Activate a license key
+arcana license activate arc_xxxx-xxxx-xxxx
+
+# Check license status and expiry
+arcana license status
+
+# Deactivate the current license
+arcana license deactivate</code></pre>
+
+        <h2 id="global-flags">Global Flags</h2>
+        <p>These flags work with any command:</p>
+        <table>
+          <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>--help</code></td><td>Show help text for any command</td></tr>
+            <tr><td><code>--version</code></td><td>Print the installed Arcana version</td></tr>
+            <tr><td><code>--verbose</code></td><td>Enable verbose debug output</td></tr>
+            <tr><td><code>--json</code></td><td>Output results as JSON (useful for scripting)</td></tr>
+          </tbody>
+        </table>
 
         <div class="docs-meta">
-          <span>Last updated: Jul 20, 2026</span>
+          <span>Last updated: Jul 22, 2026</span>
         </div>
       </article>
     </main>

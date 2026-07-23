@@ -70,24 +70,82 @@
     <main class="docs-content" id="docs-content">
       <article class="docs-article">
         <h1 id="mcp-tools">MCP & Tools</h1>
-        <p>Arcana supports the Model Context Protocol (MCP) for connecting to external tool servers and configuring scoped tool access.</p>
-        <h2 id="mcp-servers">MCP Servers</h2>
-        <p>Connect to MCP-compatible tool servers:</p>
-        <pre><code># Add an MCP server
-arcana mcp add &lt;name&gt; --url http://localhost:3001
+        <p>Arcana supports the <strong>Model Context Protocol (MCP)</strong>, an open standard for connecting AI models to external tools and data sources. MCP servers let you extend Arcana with custom capabilities — database queries, API integrations, file operations, and more — all controlled through a unified interface.</p>
+
+        <h2 id="how-it-works">How MCP Works</h2>
+        <p>An MCP server exposes <strong>tools</strong> (functions the model can call), <strong>resources</strong> (data the model can read), and <strong>prompts</strong> (templates the model can use). Arcana connects to MCP servers at startup and makes their capabilities available to the AI during your session.</p>
+
+        <pre><code>┌─────────────┐    MCP Protocol     ┌──────────────┐
+│   Arcana    │ ──────────────────► │  MCP Server  │
+│  (client)   │ ◄────────────────── │  (tools,     │
+│             │                     │   resources) │
+└─────────────┘                     └──────────────┘</code></pre>
+
+        <h2 id="mcp-servers">Adding MCP Servers</h2>
+        <p>You can connect Arcana to any MCP-compatible server using <code>arcana mcp add</code>.</p>
+        <pre><code># Connect to a local MCP server via HTTP
+arcana mcp add my-tools --url http://localhost:3001
+
+# Connect via Unix socket
+arcana mcp add db-tools --url unix:///tmp/mcp.sock
+
+# Connect to a remote server
+arcana mcp add analytics --url https://mcp.example.com
 
 # List connected servers
-arcana mcp list</code></pre>
+arcana mcp list
+
+# Disconnect a server
+arcana mcp remove my-tools</code></pre>
+
         <h2 id="tool-profiles">Tool Profiles</h2>
-        <p>Control which tools are available per session:</p>
+        <p>Control which tools are available in each session using tool profiles. Profiles let you restrict sensitive tools (like shell access) while allowing safe ones (like file reading). Configure profiles in <code>arcana.json</code>:</p>
         <pre><code>{
   "tools": {
-    "shell": { "enabled": true, "allowCommands": ["git", "npm"] },
-    "filesystem": { "enabled": true, "root": "./src" },
-    "gateway": { "enabled": false }
+    "shell": {
+      "enabled": true,
+      "allowCommands": ["git", "npm", "node"],
+      "denyCommands": ["rm", "sudo", "curl"]
+    },
+    "filesystem": {
+      "enabled": true,
+      "root": "./src",
+      "allowWrite": false
+    },
+    "gateway": {
+      "enabled": false
+    },
+    "http": {
+      "enabled": true,
+      "allowedDomains": ["api.github.com", "api.openai.com"]
+    }
   }
 }</code></pre>
-        <div class="docs-meta"><span>Last updated: Jul 20, 2026</span></div>
+
+        <h2 id="tool-options">Tool Configuration Options</h2>
+        <table>
+          <thead><tr><th>Option</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>enabled</code></td><td>boolean</td><td>Whether the tool is available</td></tr>
+            <tr><td><code>allowCommands</code></td><td>string[]</td><td>Allowed shell commands (shell tool only)</td></tr>
+            <tr><td><code>denyCommands</code></td><td>string[]</td><td>Blocked shell commands (takes priority)</td></tr>
+            <tr><td><code>root</code></td><td>string</td><td>Restrict filesystem access to this directory</td></tr>
+            <tr><td><code>allowWrite</code></td><td>boolean</td><td>Allow file write operations</td></tr>
+            <tr><td><code>allowedDomains</code></td><td>string[]</td><td>Restrict HTTP tool to these domains</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="built-in-tools">Built-in Tools</h2>
+        <p>Arcana ships with several built-in tools that are available by default:</p>
+        <ul>
+          <li><strong>shell</strong> — Execute shell commands (restricted by profile)</li>
+          <li><strong>filesystem</strong> — Read and write files within a configured root</li>
+          <li><strong>http</strong> — Make HTTP requests to allowed domains</li>
+          <li><strong>memory</strong> — Search and store facts in persistent memory</li>
+          <li><strong>gateway</strong> — Send messages through configured chat gateways</li>
+        </ul>
+
+        <div class="docs-meta"><span>Last updated: Jul 22, 2026</span></div>
       </article>
     </main>
     <aside class="docs-toc" id="docs-toc"><div class="docs-toc-label">On this page</div><nav id="docs-toc-nav"></nav></aside>
